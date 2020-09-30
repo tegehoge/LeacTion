@@ -1,15 +1,21 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3.0 + Vite" />
+  <header>
+    <nav>
+      <h1>LeacTion!</h1>
+    </nav>
+  </header>
+  <main>
+    <CommentInput></CommentInput>
+  </main>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script lang="ts">
+import CommentInput from "./components/CommentInput.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    CommentInput,
+  },
+};
 </script>
