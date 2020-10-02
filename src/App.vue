@@ -5,17 +5,24 @@
     </nav>
   </header>
   <main>
-    <CommentInput></CommentInput>
+    <Event></Event>
   </main>
 </template>
 
 <script lang="ts">
-import CommentInput from "./components/CommentInput.vue";
+import Event from "./components/Event.vue";
+import { UserContext } from "./models/user_context";
 
 export default {
   name: "App",
   components: {
-    CommentInput,
+    Event,
+  },
+  setup() {
+    const user_context = localStorage.user_context
+      ? UserContext.fromJSON(localStorage.user_context)
+      : new UserContext();
+    localStorage.setItem("user_context", user_context.toJSON());
   },
 };
 </script>

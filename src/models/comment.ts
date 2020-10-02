@@ -1,20 +1,26 @@
-import { UserContext } from "./user_context";
+import dayjs, { Dayjs } from "dayjs";
+import { v4 as uuidv4 } from "uuid";
 
 export class Comment {
   id: string; // UUID
   text: string;
   posted_by: string; // UUID
-  posted_at: string; // datetime
+  posted_at: Dayjs; // datetime
   event_id: string; // UUID
   talk_id: string; // UUID
 
-  constructor(text: string, context: UserContext) {
-    this.id = "sample";
+  constructor(
+    text: string,
+    user_id: string,
+    event_id: string,
+    talk_id: string
+  ) {
+    this.id = uuidv4();
     this.text = text;
-    this.posted_by = context.user_id;
-    this.posted_at = "2020-10-10T19:34:58.453+0900";
-    this.event_id = context.event_id;
-    this.talk_id = context.talk_id;
+    this.posted_by = user_id;
+    this.posted_at = dayjs();
+    this.event_id = event_id;
+    this.talk_id = talk_id;
   }
 
   /**

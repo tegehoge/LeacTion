@@ -1,21 +1,47 @@
 <template>
   <div>
-    <input type="text" name="comment" id="comment" v-model="comment" />
-    <button type="submit" @click="sendComment()">send</button>
+    <input
+      type="text"
+      ref="inputForm"
+      id="commentInput"
+      v-model="commentInput"
+    />
+    <button type="submit" @click="sendComment()" :disabled="commentInput == ''">
+      send
+    </button>
   </div>
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { Comment } from "../models/comment";
 
 export default {
-  setup(props) {
-    const comment = ref("");
+  emits: ["add_comment"],
+  setup(props, { emit }) {
+    const commentInput = ref("");
+    const inputForm = ref<HTMLInputElement>();
     const sendComment = () => {
-      console.log(comment.value);
-      comment.value = "";
+      const comment = new Comment(
+        commentInput.value,
+        "sample",
+        "sample",
+        "sample"
+      );
+      emit("add_comment", comment);
+      commentInput.value = "";
+      inputForm.value?.focus();
     };
-    return { comment, sendComment };
+
+    onMounted(() => {
+      // Enterでコメント送信を可能にする
+      inputForm.value?.addEventListener("keydown", (e) => {
+        if (e.keyCode == 13 && commentInput.value) {
+          sendComment();
+        }
+      });
+    });
+    return { commentInput, sendComment, inputForm };
   },
 };
 </script>

@@ -1,15 +1,39 @@
-export class UserContext {
-  user_id: string;
-  event_id: string | null;
-  talk_id: string | null;
+import { v4 as uuidv4 } from "uuid";
 
-  constructor(event_id: string | null = null, talk_id: string | null = null) {
-    this.user_id = "sample";
-    this.event_id = event_id;
-    this.talk_id = talk_id;
+type UserId = string;
+
+export class UserContext {
+  user_id: UserId;
+  comment_order: CommentOrder;
+
+  constructor(user_id?: UserId, comment_order?: CommentOrder) {
+    this.user_id = user_id || uuidv4();
+    this.comment_order = comment_order || CommentOrder.DescendingTimeOrder;
   }
 
-  changeTalk(talk_id: string): void {
-    this.talk_id = talk_id;
+  changeCommentOrder(comment_order: CommentOrder) {
+    this.comment_order = comment_order;
+  }
+  toJSON(): string {
+    return JSON.stringify({
+      user_id: this.user_id,
+      comment_order: this.comment_order,
+    });
+  }
+  static fromJSON(payload: string): UserContext {
+    const data = JSON.parse(payload);
+    return new UserContext(data.user_id, data.comment_order);
   }
 }
+
+/**
+ * コメント表示順指定
+ */
+const CommentOrder = {
+  DescendingTimeOrder: "DescendingTimeOrder",
+  AscendingTimeOrder: "AscendingTimeOrder",
+  DescendingLikeOrder: "DescendingLikeOrder",
+  AscendingLikeOrder: "AscendingLikeOrder",
+} as const;
+
+type CommentOrder = typeof CommentOrder[keyof typeof CommentOrder];
