@@ -1,10 +1,10 @@
 <template>
   <header>
-    <nav>
-      <h1>LeacTion!</h1>
+    <nav class="p-3 bg-blue-700 text-white">
+      <div class=""><h1 class="text-2xl">LeacTion!</h1></div>
     </nav>
   </header>
-  <main>
+  <main class="container mx-auto">
     <router-view></router-view>
   </main>
 </template>

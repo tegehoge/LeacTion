@@ -1,11 +1,13 @@
 <template>
   <CommentInput @add_comment="addComment"></CommentInput>
-  <CommentBlock
-    v-for="comment in comments"
-    :key="comment.id"
-    :comment="comment"
-  >
-  </CommentBlock>
+  <div class="flex flex-wrap">
+    <CommentBlock
+      v-for="comment in comments"
+      :key="comment.id"
+      :comment="comment"
+    >
+    </CommentBlock>
+  </div>
 </template>
 <script lang="ts">
 import CommentInput from "../components/CommentInput.vue";

@@ -1,19 +1,27 @@
 <template>
-  <div>
+  <div class="p-3 w-full text-center">
     <input
       type="text"
+      class="w-2/3 border-2 rounded p-2 mr-3"
       ref="inputForm"
       id="commentInput"
+      placeholder="質問・コメント"
       v-model="commentInput"
     />
-    <button type="submit" @click="sendComment()" :disabled="commentInput == ''">
-      send
+    <button
+      type="submit"
+      class="bg-black text-white active:bg-gray-600 rounded p-2"
+      :class="{ 'opacity-50': !canSend, 'cursor-not-allowed': !canSend }"
+      @click="sendComment()"
+      :disabled="!canSend"
+    >
+      投稿する(Enter)
     </button>
   </div>
 </template>
 
 <script lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { Comment } from "../models/comment";
 
 export default {
@@ -21,6 +29,7 @@ export default {
   setup(props, { emit }) {
     const commentInput = ref("");
     const inputForm = ref<HTMLInputElement>();
+    const canSend = computed(() => commentInput.value != "");
     const sendComment = () => {
       const comment = new Comment(
         commentInput.value,
@@ -41,7 +50,7 @@ export default {
         }
       });
     });
-    return { commentInput, sendComment, inputForm };
+    return { commentInput, sendComment, inputForm, canSend };
   },
 };
 </script>
