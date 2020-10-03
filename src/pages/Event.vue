@@ -14,12 +14,13 @@ import CommentInput from "../components/CommentInput.vue";
 import CommentBlock from "../components/CommentBlock.vue";
 import { ref, Ref, defineComponent, inject, onMounted } from "vue";
 import { Comment } from "../models/comment";
-import { EventId } from "../models/event";
-import { CommentRepository, EventRepository } from "../repository/interface";
+import { Event, EventId } from "../models/event";
 import {
-  LocalStorageCommentRepository,
-  LocalStorageEventRepository,
-} from "../repository/local_storage";
+  findAllCommentByEventId,
+  findEventById,
+  saveComment,
+} from "../repository";
+import dayjs from "dayjs";
 
 export default defineComponent({
   name: "Event",
@@ -28,24 +29,20 @@ export default defineComponent({
     event_id: String,
   },
   setup(props) {
-    const event_repository: EventRepository = inject(
-      "event_repository",
-      new LocalStorageEventRepository()
+    const event = ref<Event>(
+      new Event("てげほげ勉強会", dayjs("2020-10-10"), "sample", "tegehoge")
     );
-    const comment_repository: CommentRepository = inject(
-      "comment_repository",
-      new LocalStorageCommentRepository()
-    );
-    const comments: Ref<Comment[]> = ref([]);
+    const comments = ref<Comment[]>([]);
     const addComment = (comment: Comment) => {
       comments.value.push(comment);
-      comment_repository.save(comment);
+      saveComment(comment);
     };
 
     onMounted(() => {
-      comment_repository
-        .findAllByEventId(props.event_id || "")
-        .then((existing_comments) => (comments.value = existing_comments));
+      findEventById(props.event_id || "").then((ev) => (event.value = ev));
+      findAllCommentByEventId(props.event_id || "").then(
+        (existing_comments) => (comments.value = existing_comments)
+      );
     });
 
     return { event_id: props.event_id, comments, addComment };
