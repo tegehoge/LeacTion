@@ -12,3 +12,9 @@ export class Talk {
     this.speaker_name = speaker_name;
   }
 }
+
+export type TalkResponse = {
+  id: string;
+  title: string;
+  speaker_name: string;
+};

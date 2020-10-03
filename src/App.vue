@@ -10,13 +10,35 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { defineComponent, onMounted, provide } from "vue";
 import { useRoute } from "vue-router";
 import { UserContext } from "./models/user_context";
+import {
+  LocalStorageEventRepository,
+  LocalStorageCommentRepository,
+} from "./repository/local_storage";
+import {
+  FirebaseCommentRepository,
+  FirebaseEventRepository,
+} from "./repository/firebase";
 
 export default defineComponent({
   name: "App",
   setup() {
+    provide(
+      "event_repository",
+      process.env.NODE_ENV == "production"
+        ? new FirebaseEventRepository()
+        : new LocalStorageEventRepository()
+    );
+
+    provide(
+      "comment_repository",
+      process.env.NODE_ENV == "production"
+        ? new FirebaseCommentRepository()
+        : new LocalStorageCommentRepository()
+    );
+
     const createOrGetUserContext = () => {
       if (localStorage.user_context) {
         return UserContext.fromJSON(localStorage.user_context);
