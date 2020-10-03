@@ -4,12 +4,14 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "serve": "(cd functions/ && tsc) && firebase serve"
   },
   "dependencies": {
     "dayjs": "^1.9.1",
     "uuid": "^8.3.0",
-    "vue": "^3.0.0"
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.0-beta.13"
   },
   "devDependencies": {
     "@types/uuid": "^8.3.0",
