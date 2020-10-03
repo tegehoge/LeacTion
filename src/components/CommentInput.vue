@@ -25,6 +25,9 @@ import { computed, onMounted, ref } from "vue";
 import { Comment } from "../models/comment";
 
 export default {
+  props: {
+    event_id: String,
+  },
   emits: ["add_comment"],
   setup(props, { emit }) {
     const commentInput = ref("");
@@ -34,7 +37,7 @@ export default {
       const comment = new Comment(
         commentInput.value,
         "sample",
-        "sample",
+        props.event_id || "unknown",
         "sample"
       );
       emit("add_comment", comment);

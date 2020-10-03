@@ -1,5 +1,5 @@
 <template>
-  <CommentInput @add_comment="addComment"></CommentInput>
+  <CommentInput :event_id="event_id" @add_comment="addComment"></CommentInput>
   <div class="flex flex-wrap">
     <CommentBlock
       v-for="comment in comments"
@@ -28,7 +28,7 @@ export default defineComponent({
     const addComment = (comment: Comment) => {
       comments.value.push(comment);
     };
-    return { comments, addComment };
+    return { event_id: props.event_id, comments, addComment };
   },
 });
 </script>
