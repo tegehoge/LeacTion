@@ -1,22 +1,26 @@
 <template>
-  <div class="p-3 w-full text-center">
-    <input
-      type="text"
-      class="w-2/3 border-2 rounded p-2 mr-3"
-      ref="inputForm"
-      id="commentInput"
-      placeholder="質問・コメント"
-      v-model="commentInput"
-    />
-    <button
-      type="submit"
-      class="bg-black text-white active:bg-gray-600 rounded p-2"
-      :class="{ 'opacity-50': !canSend, 'cursor-not-allowed': !canSend }"
-      @click="sendComment()"
-      :disabled="!canSend"
-    >
-      投稿する(Enter)
-    </button>
+  <div class="flex px-3 py-2 w-full text-center items-center max-w-3xl mx-auto">
+    <div class="flex-grow pr-2">
+      <input
+        type="text"
+        class="w-full border-2 rounded p-2"
+        ref="inputForm"
+        id="commentInput"
+        placeholder="質問・コメント"
+        v-model="commentInput"
+      />
+    </div>
+    <div>
+      <button
+        type="submit"
+        class="bg-green-500 hover:bg-green-700 text-white rounded p-2"
+        :class="{ 'opacity-50': !canSend, 'cursor-not-allowed': !canSend }"
+        @click="sendComment()"
+        :disabled="!canSend"
+      >
+        投稿する(Enter)
+      </button>
+    </div>
   </div>
 </template>
 
@@ -52,6 +56,7 @@ export default {
           sendComment();
         }
       });
+      inputForm.value?.focus();
     });
     return { commentInput, sendComment, inputForm, canSend };
   },

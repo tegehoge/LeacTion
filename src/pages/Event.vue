@@ -1,12 +1,19 @@
 <template>
-  <CommentInput :event_id="event_id" @add_comment="addComment"></CommentInput>
-  <div class="flex flex-wrap">
-    <CommentBlock
-      v-for="comment in comments"
-      :key="comment.id"
-      :comment="comment"
-    >
-    </CommentBlock>
+  <div>
+    <div>
+      <CommentInput
+        :event_id="event_id"
+        @add_comment="addComment"
+      ></CommentInput>
+    </div>
+    <div class="flex flex-wrap">
+      <CommentBlock
+        v-for="comment in comments"
+        :key="comment.id"
+        :comment="comment"
+      >
+      </CommentBlock>
+    </div>
   </div>
 </template>
 <script lang="ts">
