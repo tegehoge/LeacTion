@@ -1,6 +1,5 @@
 import { Comment } from "./comment";
 import { v4 as uuidv4 } from "uuid";
-import { Dayjs } from "dayjs";
 
 test("Successful JSON conversion", () => {
   const comment = new Comment("新しいコメント", uuidv4(), uuidv4(), uuidv4());
