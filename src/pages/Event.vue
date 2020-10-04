@@ -12,7 +12,7 @@
 <script lang="ts">
 import CommentInput from "../components/CommentInput.vue";
 import CommentBlock from "../components/CommentBlock.vue";
-import { ref, Ref, defineComponent, inject, onMounted } from "vue";
+import { ref, defineComponent, onMounted } from "vue";
 import { Comment } from "../models/comment";
 import { Event, EventId } from "../models/event";
 import {
