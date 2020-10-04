@@ -1,0 +1,38 @@
+name: check
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14"
+      - uses: CultureHQ/actions-yarn@master
+        with:
+          args: install
+      - uses: CultureHQ/actions-yarn@master
+        with:
+          args: build
+      - uses: CultureHQ/actions-yarn@master
+        with:
+          args: test
+  build_functions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: "10"
+      - name: Install
+        working-directory: ./functions
+        run: npm install
+      - name: Build
+        working-directory: ./functions
+        run: npm run build
