@@ -1,13 +1,16 @@
 import { v4 as uuidv4 } from "uuid";
+import jssha256 from "js-sha256";
 
 type UserId = string;
 
 export class UserContext {
   user_id: UserId;
+  user_id_hashed: string;
   comment_order: CommentOrder;
 
   constructor(user_id?: UserId, comment_order?: CommentOrder) {
     this.user_id = user_id || uuidv4();
+    this.user_id_hashed = jssha256.sha256(this.user_id);
     this.comment_order = comment_order || CommentOrder.DescendingTimeOrder;
   }
 

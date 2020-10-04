@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 export class Comment {
   id: string; // UUID
   text: string;
-  posted_by: string; // UUID
+  posted_by: string; // FIXME: user_id のハッシュ値を入れる(なりすまし防止)
   posted_at: Dayjs; // datetime
   event_id: string; // UUID
   talk_id: string; // UUID

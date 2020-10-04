@@ -1,29 +1,28 @@
-import dayjs, { Dayjs } from "dayjs";
 import { Talk, TalkResponse } from "./talk";
 import { v4 as uuidv4 } from "uuid";
+import dayjs from "dayjs";
 
 export type EventId = string;
 
 export class Event {
   id: EventId; // UUID
   name: string;
-  date_of_event: Dayjs; // date
-  created_by: string; // UUID
+  date_of_event: string; // date
   talks: Talk[];
   external_url?: string; // URL
 
   constructor(
     name: string,
-    date_of_event: Dayjs,
-    user_id: string,
+    date_of_event: string,
     id?: EventId,
-    talks?: Talk[]
+    talks?: Talk[],
+    external_url?: string
   ) {
     this.id = id || uuidv4();
     this.name = name;
     this.date_of_event = date_of_event;
-    this.created_by = user_id;
     this.talks = talks || [];
+    this.external_url = external_url;
   }
 
   setExternalUrl(url: string) {
@@ -38,10 +37,10 @@ export class Event {
     const data = JSON.parse(payload) as EventResponse;
     return new Event(
       data.name,
-      dayjs(data.date_of_event),
-      data.created_by,
+      data.date_of_event,
       data.id,
-      data.talks as Talk[]
+      data.talks as Talk[],
+      data.external_url
     );
   }
 }
@@ -50,7 +49,8 @@ type EventResponse = {
   id: string; // UUID
   name: string;
   date_of_event: string; // date
-  created_by: string; // UUID
   talks: TalkResponse[];
   external_url?: string; // URL
 };
+
+export const emptyEvent = () => new Event("", dayjs().format("YYYY-MM-DD"));

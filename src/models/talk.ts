@@ -11,6 +11,10 @@ export class Talk {
     this.title = title;
     this.speaker_name = speaker_name;
   }
+
+  isEmpty() {
+    return this.title == "" && this.speaker_name == "";
+  }
 }
 
 export type TalkResponse = {
@@ -18,3 +22,5 @@ export type TalkResponse = {
   title: string;
   speaker_name: string;
 };
+
+export const emptyTalk = () => new Talk("", "");
