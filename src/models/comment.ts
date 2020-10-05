@@ -41,7 +41,7 @@ export class Comment {
     const data = JSON.parse(payload) as CommentResponse;
     return new Comment(
       data.text,
-      data.posted_by,
+      data.user_id_hashed,
       data.event_id,
       data.talk_id,
       data.id,
@@ -56,7 +56,7 @@ export class Comment {
       (c) =>
         new Comment(
           c.text,
-          c.posted_by,
+          c.user_id_hashed,
           c.event_id,
           c.talk_id,
           c.id,
@@ -82,7 +82,7 @@ export class Comment {
 type CommentResponse = {
   id: string; // UUID
   text: string;
-  posted_by: string; // UUID
+  user_id_hashed: string; // UUID
   posted_at: string; // datetime
   event_id: string; // UUID
   talk_id: string; // UUID
