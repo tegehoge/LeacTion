@@ -1,5 +1,5 @@
 import { Event, EventId } from "../models/event";
-import { Comment } from "../models/comment";
+import { Comment, CommentId } from "../models/comment";
 import { CommentRepository, EventRepository } from "./interface";
 
 export class FirebaseEventRepository implements EventRepository {
@@ -10,6 +10,13 @@ export class FirebaseEventRepository implements EventRepository {
   findById(event_id: EventId): Promise<Event> {
     return Promise.reject("Not yet implemented");
   }
+
+  savePassword(event_id: string, password: string): Promise<boolean> {
+    return Promise.reject("Not yet implemented");
+  }
+  verifyPassword(event_id: string, password: string): Promise<boolean> {
+    return Promise.reject("Not yet implemented");
+  }
 }
 
 export class FirebaseCommentRepository implements CommentRepository {
@@ -18,6 +25,13 @@ export class FirebaseCommentRepository implements CommentRepository {
   }
 
   findAllByEventId(event_id: EventId): Promise<Comment[]> {
+    return Promise.reject("Not yet implemented");
+  }
+  saveLike(
+    comment_id: CommentId,
+    user_id_hashed: string,
+    like: boolean
+  ): Promise<boolean> {
     return Promise.reject("Not yet implemented");
   }
 }

@@ -25,10 +25,10 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { defineComponent, computed, onMounted, ref } from "vue";
 import { Comment } from "../models/comment";
 
-export default {
+export default defineComponent({
   props: {
     event_id: String,
   },
@@ -60,5 +60,5 @@ export default {
     });
     return { commentInput, sendComment, inputForm, canSend };
   },
-};
+});
 </script>

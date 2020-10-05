@@ -13,7 +13,9 @@
             <button
               class="bg-green-500 text-white px-3 py-1 rounded-full"
               type="button"
-              @click="addLike"
+              :class="{ 'bg-pink-500': isLiked, 'opacity-50': isMine }"
+              :disabled="isMine"
+              @click="toggleLike"
             >
               <span class="mr-1">Like!</span>
               <span>{{ likeCount }}</span>
@@ -26,20 +28,29 @@
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { Comment } from "../models/comment";
+import { saveCommentLike } from "../repository";
 
 export default {
   props: {
     comment: Comment,
   },
-  setup(prop) {
+  setup(props) {
     // FIXME: likeCount, addLike is stub.
-    const likeCount = ref(0);
-    const addLike = () => {
-      likeCount.value = likeCount.value + 1;
+    const comment = props.comment;
+    const user_id_hashed = "sample";
+    const isLiked = computed(() => comment?.isLikedBy(user_id_hashed) || false);
+    const isMine = computed(() => comment?.user_id_hashed == user_id_hashed);
+    const toggleLike = () => {
+      if (comment) {
+        const liked = comment.isLikedBy(user_id_hashed);
+        comment.setLike(user_id_hashed, !liked);
+        saveCommentLike(comment.id, user_id_hashed, !liked);
+      }
     };
-    return { comment: prop.comment, likeCount, addLike };
+    const likeCount = computed(() => comment?.likes.length || 0);
+    return { comment, isLiked, isMine, likeCount, toggleLike };
   },
 };
 </script>
