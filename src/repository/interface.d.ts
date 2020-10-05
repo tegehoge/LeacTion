@@ -41,11 +41,11 @@ export interface CommentRepository {
    * ユーザーのlikeの状態を保存する
    * @param comment_id コメントID
    * @param user_id_hashed ハッシュ化したユーザーID
-   * @param like likeしたかどうか
+   * @param remove likeを削除する場合 true
    */
   saveLike(
     comment_id: CommentId,
     user_id_hashed: string,
-    like: boolean
+    remove: boolean
   ): Promise<boolean>;
 }

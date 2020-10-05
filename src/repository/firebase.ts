@@ -27,7 +27,7 @@ export class FirebaseCommentRepository implements CommentRepository {
   saveLike(
     comment_id: CommentId,
     user_id_hashed: string,
-    like: boolean
+    remove: boolean
   ): Promise<boolean> {
     return Promise.reject("Not yet implemented");
   }

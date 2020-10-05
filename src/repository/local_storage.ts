@@ -67,7 +67,7 @@ export class LocalStorageCommentRepository implements CommentRepository {
   saveLike(
     comment_id: CommentId,
     user_id_hashed: string,
-    like: boolean
+    remove: boolean
   ): Promise<boolean> {
     const comments = Comment.fromJSONArray(
       localStorage.getItem("comments") || "[]"
@@ -76,7 +76,7 @@ export class LocalStorageCommentRepository implements CommentRepository {
     if (!target_comment) {
       return Promise.reject();
     }
-    target_comment.setLike(user_id_hashed, like);
+    target_comment.setLike(user_id_hashed, !remove);
     localStorage.setItem(`comments`, JSON.stringify(comments));
     return Promise.resolve(true);
   }
