@@ -12,7 +12,7 @@
       </ul>
     </div>
     <div>
-      <router-link to="/event/tegehoge">
+      <router-link to="/new">
         <button class="my-6 px-5 py-2 bg-blue-400 text-white rounded-full">
           Twitterログインしてイベントを作成(仮)
         </button>

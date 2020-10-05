@@ -20,6 +20,7 @@
 import CommentInput from "../components/CommentInput.vue";
 import CommentBlock from "../components/CommentBlock.vue";
 import { ref, defineComponent, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { Comment } from "../models/comment";
 import { Event, EventId } from "../models/event";
 import {
@@ -36,9 +37,8 @@ export default defineComponent({
     event_id: String,
   },
   setup(props) {
-    const event = ref<Event>(
-      new Event("てげほげ勉強会", dayjs("2020-10-10"), "sample", "tegehoge")
-    );
+    // FIXME: dummy event
+    const event = ref<Event>();
     const comments = ref<Comment[]>([]);
     const addComment = (comment: Comment) => {
       comments.value.push(comment);
