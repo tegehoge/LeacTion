@@ -3,7 +3,7 @@ import { Comment, CommentId } from "../models/comment";
 import { CommentRepository, EventRepository } from "./interface";
 
 export class FirebaseEventRepository implements EventRepository {
-  save(event: Event): Promise<Event> {
+  save(event: Event, password: string): Promise<Event> {
     return Promise.reject("Not yet implemented");
   }
 
@@ -11,9 +11,6 @@ export class FirebaseEventRepository implements EventRepository {
     return Promise.reject("Not yet implemented");
   }
 
-  savePassword(event_id: string, password: string): Promise<boolean> {
-    return Promise.reject("Not yet implemented");
-  }
   verifyPassword(event_id: string, password: string): Promise<boolean> {
     return Promise.reject("Not yet implemented");
   }

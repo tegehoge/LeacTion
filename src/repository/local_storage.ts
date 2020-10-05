@@ -4,9 +4,26 @@ import { CommentRepository, EventRepository } from "./interface";
 import jssha256 from "js-sha256";
 
 export class LocalStorageEventRepository implements EventRepository {
-  save(event: Event): Promise<Event> {
-    localStorage.setItem(`event-${event.id}`, JSON.stringify(event));
-    return Promise.resolve(event);
+  save(event: Event, password: string): Promise<Event> {
+    const payload = localStorage.getItem(`event-${event.id}`);
+    if (payload) {
+      const password_hashed = localStorage.getItem(
+        `event-${event.id}-password`
+      );
+      if (jssha256.sha256(password) == password_hashed) {
+        localStorage.setItem(`event-${event.id}`, JSON.stringify(event));
+        return Promise.resolve(event);
+      } else {
+        return Promise.reject();
+      }
+    } else {
+      localStorage.setItem(`event-${event.id}`, JSON.stringify(event));
+      localStorage.setItem(
+        `event-${event.id}-password`,
+        jssha256.sha256(password)
+      );
+      return Promise.resolve(event);
+    }
   }
 
   findById(event_id: EventId): Promise<Event> {
@@ -18,13 +35,6 @@ export class LocalStorageEventRepository implements EventRepository {
     }
   }
 
-  savePassword(event_id: string, password: string): Promise<boolean> {
-    localStorage.setItem(
-      `event-${event_id}-password`,
-      jssha256.sha256(password)
-    );
-    return Promise.resolve(true);
-  }
   verifyPassword(event_id: string, password: string): Promise<boolean> {
     const password_hashed = localStorage.getItem(`event-${event_id}-password`);
     return Promise.resolve(jssha256.sha256(password) == password_hashed);

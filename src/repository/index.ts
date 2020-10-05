@@ -17,7 +17,6 @@ const comment_repository: CommentRepository =
 
 export const saveEvent = event_repository.save;
 export const findEventById = event_repository.findById;
-export const saveEventPassword = event_repository.savePassword;
 export const verifyEventPassword = event_repository.verifyPassword;
 export const saveComment = comment_repository.save;
 export const findAllCommentByEventId = comment_repository.findAllByEventId;
