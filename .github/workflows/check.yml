@@ -12,15 +12,18 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "14"
-      - uses: CultureHQ/actions-yarn@master
+      - name: yarn install
+        uses: CultureHQ/actions-yarn@master
         with:
           args: install
-      - uses: CultureHQ/actions-yarn@master
-        with:
-          args: build
-      - uses: CultureHQ/actions-yarn@master
+      - name: yarn test
+        uses: CultureHQ/actions-yarn@master
         with:
           args: test
+      - name: yarn build
+        uses: CultureHQ/actions-yarn@master
+        with:
+          args: build
   build_functions:
     runs-on: ubuntu-latest
     steps:
@@ -33,6 +36,9 @@ jobs:
       - name: Install
         working-directory: ./functions
         run: npm install
+      - name: Lint
+        working-directory: ./functions
+        run: npm run lint
       - name: Build
         working-directory: ./functions
         run: npm run build
