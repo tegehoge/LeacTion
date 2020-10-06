@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div v-if="event">
+    <h2 class="text-4xl text-center pt-4">{{ event.name }}</h2>
+    <div class="text-center pb-4">{{ event.date_of_event }}</div>
     <div>
       <CommentInput
         :event_id="event_id"
@@ -15,6 +17,8 @@
       </CommentBlock>
     </div>
   </div>
+  <div v-else>ローディング中…</div>
+  <!-- FIXME: loading -->
 </template>
 <script lang="ts">
 import CommentInput from "../components/CommentInput.vue";
@@ -38,6 +42,7 @@ export default defineComponent({
   },
   setup(props) {
     const event = ref<Event>();
+    const event_id = props.event_id;
     const comments = ref<Comment[]>([]);
     const addComment = (comment: Comment) => {
       comments.value.push(comment);
@@ -51,7 +56,7 @@ export default defineComponent({
       );
     });
 
-    return { event_id: props.event_id, comments, addComment };
+    return { event, event_id, comments, addComment };
   },
 });
 </script>
