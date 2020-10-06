@@ -4,6 +4,9 @@
 
     <EventInputForm :event="event"></EventInputForm>
 
+    <h3 class="w-full mt-3 pt-3 border-t-2 text-xl font-bold">
+      イベントを編集するためのパスワードを設定してください
+    </h3>
     <div class="md:flex md:items-center mt-6 mb-2">
       <div class="md:w-1/3">
         <label
@@ -52,10 +55,10 @@
       <div class="">
         <button
           type="button"
-          class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
+          class="bg-blue-500 opacity-50 text-white px-4 py-2 rounded"
           @click="saveCurrentEvent"
-          :class="{ 'opacity-50 hover:bg-blue-500': invalidPassword }"
-          :disabled="invalidPassword"
+          :class="{ 'opacity-100 hover:bg-blue-700': formValidated }"
+          :disabled="!formValidated"
         >
           イベント情報を保存する
         </button>
@@ -78,34 +81,40 @@ export default defineComponent({
   setup(props, context) {
     const router = useRouter();
 
-    const event = reactive(new Event("", dayjs().format("YYYY-MM-DD")));
+    const event: Event = reactive(new Event("", dayjs().format("YYYY-MM-DD")));
 
     const saveCurrentEvent = () => {
-      event.talks = event.talks.filter((talk) => !talk.isEmpty());
-      console.log(JSON.stringify(event));
-      saveEvent(event)
-        .then((event) => {
-          router.push(`/event/${event.id}`);
-        })
-        .catch((e) => {
-          console.error(e);
-        });
+      if (formValidated.value && eventPassword.value != null) {
+        event.talks = event.talks.filter((talk) => !talk.isEmpty());
+        // console.log(JSON.stringify(event));
+        saveEvent(event, eventPassword.value)
+          .then((savedEvent) => {
+            router.push(`/event/${savedEvent.id}`);
+          })
+          .catch((e) => {
+            console.error(e);
+          });
+      }
     };
 
     const eventPassword = ref<string | null>(null);
     const eventPasswordConfirm = ref<string | null>(null);
-    const verifyPassword = (actual: string | null, confirm: string | null) => {
-      if (confirm == null) {
-        return true; // not dirty
+    const invalidPassword = computed(() => {
+      if (eventPasswordConfirm.value == null) {
+        return null; // 未入力
       }
-      if ((actual || "").length > 0 && actual == confirm) {
-        return true;
+      if (
+        (eventPassword.value || "").length > 0 &&
+        eventPassword.value == eventPasswordConfirm.value
+      ) {
+        return false;
       }
-      return false;
-    };
-    const invalidPassword = computed(
-      () => !verifyPassword(eventPassword.value, eventPasswordConfirm.value)
-    );
+      return true;
+    });
+
+    const formValidated = computed(() => {
+      return event.isValidFuture() && invalidPassword.value == false;
+    });
 
     return {
       event,
@@ -113,6 +122,7 @@ export default defineComponent({
       eventPassword,
       eventPasswordConfirm,
       invalidPassword,
+      formValidated,
     };
   },
 });

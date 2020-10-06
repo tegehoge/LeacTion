@@ -43,6 +43,16 @@ export class Event {
       data.external_url
     );
   }
+
+  isValid(): boolean {
+    return this.name.length > 0 && this.talks.some((talk) => !talk.isEmpty());
+  }
+
+  isValidFuture(): boolean {
+    return (
+      this.isValid() && dayjs(this.date_of_event) >= dayjs().startOf("day")
+    );
+  }
 }
 
 type EventResponse = {

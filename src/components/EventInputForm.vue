@@ -5,7 +5,7 @@
         <label
           for="event_name"
           class="block text-gray-700 font-bold md:text-right pr-4 mb-1 md:mb-0"
-          >イベント名</label
+          >イベント名<sup class="text-red-500">*</sup></label
         >
       </div>
       <div class="md:w-2/3">
@@ -24,7 +24,7 @@
         <label
           for="date_of_event"
           class="block text-gray-700 font-bold md:text-right pr-4 mb-1 md:mb-0"
-          >開催日</label
+          >開催日<sup class="text-red-500">*</sup></label
         >
       </div>
       <div class="md:w-2/3">
@@ -34,6 +34,7 @@
           id="date_of_event"
           v-model="event.date_of_event"
           placeholder="yyyy-mm-dd"
+          :min="today"
           class="w-auto border-2 border-gray-400 rounded px-2 py-2"
         />
       </div>
@@ -52,7 +53,7 @@
           name="external_url"
           id="external_url"
           v-model="event.external_url"
-          placeholder="connpassイベントURLなど"
+          placeholder="connpassイベントURLなど (optional)"
           class="w-full border-2 border-gray-400 rounded px-2 py-2"
         />
       </div>
@@ -96,7 +97,7 @@
       <div class="md:w-5/6 md:px-1">
         <button
           type="button"
-          class="w-full border-2 border-green-500 hover:bg-green-500 hover:text-white text-green-500 px-4 py-1 rounded transition duration-100"
+          class="w-full border-2 border-green-500 hover:bg-green-500 hover:text-white text-green-500 py-1 rounded transition duration-100"
           @click="addTalkInput"
         >
           発表枠を追加する
@@ -107,7 +108,7 @@
 </template>
 <script lang="ts">
 import dayjs from "dayjs";
-import { defineComponent, onMounted, reactive, ref } from "vue";
+import { defineComponent, onMounted, reactive, ref, watch } from "vue";
 import { Event } from "../models/event";
 import { emptyTalk } from "../models/talk";
 export default defineComponent({
@@ -115,10 +116,10 @@ export default defineComponent({
   props: {
     event: Event,
   },
+  emits: [],
   setup(props, context) {
-    const event_data =
-      props.event || new Event("", dayjs().format("YYYY-MM-DD"));
-    const event = reactive(event_data);
+    const event = props.event || new Event("", dayjs().format("YYYY-MM-DD"));
+    const today = dayjs().format("YYYY-MM-DD");
 
     const fillMinimalTalks = () => {
       while (event.talks.length < 3) {
@@ -127,11 +128,11 @@ export default defineComponent({
     };
 
     const addTalkInput = () => {
-      event_data.talks.push(emptyTalk());
+      event.talks.push(emptyTalk());
     };
 
     const removeTalk = (talk_id: string) => {
-      event_data.talks = event_data.talks.filter((talk) => talk.id != talk_id);
+      event.talks = event.talks.filter((talk) => talk.id != talk_id);
       fillMinimalTalks();
     };
 
@@ -143,6 +144,7 @@ export default defineComponent({
       event,
       addTalkInput,
       removeTalk,
+      today,
     };
   },
 });

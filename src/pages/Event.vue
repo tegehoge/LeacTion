@@ -37,7 +37,6 @@ export default defineComponent({
     event_id: String,
   },
   setup(props) {
-    // FIXME: dummy event
     const event = ref<Event>();
     const comments = ref<Comment[]>([]);
     const addComment = (comment: Comment) => {
