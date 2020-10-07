@@ -1,4 +1,4 @@
-import { Event } from "./event";
+import { Event } from "../models/event";
 
 test("assign", () => {
   const event = new Event("sample", "2020-10-01");
