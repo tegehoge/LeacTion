@@ -35,11 +35,11 @@ import { saveCommentLike } from "../repository";
 export default {
   props: {
     comment: Comment,
+    user_id_hashed: String,
   },
   setup(props) {
-    // FIXME: likeCount, addLike is stub.
     const comment = props.comment;
-    const user_id_hashed = "sample";
+    const user_id_hashed = props.user_id_hashed || "unknown";
     const isLiked = computed(() => comment?.isLikedBy(user_id_hashed) || false);
     const isMine = computed(() => comment?.user_id_hashed == user_id_hashed);
     const toggleLike = () => {

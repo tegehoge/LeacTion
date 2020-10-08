@@ -5,6 +5,7 @@
     <div>
       <CommentInput
         :event_id="event_id"
+        :user_id_hashed="userContext.user_id_hashed"
         @add_comment="addComment"
       ></CommentInput>
     </div>
@@ -13,6 +14,7 @@
         v-for="comment in comments"
         :key="comment.id"
         :comment="comment"
+        :user_id_hashed="userContext.user_id_hashed"
       >
       </CommentBlock>
     </div>
@@ -33,6 +35,18 @@ import {
   saveComment,
 } from "../repository";
 import dayjs from "dayjs";
+import { UserContext } from "../models/user_context";
+
+const createOrGetUserContext = () => {
+  const savedUserContext = localStorage.getItem("user_context");
+  if (savedUserContext) {
+    return UserContext.fromJSON(savedUserContext);
+  } else {
+    const userContext = new UserContext();
+    localStorage.setItem("user_context", userContext.toJSON());
+    return userContext;
+  }
+};
 
 export default defineComponent({
   name: "Event",
@@ -49,6 +63,8 @@ export default defineComponent({
       saveComment(comment);
     };
 
+    const userContext = createOrGetUserContext();
+
     onMounted(() => {
       findEventById(props.event_id || "").then((ev) => (event.value = ev));
       findAllCommentByEventId(props.event_id || "").then(
@@ -56,7 +72,7 @@ export default defineComponent({
       );
     });
 
-    return { event, event_id, comments, addComment };
+    return { event, event_id, comments, addComment, userContext };
   },
 });
 </script>
