@@ -44,9 +44,9 @@ export default {
     const isMine = computed(() => comment?.user_id_hashed == user_id_hashed);
     const toggleLike = () => {
       if (comment) {
-        const liked = comment.isLikedBy(user_id_hashed);
-        comment.setLike(user_id_hashed, !liked);
-        saveCommentLike(comment.id, user_id_hashed, !liked);
+        const remove = comment.isLikedBy(user_id_hashed);
+        comment.setLike(user_id_hashed, remove);
+        saveCommentLike(comment.event_id, comment.id, user_id_hashed, remove);
       }
     };
     const likeCount = computed(() => comment?.likes.length || 0);

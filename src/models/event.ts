@@ -44,6 +44,16 @@ export class Event {
     );
   }
 
+  static fromObj(obj: EventResponse): Event {
+    return new Event(
+      obj.name,
+      obj.date_of_event,
+      obj.id,
+      obj.talks.map((talk) => Talk.fromObj(talk)),
+      obj.external_url
+    );
+  }
+
   isValid(): boolean {
     return this.name.length > 0 && this.talks.some((talk) => !talk.isEmpty());
   }

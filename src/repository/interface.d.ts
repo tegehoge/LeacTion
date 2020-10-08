@@ -44,6 +44,7 @@ export interface CommentRepository {
    * @param remove likeを削除する場合 true
    */
   saveLike(
+    event_id: EventId,
     comment_id: CommentId,
     user_id_hashed: string,
     remove: boolean

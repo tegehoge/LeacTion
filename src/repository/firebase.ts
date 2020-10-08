@@ -1,34 +1,59 @@
+import axios from "axios";
+
 import { Event, EventId } from "../models/event";
-import { Comment, CommentId } from "../models/comment";
+import { Comment, CommentId, CommentResponse } from "../models/comment";
 import { CommentRepository, EventRepository } from "./interface";
 
 export class FirebaseEventRepository implements EventRepository {
   save(event: Event, password: string): Promise<Event> {
-    return Promise.reject("Not yet implemented");
+    const data = Object.assign({}, event, { password });
+
+    return axios.post("/api/event/", data).then(() => {
+      return event;
+    });
   }
 
   findById(event_id: EventId): Promise<Event> {
-    return Promise.reject("Not yet implemented");
+    return axios.get(`/api/event/${event_id}`).then((res) => {
+      return Event.fromObj(res.data);
+    });
   }
 
   verifyPassword(event_id: string, password: string): Promise<boolean> {
-    return Promise.reject("Not yet implemented");
+    return axios
+      .post(`/api/event/${event_id}/verify`, { password })
+      .then((res) => {
+        return res.status == 200;
+      });
   }
 }
 
 export class FirebaseCommentRepository implements CommentRepository {
   save(comment: Comment): Promise<Comment> {
-    return Promise.reject("Not yet implemented");
+    return axios
+      .post(`/api/event/${comment.event_id}/comment`, comment)
+      .then(() => {
+        return comment;
+      });
   }
 
   findAllByEventId(event_id: EventId): Promise<Comment[]> {
-    return Promise.reject("Not yet implemented");
+    return axios.get(`/api/event/${event_id}/comments`).then((res) => {
+      const data = res.data as CommentResponse[];
+      return data.map((c) => Comment.fromObj(c));
+    });
   }
   saveLike(
+    event_id: EventId,
     comment_id: CommentId,
     user_id_hashed: string,
     remove: boolean
   ): Promise<boolean> {
-    return Promise.reject("Not yet implemented");
+    const data = { user_id_hashed, remove };
+    return axios
+      .post(`/api/event/${event_id}/comments/${comment_id}/like`, data)
+      .then((res) => {
+        return res.status == 201;
+      });
   }
 }

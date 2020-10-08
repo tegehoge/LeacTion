@@ -66,20 +66,32 @@ export class Comment {
     );
   }
 
+  static fromObj(obj: CommentResponse): Comment {
+    return new Comment(
+      obj.text,
+      obj.user_id_hashed,
+      obj.event_id,
+      obj.talk_id,
+      obj.id,
+      dayjs(obj.posted_at),
+      obj.likes
+    );
+  }
+
   isLikedBy(user_id_hashed: string): boolean {
     return this.likes.includes(user_id_hashed);
   }
 
-  setLike(user_id_hashed: string, like: boolean): void {
-    if (like && !this.likes.includes(user_id_hashed)) {
+  setLike(user_id_hashed: string, remove: boolean): void {
+    if (!remove && !this.likes.includes(user_id_hashed)) {
       this.likes.push(user_id_hashed);
-    } else if (!like && this.likes.includes(user_id_hashed)) {
+    } else if (remove && this.likes.includes(user_id_hashed)) {
       this.likes = this.likes.filter((u) => u != user_id_hashed);
     }
   }
 }
 
-type CommentResponse = {
+export type CommentResponse = {
   id: string; // UUID
   text: string;
   user_id_hashed: string; // UUID
