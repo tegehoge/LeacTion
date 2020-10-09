@@ -28,34 +28,41 @@
 </template>
 
 <script lang="ts">
-import { computed, ref } from "vue";
+import { computed, defineComponent } from "vue";
+
 import { Comment } from "../models/comment";
 import { saveCommentLike } from "../repository";
 
-export default {
+export default defineComponent({
   props: {
-    comment: Comment,
+    comment: {
+      type: Comment,
+      required: true,
+    },
   },
   setup(props) {
     // FIXME: likeCount, addLike is stub.
-    const comment = props.comment;
     const user_id_hashed = "sample";
-    const isLiked = computed(() => comment?.isLikedBy(user_id_hashed) || false);
-    const isMine = computed(() => comment?.user_id_hashed == user_id_hashed);
+    const isLiked = computed(
+      () => props.comment.isLikedBy(user_id_hashed) || false
+    );
+    const isMine = computed(
+      () => props.comment.user_id_hashed == user_id_hashed
+    );
     const toggleLike = () => {
-      if (comment) {
-        const remove = comment.isLikedBy(user_id_hashed);
-        comment.setLike(user_id_hashed, remove);
-        saveCommentLike(comment.event_id, comment.id, user_id_hashed, remove);
-      }
+      const remove = props.comment.isLikedBy(user_id_hashed);
+      props.comment.setLike(user_id_hashed, remove);
+      saveCommentLike(
+        props.comment.eventId,
+        props.comment.id,
+        user_id_hashed,
+        remove
+      );
     };
-    const likeCount = computed(() => comment?.likes.length || 0);
-    return { comment, isLiked, isMine, likeCount, toggleLike };
+    const likeCount = computed(() => props.comment.likes.length || 0);
+    return { isLiked, isMine, likeCount, toggleLike };
   },
-};
+});
 </script>
 
-<style>
-.fade {
-}
-</style>
+<style></style>

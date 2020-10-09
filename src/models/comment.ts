@@ -7,15 +7,15 @@ export class Comment {
   text: string;
   user_id_hashed: string; // FIXME: user_id のハッシュ値を入れる(なりすまし防止)
   posted_at: Dayjs; // datetime
-  event_id: string; // UUID
-  talk_id: string; // UUID
+  eventId: string; // UUID
+  talkId: string; // UUID
   likes: string[];
 
   constructor(
     text: string,
     user_id_hashed: string,
-    event_id: string,
-    talk_id: string,
+    eventId: string,
+    talkId: string,
     id?: string,
     posted_at?: Dayjs,
     likes?: string[]
@@ -24,17 +24,17 @@ export class Comment {
     this.text = text;
     this.user_id_hashed = user_id_hashed;
     this.posted_at = posted_at || dayjs();
-    this.event_id = event_id;
-    this.talk_id = talk_id;
+    this.eventId = eventId;
+    this.talkId = talkId;
     this.likes = likes || [];
   }
 
   /**
    * コメントの投稿先トークを変更する
-   * @param talk_id トークID
+   * @param talkId トークID
    */
-  changeTalk(talk_id: string) {
-    this.talk_id = talk_id;
+  changeTalk(talkId: string): void {
+    this.talkId = talkId;
   }
 
   static fromJSON(payload: string): Comment {
@@ -42,8 +42,8 @@ export class Comment {
     return new Comment(
       data.text,
       data.user_id_hashed,
-      data.event_id,
-      data.talk_id,
+      data.eventId,
+      data.talkId,
       data.id,
       dayjs(data.posted_at),
       data.likes
@@ -57,8 +57,8 @@ export class Comment {
         new Comment(
           c.text,
           c.user_id_hashed,
-          c.event_id,
-          c.talk_id,
+          c.eventId,
+          c.talkId,
           c.id,
           dayjs(c.posted_at),
           c.likes
@@ -70,8 +70,8 @@ export class Comment {
     return new Comment(
       obj.text,
       obj.user_id_hashed,
-      obj.event_id,
-      obj.talk_id,
+      obj.eventId,
+      obj.talkId,
       obj.id,
       dayjs(obj.posted_at),
       obj.likes
@@ -96,7 +96,7 @@ export type CommentResponse = {
   text: string;
   user_id_hashed: string; // UUID
   posted_at: string; // datetime
-  event_id: string; // UUID
-  talk_id: string; // UUID
+  eventId: string; // UUID
+  talkId: string; // UUID
   likes: string[];
 };

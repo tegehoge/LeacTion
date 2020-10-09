@@ -14,7 +14,7 @@ export class UserContext {
     this.comment_order = comment_order || CommentOrder.DescendingTimeOrder;
   }
 
-  changeCommentOrder(comment_order: CommentOrder) {
+  changeCommentOrder(comment_order: CommentOrder): void {
     this.comment_order = comment_order;
   }
   toJSON(): string {

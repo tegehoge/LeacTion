@@ -13,11 +13,11 @@ test("Successful JSON conversion", () => {
 
 test("Successful JSONArray conversion", () => {
   const user_id = uuidv4();
-  const event_id = uuidv4();
-  const talk_id = uuidv4();
+  const eventId = uuidv4();
+  const talkId = uuidv4();
   const comments = [
-    new Comment("新しいコメント", user_id, event_id, talk_id),
-    new Comment("別の新しいコメント", user_id, event_id, talk_id),
+    new Comment("新しいコメント", user_id, eventId, talkId),
+    new Comment("別の新しいコメント", user_id, eventId, talkId),
   ];
 
   const commentsString = JSON.stringify(comments);

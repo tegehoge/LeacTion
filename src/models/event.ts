@@ -25,11 +25,11 @@ export class Event {
     this.external_url = external_url;
   }
 
-  setExternalUrl(url: string) {
+  setExternalUrl(url: string): void {
     this.external_url = url;
   }
 
-  removeExternalUrl() {
+  removeExternalUrl(): void {
     this.external_url = undefined;
   }
 
@@ -73,4 +73,4 @@ type EventResponse = {
   external_url?: string; // URL
 };
 
-export const emptyEvent = () => new Event("", dayjs().format("YYYY-MM-DD"));
+export const emptyEvent = (): Event => new Event("", dayjs().format("YYYY-MM-DD"));

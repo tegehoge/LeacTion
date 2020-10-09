@@ -8,6 +8,6 @@ export default createRouter({
   routes: [
     { path: "/", component: Top },
     { path: "/new", component: NewEvent },
-    { path: "/event/:event_id", component: Event, props: true },
+    { path: "/event/:eventId", component: Event, props: true },
   ],
 });
