@@ -1,4 +1,5 @@
 module.exports = {
+  root: true,
   env: {
     browser: true,
     es6: true,
@@ -8,6 +9,7 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: "tsconfig.json",
+    parser: "@typescript-eslint/parser",
     sourceType: "module",
   },
   plugins: ["@typescript-eslint", "import"],
@@ -26,7 +28,7 @@ module.exports = {
       {
         arrays: "only-multiline",
         objects: "only-multiline",
-        imports: "always",
+        imports: "only-multiline",
       },
     ],
     "constructor-super": "error",

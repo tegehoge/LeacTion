@@ -2,12 +2,14 @@ import * as functions from "firebase-functions";
 import * as firebase from "firebase-admin";
 import * as express from "express";
 import * as bcrypt from "bcrypt";
+import { WriteResult } from "@google-cloud/firestore";
 
 import {
   EventRequestWithPassword,
   EventPasswordRequest,
   CommentRequest,
   CommentLikeRequest,
+  CommentResponse,
 } from "./types";
 
 const firebaseConfig = functions.config() ? functions.config().firebase : {};
@@ -20,10 +22,10 @@ const api = express.Router();
 
 app.use(express.json());
 
-api.get("/event/:event_id", (req, res) => {
-  const event_id = req.params["event_id"];
+api.get("/event/:eventId", (req, res) => {
+  const eventId = req.params["eventId"];
   firestore
-    .doc(`events/${event_id}`)
+    .doc(`events/${eventId}`)
     .get()
     .then((snapshot) => {
       res.set("Cache-Control", "public, max-age=300, s-maxage=10");
@@ -40,7 +42,7 @@ api.post("/event", (req, res) => {
   const eventWithPassword = req.body as EventRequestWithPassword;
   const { password, ...event } = eventWithPassword;
 
-  const createNewEvent = (): Promise<any> => {
+  const createNewEvent = (): Promise<WriteResult> => {
     const passwordHashing = bcrypt.hash(password, 10);
 
     const eventSaveTask = firestore.doc(`events/${event.id}`).set(event);
@@ -48,9 +50,9 @@ api.post("/event", (req, res) => {
       return firestore.doc(`event-secrets/${event.id}`).set({ hashedPassword });
     });
 
-    return Promise.all([eventSaveTask, passwordSaveTask]);
+    return Promise.all([eventSaveTask, passwordSaveTask]).then(result => result[0]);
   };
-  const updateEvent = (data: { hashedPassword: string }): Promise<any> => {
+  const updateEvent = (data: { hashedPassword: string }): Promise<WriteResult> => {
     const { hashedPassword } = data;
     return bcrypt.compare(password, hashedPassword).then((isVerified) => {
       if (isVerified) {
@@ -79,11 +81,11 @@ api.post("/event", (req, res) => {
     });
 });
 
-api.get("/event/:event_id/comments", (req, res) => {
-  const event_id = req.params["event_id"];
-  const comments: object[] = [];
+api.get("/event/:eventId/comments", (req, res) => {
+  const eventId = req.params["eventId"];
+  const comments: CommentResponse[] = [];
   firestore
-    .collection(`comments-${event_id}`)
+    .collection(`comments-${eventId}`)
     .stream()
     .on("data", (snapshot) => {
       comments.push(snapshot.data());
@@ -94,12 +96,12 @@ api.get("/event/:event_id/comments", (req, res) => {
     });
 });
 
-api.post("/event/:event_id/verify", async (req, res) => {
-  const event_id = req.params["event_id"];
+api.post("/event/:eventId/verify", async (req, res) => {
+  const eventId = req.params["eventId"];
   const { password } = req.body as EventPasswordRequest;
 
   firestore
-    .doc(`event-secrets/${event_id}`)
+    .doc(`event-secrets/${eventId}`)
     .get()
     .then((snapshot) => {
       const { hashedPassword } = snapshot.data() as { hashedPassword: string };
@@ -119,11 +121,11 @@ api.post("/event/:event_id/verify", async (req, res) => {
     });
 });
 
-api.post("/event/:event_id/comment", (req, res) => {
-  const event_id = req.params["event_id"];
+api.post("/event/:eventId/comment", (req, res) => {
+  const eventId = req.params["eventId"];
   const comment = req.body as CommentRequest;
   firestore
-    .doc(`comments-${event_id}/${comment.id}`)
+    .doc(`comments-${eventId}/${comment.id}`)
     .create(comment)
     .then(() => res.json({ message: "ok" }))
     .catch((e) => {
@@ -133,8 +135,8 @@ api.post("/event/:event_id/comment", (req, res) => {
     });
 });
 
-api.post("/event/:event_id/comment/:comment_id/like", (req, res) => {
-  const event_id = req.params["event_id"];
+api.post("/event/:eventId/comment/:comment_id/like", (req, res) => {
+  const eventId = req.params["eventId"];
   const comment_id = req.params["comment_id"];
   const likeReq = req.body as CommentLikeRequest;
 
@@ -142,12 +144,12 @@ api.post("/event/:event_id/comment/:comment_id/like", (req, res) => {
     ? firebase.firestore.FieldValue.arrayRemove
     : firebase.firestore.FieldValue.arrayUnion;
 
-  const docRef = firestore.doc(`comments-${event_id}/${comment_id}`);
+  const docRef = firestore.doc(`comments-${eventId}/${comment_id}`);
   docRef
     .update({
       likes: arrayUpdate(likeReq.user_id_hashed),
     })
-    .then((result) => {
+    .then(() => {
       res.json({ message: "ok" });
     })
     .catch((e) => {

@@ -22,10 +22,12 @@ export type CommentRequest = {
   text: string;
   user_id_hashed: string;
   posted_at: string; // ISO 8601 format
-  event_id: string;
-  talk_id: string;
+  eventId: string;
+  talkId: string;
   likes: string[];
 };
+
+export type CommentResponse = CommentRequest;
 
 export type CommentLikeRequest = {
   user_id_hashed: string;
