@@ -23,17 +23,17 @@
     <div class="md:flex md:items-center mb-6">
       <div class="md:w-1/3">
         <label
-          for="date_of_event"
+          for="dateOfEvent"
           class="block text-gray-700 font-bold md:text-right pr-4 mb-1 md:mb-0"
           >開催日<sup class="text-red-500">*</sup></label
         >
       </div>
       <div class="md:w-2/3">
         <input
-          id="date_of_event"
-          v-model="eventInput.date_of_event"
+          id="dateOfEvent"
+          v-model="eventInput.dateOfEvent"
           type="date"
-          name="date_of_event"
+          name="dateOfEvent"
           placeholder="yyyy-mm-dd"
           :min="today"
           class="w-auto border-2 border-gray-400 rounded px-2 py-2"
@@ -44,17 +44,17 @@
     <div class="md:flex md:items-center mb-6">
       <div class="md:w-1/3">
         <label
-          for="external_url"
+          for="externalUrl"
           class="block text-gray-700 font-bold md:text-right pr-4 mb-1 md:mb-0"
           >イベントページのURL</label
         >
       </div>
       <div class="md:w-2/3">
         <input
-          id="external_url"
-          v-model="eventInput.external_url"
+          id="externalUrl"
+          v-model.trim="eventInput.externalUrl"
           type="text"
-          name="external_url"
+          name="externalUrl"
           placeholder="connpassイベントURLなど (optional)"
           class="w-full border-2 border-gray-400 rounded px-2 py-2"
           @input="updateEvent"
@@ -67,13 +67,13 @@
       class="w-full md:flex md:items-center py-1"
     >
       <div class="md:w-1/6 mb-1 md:mb-0">
-        <label for="external_url" class="block text-gray-700 font-bold md:text-right pr-4 md:mb-0"
+        <label for="externalUrl" class="block text-gray-700 font-bold md:text-right pr-4 md:mb-0"
           >発表枠{{ index + 1 }}</label
         >
       </div>
       <div class="md:w-1/4 md:px-1 mb-1 md:mb-0">
         <input
-          v-model="talk.speaker_name"
+          v-model.trim="talk.speakerName"
           type="text"
           class="w-full border-2 border-gray-400 rounded p-2"
           placeholder="発表者名"
@@ -82,7 +82,7 @@
       </div>
       <div class="md:flex-grow md:px-1 mb-1 md:mb-0">
         <input
-          v-model="talk.title"
+          v-model.trim="talk.title"
           type="text"
           class="w-full border-2 border-gray-400 rounded p-2"
           placeholder="発表タイトル"

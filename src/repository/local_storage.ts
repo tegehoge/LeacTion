@@ -59,16 +59,16 @@ export class LocalStorageCommentRepository implements CommentRepository {
 
   saveLike(
     eventId: EventId,
-    comment_id: CommentId,
-    user_id_hashed: string,
+    commentId: CommentId,
+    userIdHashed: string,
     remove: boolean
   ): Promise<boolean> {
     const comments = Comment.fromJSONArray(storage.getItem("comments") || "[]");
-    const target_comment = comments.find((c) => c.id == comment_id);
+    const target_comment = comments.find((c) => c.id == commentId);
     if (!target_comment) {
       return Promise.reject();
     }
-    target_comment.setLike(user_id_hashed, remove);
+    target_comment.setLike(userIdHashed, remove);
     storage.setItem(`comments`, JSON.stringify(comments));
     return Promise.resolve(true);
   }

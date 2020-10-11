@@ -41,12 +41,12 @@ export class FirebaseCommentRepository implements CommentRepository {
   }
   saveLike(
     eventId: EventId,
-    comment_id: CommentId,
-    user_id_hashed: string,
+    commentId: CommentId,
+    userIdHashed: string,
     remove: boolean
   ): Promise<boolean> {
-    const data = { user_id_hashed, remove };
-    return axios.post(`/api/event/${eventId}/comment/${comment_id}/like`, data).then((res) => {
+    const data = { userIdHashed, remove };
+    return axios.post(`/api/event/${eventId}/comment/${commentId}/like`, data).then((res) => {
       return res.status == 201;
     });
   }

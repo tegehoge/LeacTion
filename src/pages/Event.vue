@@ -1,7 +1,7 @@
 <template>
   <div v-if="event">
     <h2 class="text-4xl text-center pt-4">{{ event.name }}</h2>
-    <div class="text-center pb-4">{{ event.date_of_event }}</div>
+    <div class="text-center pb-4">{{ event.dateOfEvent }}</div>
     <div class="flex px-3 py-2 w-full text-center items-center max-w-3xl mx-auto">
       <div class="w-1/6 mb-1 md:mb-0">
         <label for="talk_select" class="block text-gray-700 font-bold md:text-right pr-4 md:mb-0"
@@ -15,7 +15,7 @@
           v-model="currentTalk"
         >
           <option v-for="talk in event.talks" :key="talk.id" :value="talk">
-            {{ talk.speaker_name }}「{{ talk.title }}」
+            {{ talk.speakerName }}「{{ talk.title }}」
           </option>
         </select>
         <div
@@ -30,7 +30,7 @@
     <div>
       <CommentInput
         :event-id="eventId"
-        :user-id-hashed="userContext.user_id_hashed"
+        :user-id-hashed="userContext.userIdHashed"
         :talk-id="currentTalk?.id"
         @add-comment="addComment"
       ></CommentInput>
@@ -40,7 +40,7 @@
         v-for="comment in commentsForTalk"
         :key="comment.id"
         :comment="comment"
-        :user-id-hashed="userContext.user_id_hashed"
+        :user-id-hashed="userContext.userIdHashed"
       >
       </CommentBlock>
     </div>
@@ -102,7 +102,7 @@ export default defineComponent({
         currentTalk.value = event.value.talks[0];
       });
       findAllCommentByEventId(props.eventId || "").then(
-        (existing_comments) => (comments.value = existing_comments)
+        (existingComments) => (comments.value = existingComments)
       );
     });
 

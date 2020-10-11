@@ -7,7 +7,7 @@
         </div>
         <div class="flex items-end text-sm">
           <div class="flex-grow text-black opacity-25">
-            {{ comment.posted_at.format("YYYY-MM-DD HH:mm:ss") }}
+            {{ comment.postedAt.format("YYYY-MM-DD HH:mm:ss") }}
           </div>
           <div>
             <button
@@ -46,7 +46,7 @@ export default defineComponent({
   },
   setup(props) {
     const isLiked = computed(() => props.comment.isLikedBy(props.userIdHashed) || false);
-    const isMine = computed(() => props.comment.user_id_hashed == props.userIdHashed);
+    const isMine = computed(() => props.comment.userIdHashed == props.userIdHashed);
     const toggleLike = () => {
       const remove = props.comment.isLikedBy(props.userIdHashed);
       props.comment.setLike(props.userIdHashed, remove);

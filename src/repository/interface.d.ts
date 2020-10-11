@@ -39,14 +39,14 @@ export interface CommentRepository {
 
   /**
    * ユーザーのlikeの状態を保存する
-   * @param comment_id コメントID
-   * @param user_id_hashed ハッシュ化したユーザーID
+   * @param commentId コメントID
+   * @param userIdHashed ハッシュ化したユーザーID
    * @param remove likeを削除する場合 true
    */
   saveLike(
     eventId: EventId,
-    comment_id: CommentId,
-    user_id_hashed: string,
+    commentId: CommentId,
+    userIdHashed: string,
     remove: boolean
   ): Promise<boolean>;
 }
