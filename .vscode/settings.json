@@ -1,5 +1,6 @@
 {
   "css.validate": false,
+  "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {
     "source.fixAll": true,
     "source.fixAll.eslint": true 
