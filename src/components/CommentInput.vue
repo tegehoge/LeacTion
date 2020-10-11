@@ -32,6 +32,7 @@ export default defineComponent({
   props: {
     event_id: String,
     user_id_hashed: String,
+    talk_id: String,
   },
   emits: ["add_comment"],
   setup(props, { emit }) {
@@ -43,7 +44,7 @@ export default defineComponent({
         commentInput.value,
         props.user_id_hashed || "unknown",
         props.event_id || "unknown",
-        "sample"
+        props.talk_id || "unknown",
       );
       emit("add_comment", comment);
       commentInput.value = "";
