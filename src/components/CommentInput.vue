@@ -31,6 +31,7 @@ import { Comment } from "../models/comment";
 export default defineComponent({
   props: {
     event_id: String,
+    talk_id: String,
   },
   emits: ["add_comment"],
   setup(props, { emit }) {
@@ -42,7 +43,7 @@ export default defineComponent({
         commentInput.value,
         "sample",
         props.event_id || "unknown",
-        "sample"
+        props.talk_id || "unknown",
       );
       emit("add_comment", comment);
       commentInput.value = "";
