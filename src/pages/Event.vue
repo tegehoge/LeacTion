@@ -89,7 +89,6 @@ export default defineComponent({
       comments.value.filter((c) => c.talkId === currentTalk.value?.id)
     );
     const addComment = (comment: Comment) => {
-      console.log(comment);
       comments.value.push(comment);
       saveComment(comment);
     };
