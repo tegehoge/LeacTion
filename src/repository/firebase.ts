@@ -46,7 +46,7 @@ export class FirebaseCommentRepository implements CommentRepository {
     remove: boolean
   ): Promise<boolean> {
     const data = { user_id_hashed, remove };
-    return axios.post(`/api/event/${eventId}/comments/${comment_id}/like`, data).then((res) => {
+    return axios.post(`/api/event/${eventId}/comment/${comment_id}/like`, data).then((res) => {
       return res.status == 201;
     });
   }
