@@ -30,7 +30,7 @@
     <div>
       <CommentInput
         :event_id="event_id"
-        :talk_id="talk?.id"
+        :talk_id="currentTalk?.id"
         @add_comment="addComment"
       ></CommentInput>
     </div>
@@ -70,26 +70,26 @@ export default defineComponent({
   setup(props) {
     const event = ref<Event>();
     const event_id = props.event_id;
-    const talk = ref<Talk>();
+    const currentTalk = ref<Talk>();
     const comments = ref<Comment[]>([]);
-    const commentsForTalk = computed(() => comments.value.filter(c => c.talk_id === talk.value?.id));
+    const commentsForTalk = computed(() => comments.value.filter(c => c.talk_id === currentTalk.value?.id));
     const addComment = (comment: Comment) => {
       comments.value.push(comment);
       saveComment(comment);
     };
-    const switchTalk = (selectedTalk: Talk) => talk.value = selectedTalk;
+    const switchTalk = (selectedTalk: Talk) => currentTalk.value = selectedTalk;
 
     onMounted(() => {
       findEventById(props.event_id || "").then((ev) => {
         event.value = ev;
-        talk.value = event.value.talks[0];
+        currentTalk.value = event.value.talks[0];
       });
       findAllCommentByEventId(props.event_id || "").then(
         (existing_comments) => (comments.value = existing_comments)
       );
     });
 
-    return { event, event_id, talk, comments, commentsForTalk, addComment, switchTalk };
+    return { event, event_id, currentTalk, comments, commentsForTalk, addComment, switchTalk };
   },
 });
 </script>
