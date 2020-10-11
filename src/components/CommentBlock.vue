@@ -7,7 +7,7 @@
         </div>
         <div class="flex items-end text-sm">
           <div class="flex-grow text-black opacity-25">
-            {{ comment.posted_at.format("YYYY-MM-DD HH:mm:ss") }}
+            {{ comment.postedAt.format("YYYY-MM-DD HH:mm:ss") }}
           </div>
           <div>
             <button
@@ -39,16 +39,18 @@ export default defineComponent({
       type: Comment,
       required: true,
     },
+    userIdHashed: {
+      type: String,
+      required: true,
+    },
   },
   setup(props) {
-    // FIXME: likeCount, addLike is stub.
-    const user_id_hashed = "sample";
-    const isLiked = computed(() => props.comment.isLikedBy(user_id_hashed) || false);
-    const isMine = computed(() => props.comment.user_id_hashed == user_id_hashed);
+    const isLiked = computed(() => props.comment.isLikedBy(props.userIdHashed) || false);
+    const isMine = computed(() => props.comment.userIdHashed == props.userIdHashed);
     const toggleLike = () => {
-      const remove = props.comment.isLikedBy(user_id_hashed);
-      props.comment.setLike(user_id_hashed, remove);
-      saveCommentLike(props.comment.eventId, props.comment.id, user_id_hashed, remove);
+      const remove = props.comment.isLikedBy(props.userIdHashed);
+      props.comment.setLike(props.userIdHashed, remove);
+      saveCommentLike(props.comment.eventId, props.comment.id, props.userIdHashed, remove);
     };
     const likeCount = computed(() => props.comment.likes.length || 0);
     return { isLiked, isMine, likeCount, toggleLike };

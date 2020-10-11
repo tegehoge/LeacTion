@@ -135,19 +135,19 @@ api.post("/event/:eventId/comment", (req, res) => {
     });
 });
 
-api.post("/event/:eventId/comment/:comment_id/like", (req, res) => {
+api.post("/event/:eventId/comment/:commentId/like", (req, res) => {
   const eventId = req.params["eventId"];
-  const comment_id = req.params["comment_id"];
+  const commentId = req.params["commentId"];
   const likeReq = req.body as CommentLikeRequest;
 
   const arrayUpdate = likeReq.remove
     ? firebase.firestore.FieldValue.arrayRemove
     : firebase.firestore.FieldValue.arrayUnion;
 
-  const docRef = firestore.doc(`comments-${eventId}/${comment_id}`);
+  const docRef = firestore.doc(`comments-${eventId}/${commentId}`);
   docRef
     .update({
-      likes: arrayUpdate(likeReq.user_id_hashed),
+      likes: arrayUpdate(likeReq.userIdHashed),
     })
     .then(() => {
       res.json({ message: "ok" });

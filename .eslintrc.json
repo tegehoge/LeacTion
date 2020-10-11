@@ -15,6 +15,7 @@
   },
   "plugins": ["vue", "@typescript-eslint", "prettier"],
   "rules": {
+    "camelcase": ["warn", { "properties": "always" }],
     "prettier/prettier": [
       "warn",
       {
@@ -30,6 +31,13 @@
     "vue/multiline-html-element-content-newline": "off",
     "vue/singleline-html-element-content-newline": "off",
     "vue/html-indent": "off",
-    "vue/html-self-closing": "off"
+    "vue/html-self-closing": "off",
+    "vue/no-unused-properties": "error",
+    "vue/attributes-order": "warn",
+    "vue/component-tags-order": "warn",
+    "vue/no-useless-mustaches": "error",
+    "vue/no-static-inline-styles": "error",
+    "vue/no-reserved-component-names": "error",
+    "vue/no-multiple-objects-in-class": "error"
   }
 }

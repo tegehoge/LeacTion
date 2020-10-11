@@ -4,27 +4,27 @@ import { v4 as uuidv4 } from "uuid";
 export class Talk {
   id: TalkId; // UUID
   title: string;
-  speaker_name: string;
+  speakerName: string;
 
-  constructor(title: string, speaker_name: string, id?: string) {
+  constructor(title: string, speakerName: string, id?: string) {
     this.id = id || uuidv4();
     this.title = title;
-    this.speaker_name = speaker_name;
+    this.speakerName = speakerName;
   }
 
   isEmpty(): boolean {
-    return this.title == "" && this.speaker_name == "";
+    return this.title == "" && this.speakerName == "";
   }
 
   static fromObj(obj: TalkResponse): Talk {
-    return new Talk(obj.title, obj.speaker_name, obj.id);
+    return new Talk(obj.title, obj.speakerName, obj.id);
   }
 }
 
 export type TalkResponse = {
   id: string;
   title: string;
-  speaker_name: string;
+  speakerName: string;
 };
 
 export const emptyTalk = (): Talk => new Talk("", "");

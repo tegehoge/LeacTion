@@ -35,6 +35,14 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    userIdHashed: {
+      type: String,
+      required: true,
+    },
+    talkId: {
+      type: String,
+      required: true,
+    },
   },
   emits: ["add-comment"],
   setup(props, { emit }) {
@@ -44,9 +52,9 @@ export default defineComponent({
     const sendComment = () => {
       const comment = new Comment(
         commentInput.value,
-        "sample",
-        props.eventId || "unknown",
-        "sample"
+        props.userIdHashed,
+        props.eventId,
+        props.talkId
       );
       emit("add-comment", comment);
       commentInput.value = "";

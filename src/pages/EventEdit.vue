@@ -16,12 +16,12 @@
             <div class="flex items-center">
               <div class="flex-grow pr-3">
                 <input
-                  v-model="passwordInput"
+                  id="password"
                   ref="passwordInputForm"
+                  v-model="passwordInput"
                   class="w-full border-2 rounded px-2 py-1"
                   type="password"
                   name="password"
-                  id="password"
                 />
               </div>
               <div class="text-center">
