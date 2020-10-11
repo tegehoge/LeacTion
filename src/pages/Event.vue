@@ -1,8 +1,14 @@
 <template>
   <div v-if="event">
-    <h2 class="text-4xl text-center pt-4">
-      {{ event.name }}
+    <h2 class="text-center pt-4">
+      <span class="text-4xl mr-3">{{ event.name }}</span>
+      <router-link :to="`/event/${eventId}/edit`">
+        <button type="button" class="bg-gray-400 text-white rounded px-2 py-1">
+          編集する
+        </button></router-link
+      >
     </h2>
+
     <div class="text-center pb-4">
       {{ event.date_of_event }}
     </div>

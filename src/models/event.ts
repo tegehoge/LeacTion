@@ -39,7 +39,7 @@ export class Event {
       data.name,
       data.date_of_event,
       data.id,
-      data.talks as Talk[],
+      data.talks.map((talk) => Talk.fromObj(talk)),
       data.external_url
     );
   }

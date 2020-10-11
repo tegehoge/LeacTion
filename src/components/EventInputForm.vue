@@ -125,6 +125,9 @@ export default defineComponent({
   setup(props, { emit }) {
     const today = dayjs().format("YYYY-MM-DD");
     const eventInput = reactive(props.initialEvent);
+    const currentTalkIds = props.initialEvent.talks
+      .filter((talk) => !talk.isEmpty())
+      .map((talk) => talk.id);
 
     const fillMinimalTalks = () => {
       while ((eventInput.talks.length || 0) < 3) {
@@ -137,6 +140,14 @@ export default defineComponent({
     };
 
     const removeTalk = (talkId: string) => {
+      if (currentTalkIds.includes(talkId)) {
+        const confirmed = confirm(
+          "既存の発表を削除するとすでに投稿されたコメントが閲覧できなくなります。\n削除してよろしいですか？"
+        );
+        if (!confirmed) {
+          return;
+        }
+      }
       eventInput.talks = eventInput.talks.filter((talk) => talk.id != talkId);
       fillMinimalTalks();
     };
