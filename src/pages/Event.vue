@@ -5,13 +5,17 @@
     <div class="flex px-3 py-2 w-full text-center items-center max-w-3xl mx-auto">
       <div class="w-1/6 mb-1 md:mb-0">
         <label
-          for="external_url"
+          for="talk_select"
           class="block text-gray-700 font-bold md:text-right pr-4 md:mb-0"
           >発表枠</label
         >
       </div>
       <div class="w-5/6 relative">
-        <select class="w-full block appearance-none border-2 rounded p-2" v-model="talk">
+        <select
+          class="w-full block appearance-none border-2 rounded p-2"
+          id="talk_select"
+          v-model="currentTalk"
+        >
           <option v-for="talk in event.talks" :key="talk.id" :value="talk">
             {{ talk.speaker_name }}「{{ talk.title }}」
           </option>
