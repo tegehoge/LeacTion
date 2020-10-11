@@ -10,9 +10,9 @@
       </div>
       <div class="w-5/6 relative">
         <select
-          class="w-full block appearance-none border-2 rounded p-2"
           id="talk_select"
           v-model="currentTalk"
+          class="w-full block appearance-none border-2 rounded p-2"
         >
           <option v-for="talk in event.talks" :key="talk.id" :value="talk">
             {{ talk.speakerName }}「{{ talk.title }}」
