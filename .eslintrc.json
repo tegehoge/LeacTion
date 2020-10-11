@@ -4,10 +4,8 @@
     "es2021": true
   },
   "extends": [
-    "eslint:recommended",
-    "plugin:vue/vue3-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier/vue"
+    "plugin:prettier/recommended",
+    "plugin:vue/vue3-strongly-recommended"
   ],
   "parser": "vue-eslint-parser",
   "parserOptions": {
@@ -15,6 +13,23 @@
     "parser": "@typescript-eslint/parser",
     "sourceType": "module"
   },
-  "plugins": ["vue", "@typescript-eslint"],
-  "rules": {}
+  "plugins": ["vue", "@typescript-eslint", "prettier"],
+  "rules": {
+    "prettier/prettier": [
+      "warn",
+      {
+        "printWidth": 100,
+        "tabWidth": 2,
+        "singleQuote": false,
+        "trailingComma": "es5",
+        "semi": true
+      }
+    ],
+    "vue/max-attributes-per-line": "off",
+    "vue/html-closing-bracket-newline": "off",
+    "vue/multiline-html-element-content-newline": "off",
+    "vue/singleline-html-element-content-newline": "off",
+    "vue/html-indent": "off",
+    "vue/html-self-closing": "off"
+  }
 }

@@ -20,21 +20,17 @@ export class FirebaseEventRepository implements EventRepository {
   }
 
   verifyPassword(eventId: string, password: string): Promise<boolean> {
-    return axios
-      .post(`/api/event/${eventId}/verify`, { password })
-      .then((res) => {
-        return res.status == 200;
-      });
+    return axios.post(`/api/event/${eventId}/verify`, { password }).then((res) => {
+      return res.status == 200;
+    });
   }
 }
 
 export class FirebaseCommentRepository implements CommentRepository {
   save(comment: Comment): Promise<Comment> {
-    return axios
-      .post(`/api/event/${comment.eventId}/comment`, comment)
-      .then(() => {
-        return comment;
-      });
+    return axios.post(`/api/event/${comment.eventId}/comment`, comment).then(() => {
+      return comment;
+    });
   }
 
   findAllByEventId(eventId: EventId): Promise<Comment[]> {
@@ -50,10 +46,8 @@ export class FirebaseCommentRepository implements CommentRepository {
     remove: boolean
   ): Promise<boolean> {
     const data = { user_id_hashed, remove };
-    return axios
-      .post(`/api/event/${eventId}/comments/${comment_id}/like`, data)
-      .then((res) => {
-        return res.status == 201;
-      });
+    return axios.post(`/api/event/${eventId}/comments/${comment_id}/like`, data).then((res) => {
+      return res.status == 201;
+    });
   }
 }

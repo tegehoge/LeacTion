@@ -67,9 +67,7 @@
       class="w-full md:flex md:items-center py-1"
     >
       <div class="md:w-1/6 mb-1 md:mb-0">
-        <label
-          for="external_url"
-          class="block text-gray-700 font-bold md:text-right pr-4 md:mb-0"
+        <label for="external_url" class="block text-gray-700 font-bold md:text-right pr-4 md:mb-0"
           >発表枠{{ index + 1 }}</label
         >
       </div>
@@ -92,13 +90,12 @@
         />
       </div>
       <div class="pl-1">
-        <button type="button" class="text-red-500" @click="removeTalk(talk.id)">
-          消</button
+        <button type="button" class="text-red-500" @click="removeTalk(talk.id)">消</button
         ><!-- FIXME: FontAwesome -->
       </div>
     </div>
     <div class="md:flex py-1">
-      <div class="md:w-1/6"></div>
+      <div class="md:w-1/6" />
       <div class="md:w-5/6 md:px-1">
         <button
           type="button"
@@ -143,6 +140,7 @@ export default defineComponent({
       eventInput.talks = eventInput.talks.filter((talk) => talk.id != talkId);
       fillMinimalTalks();
     };
+
     const updateEvent = (): void => {
       emit("update-event", eventInput);
     };

@@ -59,9 +59,7 @@ export class Event {
   }
 
   isValidFuture(): boolean {
-    return (
-      this.isValid() && dayjs(this.date_of_event) >= dayjs().startOf("day")
-    );
+    return this.isValid() && dayjs(this.date_of_event) >= dayjs().startOf("day");
   }
 }
 

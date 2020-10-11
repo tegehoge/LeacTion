@@ -1,9 +1,6 @@
 import { FirebaseCommentRepository, FirebaseEventRepository } from "./firebase";
 import { CommentRepository, EventRepository } from "./interface";
-import {
-  LocalStorageCommentRepository,
-  LocalStorageEventRepository,
-} from "./local_storage";
+import { LocalStorageCommentRepository, LocalStorageEventRepository } from "./local_storage";
 
 const event_repository: EventRepository =
   process.env.NODE_ENV == "production"

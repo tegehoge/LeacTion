@@ -43,21 +43,12 @@ export default defineComponent({
   setup(props) {
     // FIXME: likeCount, addLike is stub.
     const user_id_hashed = "sample";
-    const isLiked = computed(
-      () => props.comment.isLikedBy(user_id_hashed) || false
-    );
-    const isMine = computed(
-      () => props.comment.user_id_hashed == user_id_hashed
-    );
+    const isLiked = computed(() => props.comment.isLikedBy(user_id_hashed) || false);
+    const isMine = computed(() => props.comment.user_id_hashed == user_id_hashed);
     const toggleLike = () => {
       const remove = props.comment.isLikedBy(user_id_hashed);
       props.comment.setLike(user_id_hashed, remove);
-      saveCommentLike(
-        props.comment.eventId,
-        props.comment.id,
-        user_id_hashed,
-        remove
-      );
+      saveCommentLike(props.comment.eventId, props.comment.id, user_id_hashed, remove);
     };
     const likeCount = computed(() => props.comment.likes.length || 0);
     return { isLiked, isMine, likeCount, toggleLike };

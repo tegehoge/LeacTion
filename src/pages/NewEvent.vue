@@ -2,19 +2,14 @@
   <div>
     <h2 class="my-3 text-2xl font-bold">新規イベントを登録する</h2>
 
-    <EventInputForm
-      :initial-event="initialEvent"
-      @update-event="updateEvent"
-    ></EventInputForm>
+    <EventInputForm :initial-event="initialEvent" @update-event="updateEvent" />
 
     <h3 class="w-full mt-3 pt-3 border-t-2 text-xl font-bold">
       イベントを編集するためのパスワードを設定してください
     </h3>
     <div class="md:flex md:items-center mt-6 mb-2">
       <div class="md:w-1/3">
-        <label
-          for="password"
-          class="block text-gray-700 font-bold md:text-right pr-4 mb-1 md:mb-0"
+        <label for="password" class="block text-gray-700 font-bold md:text-right pr-4 mb-1 md:mb-0"
           >管理者パスワード</label
         >
       </div>
@@ -48,9 +43,7 @@
           :class="{ 'border-red-500': invalidPassword }"
           class="border-2 border-gray-400 rounded px-2 py-2"
         />
-        <span v-show="invalidPassword" class="text-red-500 ml-2"
-          >パスワードが一致していません</span
-        >
+        <span v-show="invalidPassword" class="text-red-500 ml-2">パスワードが一致していません</span>
       </div>
     </div>
 
