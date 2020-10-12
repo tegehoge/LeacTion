@@ -1,0 +1,219 @@
+openapi: 3.0.0
+info:
+  title: LeacTion API
+  version: '1.0'
+servers:
+  - url: 'http://localhost:5001/api'
+paths:
+  /event:
+    post:
+      summary: Create Event
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      operationId: post-event
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventWithPassword'
+      description: 新規イベントを登録する
+  '/event/:event_id':
+    get:
+      summary: Get Event Informatioon
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+      operationId: 'get-event-:event_id'
+  '/event/:event_id/verify':
+    post:
+      summary: Verify Event Password
+      tags: []
+      responses:
+        '200':
+          description: OK
+      operationId: 'post-event-:event_id-verify'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Password'
+        description: ''
+  '/event/:event_id/comments':
+    get:
+      summary: Get All Comments for Event
+      tags: []
+      responses:
+        '200':
+          description: OK
+      operationId: 'get-event-:event_id-comments'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Comment'
+  '/event/:event_id/comment/:comment_id/like':
+    post:
+      summary: Set Like or Unlke on comment
+      tags: []
+      responses:
+        '200':
+          description: OK
+      operationId: 'post-event-:event_id-comment-:comment_id-like'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Like'
+  '/event/:event_id/comment':
+    post:
+      summary: Create New Comment
+      tags: []
+      responses:
+        '200':
+          description: OK
+      operationId: 'post-event-:event_id-comment'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+components:
+  schemas:
+    EventWithPassword:
+      title: EventWithPassword
+      type: object
+      x-examples:
+        example-1:
+          id: string
+          name: string
+          date_of_event: string
+          talks: null
+          external_url: string
+          password: string
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        date_of_event:
+          type: string
+        talks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Talk'
+        external_url:
+          type: string
+        password:
+          type: string
+      required:
+        - id
+        - name
+        - date_of_event
+        - talks
+        - password
+    Event:
+      description: ''
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 1
+        name:
+          type: string
+          minLength: 1
+        date_of_event:
+          type: string
+          minLength: 1
+        talks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Talk'
+        external_url:
+          type: string
+          minLength: 1
+      required:
+        - id
+        - name
+        - date_of_event
+        - external_url
+    Comment:
+      title: Comment
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+        user_id_hashed:
+          type: string
+        posted_at:
+          type: string
+        event_id:
+          type: string
+        talk_id:
+          type: string
+        likes:
+          type: array
+          items:
+            type: string
+    Like:
+      title: Like
+      type: object
+      properties:
+        user_id_hashed:
+          type: string
+        remove:
+          type: string
+      required:
+        - user_id_hashed
+    Talk:
+      title: Talk
+      type: object
+      x-examples:
+        example-1:
+          id: string
+          title: string
+          speaker_name: string
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        speaker_name:
+          type: string
+      required:
+        - id
+        - title
+        - speaker_name
+    Password:
+      title: Password
+      type: object
+      properties:
+        password:
+          type: string
+  securitySchemes: {}
