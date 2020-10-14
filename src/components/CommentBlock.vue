@@ -7,7 +7,7 @@
         </div>
         <div class="flex items-end text-sm">
           <div class="flex-grow text-black opacity-25">
-            {{ comment.posted_at.format("YYYY-MM-DD HH:mm:ss") }}
+            {{ comment.postedAt.format("YYYY-MM-DD HH:mm:ss") }}
           </div>
           <div>
             <button
@@ -28,34 +28,34 @@
 </template>
 
 <script lang="ts">
-import { computed, ref } from "vue";
+import { computed, defineComponent } from "vue";
+
 import { Comment } from "../models/comment";
 import { saveCommentLike } from "../repository";
 
-export default {
+export default defineComponent({
   props: {
-    comment: Comment,
-    user_id_hashed: String,
+    comment: {
+      type: Comment,
+      required: true,
+    },
+    userIdHashed: {
+      type: String,
+      required: true,
+    },
   },
   setup(props) {
-    const comment = props.comment;
-    const user_id_hashed = props.user_id_hashed || "unknown";
-    const isLiked = computed(() => comment?.isLikedBy(user_id_hashed) || false);
-    const isMine = computed(() => comment?.user_id_hashed == user_id_hashed);
+    const isLiked = computed(() => props.comment.isLikedBy(props.userIdHashed) || false);
+    const isMine = computed(() => props.comment.userIdHashed == props.userIdHashed);
     const toggleLike = () => {
-      if (comment) {
-        const remove = comment.isLikedBy(user_id_hashed);
-        comment.setLike(user_id_hashed, remove);
-        saveCommentLike(comment.event_id, comment.id, user_id_hashed, remove);
-      }
+      const remove = props.comment.isLikedBy(props.userIdHashed);
+      props.comment.setLike(props.userIdHashed, remove);
+      saveCommentLike(props.comment.eventId, props.comment.id, props.userIdHashed, remove);
     };
-    const likeCount = computed(() => comment?.likes.length || 0);
-    return { comment, isLiked, isMine, likeCount, toggleLike };
+    const likeCount = computed(() => props.comment.likes.length || 0);
+    return { isLiked, isMine, likeCount, toggleLike };
   },
-};
+});
 </script>
 
-<style>
-.fade {
-}
-</style>
+<style></style>

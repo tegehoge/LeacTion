@@ -4,28 +4,28 @@ import jssha256 from "js-sha256";
 type UserId = string;
 
 export class UserContext {
-  user_id: UserId;
-  user_id_hashed: string;
-  comment_order: CommentOrder;
+  userId: UserId;
+  userIdHashed: string;
+  commentOrder: CommentOrder;
 
-  constructor(user_id?: UserId, comment_order?: CommentOrder) {
-    this.user_id = user_id || uuidv4();
-    this.user_id_hashed = jssha256.sha256(this.user_id);
-    this.comment_order = comment_order || CommentOrder.DescendingTimeOrder;
+  constructor(userId?: UserId, commentOrder?: CommentOrder) {
+    this.userId = userId || uuidv4();
+    this.userIdHashed = jssha256.sha256(this.userId);
+    this.commentOrder = commentOrder || CommentOrder.DescendingTimeOrder;
   }
 
-  changeCommentOrder(comment_order: CommentOrder) {
-    this.comment_order = comment_order;
+  changeCommentOrder(commentOrder: CommentOrder): void {
+    this.commentOrder = commentOrder;
   }
   toJSON(): string {
     return JSON.stringify({
-      user_id: this.user_id,
-      comment_order: this.comment_order,
+      userId: this.userId,
+      commentOrder: this.commentOrder,
     });
   }
   static fromJSON(payload: string): UserContext {
     const data = JSON.parse(payload);
-    return new UserContext(data.user_id, data.comment_order);
+    return new UserContext(data.userId, data.commentOrder);
   }
 }
 

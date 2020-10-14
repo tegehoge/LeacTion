@@ -23,8 +23,8 @@ export class LocalStorageEventRepository implements EventRepository {
     }
   }
 
-  findById(event_id: EventId): Promise<Event> {
-    const payload = storage.getItem(`event-${event_id}`);
+  findById(eventId: EventId): Promise<Event> {
+    const payload = storage.getItem(`event-${eventId}`);
     if (payload) {
       return Promise.resolve(Event.fromJSON(payload));
     } else {
@@ -32,8 +32,8 @@ export class LocalStorageEventRepository implements EventRepository {
     }
   }
 
-  verifyPassword(event_id: string, password: string): Promise<boolean> {
-    const password_hashed = storage.getItem(`event-${event_id}-password`);
+  verifyPassword(eventId: string, password: string): Promise<boolean> {
+    const password_hashed = storage.getItem(`event-${eventId}-password`);
     return Promise.resolve(jssha256.sha256(password) == password_hashed);
   }
 }
@@ -51,24 +51,24 @@ export class LocalStorageCommentRepository implements CommentRepository {
     return Promise.resolve(comment);
   }
 
-  findAllByEventId(event_id: EventId): Promise<Comment[]> {
+  findAllByEventId(eventId: EventId): Promise<Comment[]> {
     const comments = Comment.fromJSONArray(storage.getItem("comments") || "[]");
-    const target_comments = comments.filter((c) => c.event_id == event_id);
+    const target_comments = comments.filter((c) => c.eventId == eventId);
     return Promise.resolve(target_comments);
   }
 
   saveLike(
-    event_id: EventId,
-    comment_id: CommentId,
-    user_id_hashed: string,
+    eventId: EventId,
+    commentId: CommentId,
+    userIdHashed: string,
     remove: boolean
   ): Promise<boolean> {
     const comments = Comment.fromJSONArray(storage.getItem("comments") || "[]");
-    const target_comment = comments.find((c) => c.id == comment_id);
+    const target_comment = comments.find((c) => c.id == commentId);
     if (!target_comment) {
       return Promise.reject();
     }
-    target_comment.setLike(user_id_hashed, remove);
+    target_comment.setLike(userIdHashed, remove);
     storage.setItem(`comments`, JSON.stringify(comments));
     return Promise.resolve(true);
   }

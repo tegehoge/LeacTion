@@ -5,47 +5,47 @@ export type CommentId = string;
 export class Comment {
   id: CommentId; // UUID
   text: string;
-  user_id_hashed: string; // FIXME: user_id のハッシュ値を入れる(なりすまし防止)
-  posted_at: Dayjs; // datetime
-  event_id: string; // UUID
-  talk_id: string; // UUID
+  userIdHashed: string; // FIXME: userId のハッシュ値を入れる(なりすまし防止)
+  postedAt: Dayjs; // datetime
+  eventId: string; // UUID
+  talkId: string; // UUID
   likes: string[];
 
   constructor(
     text: string,
-    user_id_hashed: string,
-    event_id: string,
-    talk_id: string,
+    userIdHashed: string,
+    eventId: string,
+    talkId: string,
     id?: string,
-    posted_at?: Dayjs,
+    postedAt?: Dayjs,
     likes?: string[]
   ) {
     this.id = id || uuidv4();
     this.text = text;
-    this.user_id_hashed = user_id_hashed;
-    this.posted_at = posted_at || dayjs();
-    this.event_id = event_id;
-    this.talk_id = talk_id;
+    this.userIdHashed = userIdHashed;
+    this.postedAt = postedAt || dayjs();
+    this.eventId = eventId;
+    this.talkId = talkId;
     this.likes = likes || [];
   }
 
   /**
    * コメントの投稿先トークを変更する
-   * @param talk_id トークID
+   * @param talkId トークID
    */
-  changeTalk(talk_id: string) {
-    this.talk_id = talk_id;
+  changeTalk(talkId: string): void {
+    this.talkId = talkId;
   }
 
   static fromJSON(payload: string): Comment {
     const data = JSON.parse(payload) as CommentResponse;
     return new Comment(
       data.text,
-      data.user_id_hashed,
-      data.event_id,
-      data.talk_id,
+      data.userIdHashed,
+      data.eventId,
+      data.talkId,
       data.id,
-      dayjs(data.posted_at),
+      dayjs(data.postedAt),
       data.likes
     );
   }
@@ -54,39 +54,31 @@ export class Comment {
     const data = JSON.parse(payload) as CommentResponse[];
     return data.map(
       (c) =>
-        new Comment(
-          c.text,
-          c.user_id_hashed,
-          c.event_id,
-          c.talk_id,
-          c.id,
-          dayjs(c.posted_at),
-          c.likes
-        )
+        new Comment(c.text, c.userIdHashed, c.eventId, c.talkId, c.id, dayjs(c.postedAt), c.likes)
     );
   }
 
   static fromObj(obj: CommentResponse): Comment {
     return new Comment(
       obj.text,
-      obj.user_id_hashed,
-      obj.event_id,
-      obj.talk_id,
+      obj.userIdHashed,
+      obj.eventId,
+      obj.talkId,
       obj.id,
-      dayjs(obj.posted_at),
+      dayjs(obj.postedAt),
       obj.likes
     );
   }
 
-  isLikedBy(user_id_hashed: string): boolean {
-    return this.likes.includes(user_id_hashed);
+  isLikedBy(userIdHashed: string): boolean {
+    return this.likes.includes(userIdHashed);
   }
 
-  setLike(user_id_hashed: string, remove: boolean): void {
-    if (!remove && !this.likes.includes(user_id_hashed)) {
-      this.likes.push(user_id_hashed);
-    } else if (remove && this.likes.includes(user_id_hashed)) {
-      this.likes = this.likes.filter((u) => u != user_id_hashed);
+  setLike(userIdHashed: string, remove: boolean): void {
+    if (!remove && !this.likes.includes(userIdHashed)) {
+      this.likes.push(userIdHashed);
+    } else if (remove && this.likes.includes(userIdHashed)) {
+      this.likes = this.likes.filter((u) => u != userIdHashed);
     }
   }
 }
@@ -94,9 +86,9 @@ export class Comment {
 export type CommentResponse = {
   id: string; // UUID
   text: string;
-  user_id_hashed: string; // UUID
-  posted_at: string; // datetime
-  event_id: string; // UUID
-  talk_id: string; // UUID
+  userIdHashed: string; // UUID
+  postedAt: string; // datetime
+  eventId: string; // UUID
+  talkId: string; // UUID
   likes: string[];
 };

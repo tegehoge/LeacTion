@@ -1,0 +1,23 @@
+{
+  "css.validate": false,
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.fixAll.eslint": true 
+  },
+  "eslint.options": {
+    "extensions": [
+      ".js",
+      ".ts",
+      ".vue",
+      ".json",
+    ]
+  },
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "vue",
+  ],
+  "eslint.format.enable": true,
+  "prettier.enable": false
+}

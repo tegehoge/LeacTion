@@ -12,16 +12,16 @@ export interface EventRepository {
 
   /**
    * イベントを検索する
-   * @param event_id イベントID
+   * @param eventIdイベントID
    */
-  findById(event_id: EventId): Promise<Event>;
+  findById(eventId: EventId): Promise<Event>;
 
   /**
    * パスワードの一致のみ確認する
-   * @param event_id イベントID
+   * @param eventIdイベントID
    * @param password 管理用パスワード
    */
-  verifyPassword(event_id: string, password: string): Promise<boolean>;
+  verifyPassword(eventId: string, password: string): Promise<boolean>;
 }
 
 export interface CommentRepository {
@@ -33,20 +33,20 @@ export interface CommentRepository {
 
   /**
    * イベント内のコメントをすべて取得する
-   * @param event_id イベントID
+   * @param eventIdイベントID
    */
-  findAllByEventId(event_id: EventId): Promise<Comment[]>;
+  findAllByEventId(eventId: EventId): Promise<Comment[]>;
 
   /**
    * ユーザーのlikeの状態を保存する
-   * @param comment_id コメントID
-   * @param user_id_hashed ハッシュ化したユーザーID
+   * @param commentId コメントID
+   * @param userIdHashed ハッシュ化したユーザーID
    * @param remove likeを削除する場合 true
    */
   saveLike(
-    event_id: EventId,
-    comment_id: CommentId,
-    user_id_hashed: string,
+    eventId: EventId,
+    commentId: CommentId,
+    userIdHashed: string,
     remove: boolean
   ): Promise<boolean>;
 }

@@ -10,90 +10,92 @@
       </div>
       <div class="md:w-2/3">
         <input
+          id="event_name"
+          v-model.trim="eventInput.name"
           type="text"
           name="event_name"
-          id="event_name"
-          v-model="event.name"
           placeholder="Webナイト宮崎 vol.1"
           class="w-full border-2 border-gray-400 rounded px-2 py-2"
+          @input="updateEvent"
         />
       </div>
     </div>
     <div class="md:flex md:items-center mb-6">
       <div class="md:w-1/3">
         <label
-          for="date_of_event"
+          for="dateOfEvent"
           class="block text-gray-700 font-bold md:text-right pr-4 mb-1 md:mb-0"
           >開催日<sup class="text-red-500">*</sup></label
         >
       </div>
       <div class="md:w-2/3">
         <input
+          id="dateOfEvent"
+          v-model="eventInput.dateOfEvent"
           type="date"
-          name="date_of_event"
-          id="date_of_event"
-          v-model="event.date_of_event"
+          name="dateOfEvent"
           placeholder="yyyy-mm-dd"
           :min="today"
           class="w-auto border-2 border-gray-400 rounded px-2 py-2"
+          @input="updateEvent"
         />
       </div>
     </div>
     <div class="md:flex md:items-center mb-6">
       <div class="md:w-1/3">
         <label
-          for="external_url"
+          for="externalUrl"
           class="block text-gray-700 font-bold md:text-right pr-4 mb-1 md:mb-0"
           >イベントページのURL</label
         >
       </div>
       <div class="md:w-2/3">
         <input
+          id="externalUrl"
+          v-model.trim="eventInput.externalUrl"
           type="text"
-          name="external_url"
-          id="external_url"
-          v-model="event.external_url"
+          name="externalUrl"
           placeholder="connpassイベントURLなど (optional)"
           class="w-full border-2 border-gray-400 rounded px-2 py-2"
+          @input="updateEvent"
         />
       </div>
     </div>
     <div
-      class="w-full md:flex md:items-center py-1"
-      v-for="(talk, index) in event.talks"
+      v-for="(talk, index) in eventInput.talks"
       :key="talk.id"
+      class="w-full md:flex md:items-center py-1"
     >
       <div class="md:w-1/6 mb-1 md:mb-0">
-        <label
-          for="external_url"
-          class="block text-gray-700 font-bold md:text-right pr-4 md:mb-0"
+        <label for="externalUrl" class="block text-gray-700 font-bold md:text-right pr-4 md:mb-0"
           >発表枠{{ index + 1 }}</label
         >
       </div>
       <div class="md:w-1/4 md:px-1 mb-1 md:mb-0">
         <input
+          v-model.trim="talk.speakerName"
           type="text"
           class="w-full border-2 border-gray-400 rounded p-2"
           placeholder="発表者名"
-          v-model="talk.speaker_name"
+          @input="updateEvent"
         />
       </div>
       <div class="md:flex-grow md:px-1 mb-1 md:mb-0">
         <input
+          v-model.trim="talk.title"
           type="text"
           class="w-full border-2 border-gray-400 rounded p-2"
           placeholder="発表タイトル"
-          v-model="talk.title"
+          @input="updateEvent"
         />
       </div>
       <div class="pl-1">
-        <button type="button" class="text-red-500" @click="removeTalk(talk.id)">
-          消</button
+        <button type="button" class="text-red-500" @click="removeTalk(talk.id)">消</button
         ><!-- FIXME: FontAwesome -->
       </div>
     </div>
     <div class="md:flex py-1">
-      <div class="md:w-1/6"></div>
+      <div class="md:w-1/6" />
       <div class="md:w-5/6 md:px-1">
         <button
           type="button"
@@ -108,32 +110,39 @@
 </template>
 <script lang="ts">
 import dayjs from "dayjs";
-import { defineComponent, onMounted, reactive, ref, watch } from "vue";
+import { defineComponent, onMounted, reactive } from "vue";
 import { Event } from "../models/event";
 import { emptyTalk } from "../models/talk";
 export default defineComponent({
   name: "EventInput",
   props: {
-    event: Event,
+    initialEvent: {
+      type: Event,
+      required: true,
+    },
   },
-  emits: [],
-  setup(props, context) {
-    const event = props.event || new Event("", dayjs().format("YYYY-MM-DD"));
+  emits: ["update-event"],
+  setup(props, { emit }) {
     const today = dayjs().format("YYYY-MM-DD");
+    const eventInput = reactive(props.initialEvent);
 
     const fillMinimalTalks = () => {
-      while (event.talks.length < 3) {
-        event.talks.push(emptyTalk());
+      while ((eventInput.talks.length || 0) < 3) {
+        eventInput.talks.push(emptyTalk());
       }
     };
 
     const addTalkInput = () => {
-      event.talks.push(emptyTalk());
+      eventInput.talks.push(emptyTalk());
     };
 
-    const removeTalk = (talk_id: string) => {
-      event.talks = event.talks.filter((talk) => talk.id != talk_id);
+    const removeTalk = (talkId: string) => {
+      eventInput.talks = eventInput.talks.filter((talk) => talk.id != talkId);
       fillMinimalTalks();
+    };
+
+    const updateEvent = (): void => {
+      emit("update-event", eventInput);
     };
 
     onMounted(() => {
@@ -141,7 +150,8 @@ export default defineComponent({
     });
 
     return {
-      event,
+      eventInput,
+      updateEvent,
       addTalkInput,
       removeTalk,
       today,

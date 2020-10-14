@@ -13,47 +13,41 @@ export class FirebaseEventRepository implements EventRepository {
     });
   }
 
-  findById(event_id: EventId): Promise<Event> {
-    return axios.get(`/api/event/${event_id}`).then((res) => {
+  findById(eventId: EventId): Promise<Event> {
+    return axios.get(`/api/event/${eventId}`).then((res) => {
       return Event.fromObj(res.data);
     });
   }
 
-  verifyPassword(event_id: string, password: string): Promise<boolean> {
-    return axios
-      .post(`/api/event/${event_id}/verify`, { password })
-      .then((res) => {
-        return res.status == 200;
-      });
+  verifyPassword(eventId: string, password: string): Promise<boolean> {
+    return axios.post(`/api/event/${eventId}/verify`, { password }).then((res) => {
+      return res.status == 200;
+    });
   }
 }
 
 export class FirebaseCommentRepository implements CommentRepository {
   save(comment: Comment): Promise<Comment> {
-    return axios
-      .post(`/api/event/${comment.event_id}/comment`, comment)
-      .then(() => {
-        return comment;
-      });
+    return axios.post(`/api/event/${comment.eventId}/comment`, comment).then(() => {
+      return comment;
+    });
   }
 
-  findAllByEventId(event_id: EventId): Promise<Comment[]> {
-    return axios.get(`/api/event/${event_id}/comments`).then((res) => {
+  findAllByEventId(eventId: EventId): Promise<Comment[]> {
+    return axios.get(`/api/event/${eventId}/comments`).then((res) => {
       const data = res.data as CommentResponse[];
       return data.map((c) => Comment.fromObj(c));
     });
   }
   saveLike(
-    event_id: EventId,
-    comment_id: CommentId,
-    user_id_hashed: string,
+    eventId: EventId,
+    commentId: CommentId,
+    userIdHashed: string,
     remove: boolean
   ): Promise<boolean> {
-    const data = { user_id_hashed, remove };
-    return axios
-      .post(`/api/event/${event_id}/comments/${comment_id}/like`, data)
-      .then((res) => {
-        return res.status == 201;
-      });
+    const data = { userIdHashed, remove };
+    return axios.post(`/api/event/${eventId}/comment/${commentId}/like`, data).then((res) => {
+      return res.status == 201;
+    });
   }
 }
