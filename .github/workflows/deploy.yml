@@ -1,9 +1,12 @@
-name: check
+name: firebase-deploy
 
-on: [pull_request]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,21 +27,9 @@ jobs:
         uses: CultureHQ/actions-yarn@master
         with:
           args: build
-  build_functions:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: "10"
-      - name: Install
+      - name: npm install for firebase functions
         working-directory: ./functions
         run: npm install
-      - name: Lint
-        working-directory: ./functions
-        run: npm run lint
-      - name: Build
-        working-directory: ./functions
-        run: npm run build
+      - name: firebase deploy
+        run: yarn deploy --token=${{ secrets.FIREBASE_TOKEN }}
+        
