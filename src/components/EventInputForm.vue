@@ -90,8 +90,9 @@
         />
       </div>
       <div class="pl-1">
-        <button type="button" class="text-red-500" @click="removeTalk(talk.id)">消</button
-        ><!-- FIXME: FontAwesome -->
+        <button type="button" class="text-red-500" @click="removeTalk(talk.id)">
+           <font-awesome-icon icon="trash-alt" />
+        </button>
       </div>
     </div>
     <div class="md:flex py-1">
@@ -110,6 +111,7 @@
 </template>
 <script lang="ts">
 import dayjs from "dayjs";
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { defineComponent, onMounted, reactive } from "vue";
 import { Event } from "../models/event";
 import { emptyTalk } from "../models/talk";
@@ -120,6 +122,9 @@ export default defineComponent({
       type: Event,
       required: true,
     },
+  },
+  components: {
+    FontAwesomeIcon
   },
   emits: ["update-event"],
   setup(props, { emit }) {
