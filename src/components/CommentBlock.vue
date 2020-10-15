@@ -31,7 +31,6 @@
 
 <script lang="ts">
 import { computed, defineComponent } from "vue";
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { Comment } from "../models/comment";
 import { saveCommentLike } from "../repository";
 
@@ -45,9 +44,6 @@ export default defineComponent({
       type: String,
       required: true,
     },
-  },
-  components: {
-    FontAwesomeIcon
   },
   setup(props) {
     const isLiked = computed(() => props.comment.isLikedBy(props.userIdHashed) || false);

@@ -111,7 +111,6 @@
 </template>
 <script lang="ts">
 import dayjs from "dayjs";
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { defineComponent, onMounted, reactive } from "vue";
 import { Event } from "../models/event";
 import { emptyTalk } from "../models/talk";
@@ -122,9 +121,6 @@ export default defineComponent({
       type: Event,
       required: true,
     },
-  },
-  components: {
-    FontAwesomeIcon
   },
   emits: ["update-event"],
   setup(props, { emit }) {
