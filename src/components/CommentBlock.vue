@@ -17,7 +17,9 @@
               :disabled="isMine"
               @click="toggleLike"
             >
-              <span class="mr-1">Like!</span>
+              <span class="mr-1">
+                <font-awesome-icon :icon="['fas', 'thumbs-up']" />
+              </span>
               <span>{{ likeCount }}</span>
             </button>
           </div>
@@ -29,7 +31,7 @@
 
 <script lang="ts">
 import { computed, defineComponent } from "vue";
-
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { Comment } from "../models/comment";
 import { saveCommentLike } from "../repository";
 
@@ -43,6 +45,9 @@ export default defineComponent({
       type: String,
       required: true,
     },
+  },
+  components: {
+    FontAwesomeIcon
   },
   setup(props) {
     const isLiked = computed(() => props.comment.isLikedBy(props.userIdHashed) || false);

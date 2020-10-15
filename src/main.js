@@ -3,10 +3,11 @@ import App from "./App.vue";
 import router from "./router";
 import "./index.css";
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { faTrashAlt, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
-  faTrashAlt
+  faTrashAlt,
+  faThumbsUp
 )
 
 const app = createApp(App);
