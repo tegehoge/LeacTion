@@ -30,6 +30,5 @@ jobs:
       - name: npm install for firebase functions
         working-directory: ./functions
         run: npm install
-      - name: firebase deploy
+      - name: Firebase Production Deploy
         run: yarn deploy --token=${{ secrets.FIREBASE_TOKEN }}
-        
