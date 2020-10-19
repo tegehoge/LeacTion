@@ -91,7 +91,7 @@
       </div>
       <div class="pl-1">
         <button type="button" class="text-red-500" @click="removeTalk(talk.id)">
-           <font-awesome-icon icon="trash-alt" />
+           <font-awesome-icon :icon="['fas', 'trash-alt']" />
         </button>
       </div>
     </div>
