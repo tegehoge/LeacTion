@@ -90,8 +90,9 @@
         />
       </div>
       <div class="pl-1">
-        <button type="button" class="text-red-500" @click="removeTalk(talk.id)">消</button
-        ><!-- FIXME: FontAwesome -->
+        <button type="button" class="text-red-500" @click="removeTalk(talk.id)">
+           <font-awesome-icon :icon="['fas', 'trash-alt']" />
+        </button>
       </div>
     </div>
     <div class="md:flex py-1">
