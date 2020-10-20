@@ -70,8 +70,9 @@
           >
             ここに発表枠を追加
           </button>
-          <button type="button" class="text-red-500 text-sm" @click="removeTalk(talk.id)">消</button
-          ><!-- FIXME: FontAwesome -->
+          <button type="button" class="text-red-500 text-sm" @click="removeTalk(talk.id)">
+            <font-awesome-icon :icon="['fas', 'trash-alt']" />
+          </button>
         </div>
         <div class="md:flex md:items-center md:mb-2">
           <div class="md:w-1/4 mb-1 md:mb-0">

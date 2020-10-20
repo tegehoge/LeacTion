@@ -10,6 +10,9 @@
     "deploy": "firebase deploy"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.32",
+    "@fortawesome/free-solid-svg-icons": "^5.15.1",
+    "@fortawesome/vue-fontawesome": "^3.0.0-2",
     "axios": "^0.20.0",
     "dayjs": "^1.9.1",
     "js-sha256": "^0.9.0",
