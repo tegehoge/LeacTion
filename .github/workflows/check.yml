@@ -1,6 +1,6 @@
 name: check
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   build:
@@ -42,3 +42,30 @@ jobs:
       - name: Build
         working-directory: ./functions
         run: npm run build
+  deploy_for_preview:
+    runs-on: ubuntu-latest
+    needs: [build, build_functions]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14"
+      - name: yarn install
+        uses: CultureHQ/actions-yarn@master
+        with:
+          args: install
+      - name: yarn build
+        uses: CultureHQ/actions-yarn@master
+        with:
+          args: build
+      - name: Firebase Preview Deploy
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+          expires: 10d
+          projectId: leaction
+        env:
+          FIREBASE_CLI_PREVIEWS: hostingchannels
