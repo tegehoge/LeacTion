@@ -1,62 +1,58 @@
 <template>
   <div>
-    <h2 class="my-3 text-2xl font-bold">新規イベントを登録する</h2>
+    <h2 class="my-5 text-3xl text-center font-bold">新規イベントを登録する</h2>
 
     <EventInputForm :initial-event="initialEvent" @update-event="updateEvent" />
 
-    <h3 class="w-full mt-3 pt-3 border-t-2 text-xl font-bold">
-      イベントを編集するためのパスワードを設定してください
-    </h3>
-    <div class="md:flex md:items-center mt-6 mb-2">
-      <div class="md:w-1/3">
-        <label for="password" class="block text-gray-700 font-bold md:text-right pr-4 mb-1 md:mb-0"
-          >管理者パスワード</label
+    <h3 class="w-full mt-3 p-5 border-t-2 text-xl text-center font-bold">編集用パスワードの設定</h3>
+    <div class="max-w-4xl mx-auto md:flex md:items-start px-2">
+      <div class="w-full md:w-1/2 md:px-10">
+        <div>
+          <label for="password" class="text-input-label">管理者パスワード</label>
+        </div>
+        <div>
+          <input
+            id="password"
+            v-model="eventPassword"
+            type="password"
+            name="password"
+            placeholder="パスワード"
+            :class="{ 'border-red-500': invalidPassword }"
+            class="text-input-form w-full"
+          />
+        </div>
+      </div>
+      <div class="w-full md:w-1/2 md:px-10">
+        <div>
+          <label for="password_confirm" class="text-input-label">管理者パスワード（確認用）</label>
+        </div>
+        <div>
+          <input
+            id="password_confirm"
+            v-model="eventPasswordConfirm"
+            type="password"
+            name="password_confirm"
+            placeholder="パスワード（確認用）"
+            :class="{ 'border-red-500': invalidPassword }"
+            class="text-input-form w-full"
+          />
+        </div>
+        <span v-show="invalidPassword" class="text-red-500 ml-2 text-sm"
+          >パスワードが一致していません</span
         >
-      </div>
-      <div class="md:w-2/3">
-        <input
-          id="password"
-          v-model="eventPassword"
-          type="password"
-          name="password"
-          placeholder="パスワード"
-          :class="{ 'border-red-500': invalidPassword }"
-          class="border-2 border-gray-400 rounded px-2 py-2"
-        />
-      </div>
-    </div>
-    <div class="md:flex md:items-center mb-6">
-      <div class="md:w-1/3">
-        <label
-          for="password_confirm"
-          class="block text-gray-700 font-bold md:text-right pr-4 mb-1 md:mb-0"
-          >管理者パスワード（確認用）</label
-        >
-      </div>
-      <div class="md:w-2/3">
-        <input
-          id="password_confirm"
-          v-model="eventPasswordConfirm"
-          type="password"
-          name="password_confirm"
-          placeholder="パスワード（確認用）"
-          :class="{ 'border-red-500': invalidPassword }"
-          class="border-2 border-gray-400 rounded px-2 py-2"
-        />
-        <span v-show="invalidPassword" class="text-red-500 ml-2">パスワードが一致していません</span>
       </div>
     </div>
 
-    <div class="text-center py-5">
+    <div class="text-center py-8">
       <div class="">
         <button
           type="button"
           :disabled="!formValidated"
-          class="bg-blue-500 opacity-50 text-white px-4 py-2 rounded"
-          :class="{ 'opacity-100 hover:bg-blue-700': formValidated }"
+          class="bg-blue-500 opacity-50 cursor-not-allowed text-white px-4 py-2 rounded"
+          :class="{ 'opacity-100 hover:bg-blue-700 cursor-default': formValidated }"
           @click="saveCurrentEvent"
         >
-          イベント情報を保存する
+          イベントを作成する
         </button>
       </div>
     </div>

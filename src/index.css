@@ -3,3 +3,16 @@
 @tailwind components;
 
 @tailwind utilities;
+
+@layer components {
+  .text-input-form {
+    @apply border-2 border-gray-400 rounded px-2 py-2;
+  }
+  .text-input-label {
+    @apply text-gray-700 font-bold text-sm;
+  }
+  .date-input-form {
+    @apply border-2 border-gray-400 rounded px-2 py-2;
+    height: 44px;
+  }
+}
