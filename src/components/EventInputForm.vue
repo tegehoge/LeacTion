@@ -1,13 +1,13 @@
 <template>
   <form class="max-w-5xl mx-auto px-2">
-    <div class="md:flex md:items-center mb-0 md:mb-2">
-      <div class="md:w-2/3 p">
+    <div class="md:flex md:items-center pb-0 md:pb-3">
+      <div class="md:w-2/3">
         <div>
           <label for="eventName" class="text-input-label"
             >イベント名<sup class="text-red-500">*</sup></label
           >
         </div>
-        <div class="w-full mb-2 md:mb-0">
+        <div class="w-full pb-3 md:pb-0">
           <input
             id="eventName"
             v-model.trim="eventInput.name"
@@ -19,7 +19,7 @@
           />
         </div>
       </div>
-      <div class="md:w-1/3 md:pl-2 mb-2 md:mb-0">
+      <div class="md:w-1/3 md:pl-2 pb-3 md:pb-0">
         <div>
           <label for="dateOfEvent" class="text-input-label"
             >開催日<sup class="text-red-500">*</sup></label
@@ -58,7 +58,7 @@
     </div>
 
     <div>
-      <div v-for="(talk, index) in eventInput.talks" :key="talk.id" class="transition py-1 md:py-0">
+      <div v-for="(talk, index) in eventInput.talks" :key="talk.id" class="transition pb-3">
         <div class="flex items-center">
           <label for="externalUrl" class="block flex-grow text-input-label"
             >発表枠{{ index + 1 }}</label

@@ -9,7 +9,7 @@
     @apply border-2 border-gray-400 rounded px-2 py-2;
   }
   .text-input-label {
-    @apply text-gray-700 font-bold text-sm;
+    @apply text-gray-700 font-bold text-base;
   }
   .date-input-form {
     @apply border-2 border-gray-400 rounded px-2 py-2;
