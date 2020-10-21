@@ -48,8 +48,8 @@
         <button
           type="button"
           :disabled="!formValidated"
-          class="bg-blue-500 opacity-50 cursor-not-allowed text-white px-4 py-2 rounded"
-          :class="{ 'opacity-100 hover:bg-blue-700 cursor-default': formValidated }"
+          class="bg-blue-500 opacity-50 pointer-events-none text-white px-4 py-2 rounded"
+          :class="{ 'opacity-100 hover:bg-blue-700 pointer-events-auto': formValidated }"
           @click="saveCurrentEvent"
         >
           イベントを作成する
