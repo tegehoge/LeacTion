@@ -7,6 +7,7 @@
     "check": "tsc --noEmit",
     "serve": "(cd functions/ && tsc) && firebase serve",
     "test": "jest",
+    "format": "eslint --fix src/**/*.{ts,js,vue}",
     "deploy": "firebase deploy"
   },
   "dependencies": {

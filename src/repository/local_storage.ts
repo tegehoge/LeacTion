@@ -9,8 +9,8 @@ export class LocalStorageEventRepository implements EventRepository {
   save(event: Event, password: string): Promise<Event> {
     const payload = storage.getItem(`event-${event.id}`);
     if (payload) {
-      const password_hashed = storage.getItem(`event-${event.id}-password`);
-      if (jssha256.sha256(password) == password_hashed) {
+      const passwordHashed = storage.getItem(`event-${event.id}-password`);
+      if (jssha256.sha256(password) == passwordHashed) {
         storage.setItem(`event-${event.id}`, JSON.stringify(event));
         return Promise.resolve(event);
       } else {
@@ -33,19 +33,19 @@ export class LocalStorageEventRepository implements EventRepository {
   }
 
   verifyPassword(eventId: string, password: string): Promise<boolean> {
-    const password_hashed = storage.getItem(`event-${eventId}-password`);
-    return Promise.resolve(jssha256.sha256(password) == password_hashed);
+    const passwordHashed = storage.getItem(`event-${eventId}-password`);
+    return Promise.resolve(jssha256.sha256(password) == passwordHashed);
   }
 }
 
 export class LocalStorageCommentRepository implements CommentRepository {
   save(comment: Comment): Promise<Comment> {
     const comments = Comment.fromJSONArray(storage.getItem("comments") || "[]");
-    const replace_index = comments.findIndex((c) => c.id == comment.id);
-    if (replace_index < 0) {
+    const replaceIndex = comments.findIndex((c) => c.id == comment.id);
+    if (replaceIndex < 0) {
       comments.push(comment);
     } else {
-      comments[replace_index] = comment;
+      comments[replaceIndex] = comment;
     }
     storage.setItem(`comments`, JSON.stringify(comments));
     return Promise.resolve(comment);
@@ -53,8 +53,8 @@ export class LocalStorageCommentRepository implements CommentRepository {
 
   findAllByEventId(eventId: EventId): Promise<Comment[]> {
     const comments = Comment.fromJSONArray(storage.getItem("comments") || "[]");
-    const target_comments = comments.filter((c) => c.eventId == eventId);
-    return Promise.resolve(target_comments);
+    const targetComments = comments.filter((c) => c.eventId == eventId);
+    return Promise.resolve(targetComments);
   }
 
   saveLike(
@@ -64,11 +64,11 @@ export class LocalStorageCommentRepository implements CommentRepository {
     remove: boolean
   ): Promise<boolean> {
     const comments = Comment.fromJSONArray(storage.getItem("comments") || "[]");
-    const target_comment = comments.find((c) => c.id == commentId);
-    if (!target_comment) {
+    const targetComment = comments.find((c) => c.id == commentId);
+    if (!targetComment) {
       return Promise.reject();
     }
-    target_comment.setLike(userIdHashed, remove);
+    targetComment.setLike(userIdHashed, remove);
     storage.setItem(`comments`, JSON.stringify(comments));
     return Promise.resolve(true);
   }
