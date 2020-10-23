@@ -1,4 +1,4 @@
-import { Talk, TalkResponse } from "./talk";
+import { emptyTalk, Talk, TalkResponse } from "./talk";
 import { v4 as uuidv4 } from "uuid";
 import dayjs from "dayjs";
 
@@ -31,6 +31,14 @@ export class Event {
 
   removeExternalUrl(): void {
     this.externalUrl = undefined;
+  }
+
+  insertEmptyTalkAt(index?: number) {
+    if (index === undefined) {
+      this.talks.push(emptyTalk());
+    } else {
+      this.talks.splice(index, 0, emptyTalk());
+    }
   }
 
   static fromJSON(payload: string): Event {
