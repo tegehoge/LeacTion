@@ -6,9 +6,14 @@
     "build": "tsc --noEmit && NODE_ENV=production vite build",
     "check": "tsc --noEmit",
     "serve": "(cd functions/ && tsc) && firebase serve",
-    "test": "jest"
+    "test": "jest",
+    "format": "eslint --fix src/**/*.{ts,js,vue}",
+    "deploy": "firebase deploy"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.32",
+    "@fortawesome/free-solid-svg-icons": "^5.15.1",
+    "@fortawesome/vue-fontawesome": "^3.0.0-2",
     "axios": "^0.20.0",
     "dayjs": "^1.9.1",
     "js-sha256": "^0.9.0",
@@ -27,6 +32,7 @@
     "eslint-config-prettier": "^6.12.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-vue": "^7.0.1",
+    "firebase-tools": "^8.12.1",
     "jest": "^26.4.2",
     "prettier": "^2.1.2",
     "stylelint-config-recommended": "^3.0.0",

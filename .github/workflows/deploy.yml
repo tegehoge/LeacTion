@@ -1,0 +1,34 @@
+name: firebase-deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14"
+      - name: yarn install
+        uses: CultureHQ/actions-yarn@master
+        with:
+          args: install
+      - name: yarn test
+        uses: CultureHQ/actions-yarn@master
+        with:
+          args: test
+      - name: yarn build
+        uses: CultureHQ/actions-yarn@master
+        with:
+          args: build
+      - name: npm install for firebase functions
+        working-directory: ./functions
+        run: npm install
+      - name: Firebase Production Deploy
+        run: yarn deploy --token=${{ secrets.FIREBASE_TOKEN }}
