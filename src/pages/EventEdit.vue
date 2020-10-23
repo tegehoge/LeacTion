@@ -42,6 +42,7 @@
       </div>
     </div>
     <div v-if="initialEvent">
+      <h2 class="my-5 text-3xl text-center font-bold">イベントを編集する</h2>
       <EventInputForm :initial-event="initialEvent" @update-event="updateEvent" />
       <div class="text-center py-5">
         <div class="">
