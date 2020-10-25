@@ -12,6 +12,7 @@ export class LocalStorageEventRepository implements EventRepository {
       const passwordHashed = storage.getItem(`event-${event.id}-password`);
       if (jssha256.sha256(password) == passwordHashed) {
         storage.setItem(`event-${event.id}`, JSON.stringify(event));
+        console.debug(`Event ${event.id} saved.`);
         return Promise.resolve(event);
       } else {
         return Promise.reject();
@@ -26,6 +27,7 @@ export class LocalStorageEventRepository implements EventRepository {
   findById(eventId: EventId): Promise<Event> {
     const payload = storage.getItem(`event-${eventId}`);
     if (payload) {
+      console.debug(`Event ${eventId} found.`);
       return Promise.resolve(Event.fromJSON(payload));
     } else {
       return Promise.reject();
@@ -48,12 +50,14 @@ export class LocalStorageCommentRepository implements CommentRepository {
       comments[replaceIndex] = comment;
     }
     storage.setItem(`comments`, JSON.stringify(comments));
+    console.debug(`Comment ${comment.id} saved.`);
     return Promise.resolve(comment);
   }
 
   findAllByEventId(eventId: EventId): Promise<Comment[]> {
     const comments = Comment.fromJSONArray(storage.getItem("comments") || "[]");
     const targetComments = comments.filter((c) => c.eventId == eventId);
+    console.debug(`Comments for ${eventId} found.`);
     return Promise.resolve(targetComments);
   }
 
@@ -70,6 +74,7 @@ export class LocalStorageCommentRepository implements CommentRepository {
     }
     targetComment.setLike(userIdHashed, remove);
     storage.setItem(`comments`, JSON.stringify(comments));
+    console.debug(`Comment ${commentId} like toggled.`);
     return Promise.resolve(true);
   }
 }
