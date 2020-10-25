@@ -49,7 +49,7 @@
   <!-- FIXME: loading -->
 </template>
 <script lang="ts">
-import { ref, defineComponent, onMounted, computed } from "vue";
+import { ref, defineComponent, onMounted, computed, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 
 import CommentInput from "../components/CommentInput.vue";
@@ -96,14 +96,29 @@ export default defineComponent({
 
     const userContext = createOrGetUserContext();
 
-    onMounted(() => {
+    const fetchEvent = () => {
       findEventById(props.eventId || "").then((ev) => {
         event.value = ev;
         currentTalk.value = event.value.talks[0];
       });
+    };
+    const fetchEventTask = setInterval(fetchEvent, 10 * 1000);
+
+    const fetchComments = () => {
       findAllCommentByEventId(props.eventId || "").then(
         (existingComments) => (comments.value = existingComments)
       );
+    };
+    const fetchCommentsTask = setInterval(fetchComments, 2 * 1000);
+
+    onMounted(() => {
+      fetchEvent();
+      fetchComments();
+    });
+
+    onUnmounted(() => {
+      clearInterval(fetchEventTask);
+      clearInterval(fetchCommentsTask);
     });
 
     return {
