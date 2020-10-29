@@ -90,9 +90,11 @@ export default defineComponent({
     const myCommentCache: Comment[] = [];
     const myLikeCache: { commentId: string; liked: boolean }[] = [];
 
-    const commentsForTalk = computed(() =>
-      comments.value.filter((c) => c.talkId === currentTalk.value?.id)
-    );
+    const commentsForTalk = computed(() => {
+      const talks = comments.value.filter((c) => c.talkId === currentTalk.value?.id);
+      talks.sort((a, b) => a.postedAt.diff(b.postedAt));
+      return talks;
+    });
     const addComment = (comment: Comment) => {
       comments.value.push(comment);
       myCommentCache.push(comment);
