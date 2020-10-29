@@ -41,6 +41,7 @@
         :key="comment.id"
         :comment="comment"
         :user-id-hashed="userContext.userIdHashed"
+        @update:like="updateLike"
       >
       </CommentBlock>
     </div>
@@ -85,35 +86,71 @@ export default defineComponent({
     const event = ref<Event>();
     const currentTalk = ref<Talk>();
     const comments = ref<Comment[]>([]);
+
+    const myCommentCache: Comment[] = [];
+    const myLikeCache: { commentId: string; liked: boolean }[] = [];
+
     const commentsForTalk = computed(() =>
       comments.value.filter((c) => c.talkId === currentTalk.value?.id)
     );
     const addComment = (comment: Comment) => {
       comments.value.push(comment);
+      myCommentCache.push(comment);
       saveComment(comment);
     };
-    const switchTalk = (selectedTalk: Talk) => (currentTalk.value = selectedTalk);
+
+    const updateLike = (commentId: string, liked: boolean) => {
+      const existCacheIndex = myLikeCache.findIndex((c) => c.commentId !== commentId);
+      if (existCacheIndex >= 0) {
+        myLikeCache.splice(existCacheIndex, 1, { commentId, liked });
+      } else {
+        myLikeCache.push({ commentId, liked });
+      }
+      console.debug(myLikeCache);
+    };
 
     const userContext = createOrGetUserContext();
 
     const fetchEvent = () => {
-      findEventById(props.eventId || "").then((ev) => {
+      return findEventById(props.eventId || "").then((ev) => {
         event.value = ev;
-        currentTalk.value = event.value.talks[0];
       });
     };
     const fetchEventTask = setInterval(fetchEvent, 10 * 1000);
 
+    const mergeLocalCache = () => {
+      while (myCommentCache.length > 0) {
+        const commentUpdate = myCommentCache.shift();
+        if (commentUpdate) {
+          const targetComment = comments.value.filter((c) => c.id === commentUpdate.id)[0];
+          if (!targetComment) {
+            comments.value.push(commentUpdate);
+          }
+        }
+      }
+      while (myLikeCache.length > 0) {
+        const likeUpdate = myLikeCache.shift();
+        if (likeUpdate) {
+          const targetComment = comments.value.filter((c) => c.id === likeUpdate.commentId)[0];
+          if (targetComment) {
+            targetComment.setLike(userContext.userIdHashed, !likeUpdate.liked);
+          } else {
+            console.error(`Unknown commentId ${likeUpdate.commentId}`);
+          }
+        }
+      }
+    };
     const fetchComments = () => {
-      findAllCommentByEventId(props.eventId || "").then(
-        (existingComments) => (comments.value = existingComments)
-      );
+      return findAllCommentByEventId(props.eventId || "").then((existingComments) => {
+        comments.value = existingComments;
+        mergeLocalCache();
+      });
     };
     const fetchCommentsTask = setInterval(fetchComments, 2 * 1000);
 
-    onMounted(() => {
-      fetchEvent();
-      fetchComments();
+    onMounted(async () => {
+      await fetchEvent().then(() => (currentTalk.value = event.value?.talks[0]));
+      await fetchComments();
     });
 
     onUnmounted(() => {
@@ -127,7 +164,7 @@ export default defineComponent({
       comments,
       commentsForTalk,
       addComment,
-      switchTalk,
+      updateLike,
       userContext,
     };
   },
