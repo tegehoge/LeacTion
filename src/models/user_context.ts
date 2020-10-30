@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import { nanoid } from "nanoid";
 import jssha256 from "js-sha256";
 
 type UserId = string;
@@ -9,7 +9,7 @@ export class UserContext {
   commentOrder: CommentOrder;
 
   constructor(userId?: UserId, commentOrder?: CommentOrder) {
-    this.userId = userId || uuidv4();
+    this.userId = userId || nanoid();
     this.userIdHashed = jssha256.sha256(this.userId);
     this.commentOrder = commentOrder || CommentOrder.DescendingTimeOrder;
   }
