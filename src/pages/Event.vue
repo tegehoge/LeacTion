@@ -15,7 +15,7 @@
     </div>
     <div v-else>ローディング中…</div>
     <!-- FIXME: loading -->
-    <div v-if="event" class="relative bottom-0">
+    <div v-if="event" class="relative bottom-0 border-t-2">
       <div class="flex px-3 py-2 w-full text-center items-center max-w-4xl mx-auto">
         <div class="flex-shrink-0 mb-1 md:mb-0">
           <label for="talk_select" class="block text-gray-700 font-bold md:text-right pr-4 md:mb-0"
