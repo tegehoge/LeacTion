@@ -45,8 +45,9 @@
       </CommentBlock>
     </div>
   </div>
-  <div v-else>ローディング中…</div>
-  <!-- FIXME: loading -->
+  <div v-else class="w-full text-5xl pt-8 text-center">
+    <font-awesome-icon :icon="['fas', 'cog']" spin />
+  </div>
 </template>
 <script lang="ts">
 import { ref, defineComponent, onMounted, computed } from "vue";
