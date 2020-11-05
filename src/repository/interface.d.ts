@@ -49,4 +49,16 @@ export interface CommentRepository {
     userIdHashed: string,
     remove: boolean
   ): Promise<boolean>;
+
+  /**
+   * コメントを削除する
+   * @param eventIdイベントID
+   * @param commentId コメントID
+   * @param userIdHashed ハッシュ化したユーザーID
+   */
+  delete(
+    eventId: EventId,
+    commentId: CommentId,
+    userIdHashed: string,
+  ): Promise<boolean>;
 }

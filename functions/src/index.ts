@@ -159,6 +159,24 @@ api.post("/event/:eventId/comment/:commentId/like", (req, res) => {
     });
 });
 
+api.post("/event/:eventId/comment/:commentId/delete", (req, res) => {
+  const eventId = req.params["eventId"];
+  const commentId = req.params["commentId"];
+  // const likeReq = req.body as CommentLikeRequest;
+
+  const docRef = firestore.doc(`comments-${eventId}/${commentId}`);
+  docRef
+    .delete()
+    .then(() => {
+      res.json({ message: "ok" });
+    })
+    .catch((e) => {
+      console.error(e);
+      res.status(400);
+      res.json({ message: "failed" });
+    });
+});
+
 app.use("/api", api);
 
 exports.app = functions.https.onRequest(app);

@@ -50,4 +50,10 @@ export class FirebaseCommentRepository implements CommentRepository {
       return res.status == 201;
     });
   }
+
+  delete(eventId: string, commentId: string, userIdHashed: string): Promise<boolean> {
+    return axios.post(`/api/event/${eventId}/comment/${commentId}/delete`, { userIdHashed }).then((res) => {
+      return res.status == 200;
+    });
+  }
 }

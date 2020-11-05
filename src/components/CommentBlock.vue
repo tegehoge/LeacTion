@@ -14,6 +14,18 @@
               class="bg-green-500 text-white px-3 py-1 rounded-full"
               type="button"
               :class="{ 'bg-pink-500': isLiked, 'opacity-50': isMine }"
+              :disabled="!isMine"
+              @click="delComment"
+            >
+              <span class="mr-1">
+                <font-awesome-icon :icon="['fas', 'trash-alt']" />
+              </span>
+              <span>{{ likeCount }}</span>
+            </button>
+            <button
+              class="bg-green-500 text-white px-3 py-1 rounded-full"
+              type="button"
+              :class="{ 'bg-pink-500': isLiked, 'opacity-50': isMine }"
               :disabled="isMine"
               @click="toggleLike"
             >
@@ -32,7 +44,7 @@
 <script lang="ts">
 import { computed, defineComponent } from "vue";
 import { Comment } from "../models/comment";
-import { saveCommentLike } from "../repository";
+import { saveCommentLike, deleteComment } from "../repository";
 
 export default defineComponent({
   props: {
@@ -48,13 +60,17 @@ export default defineComponent({
   setup(props) {
     const isLiked = computed(() => props.comment.isLikedBy(props.userIdHashed) || false);
     const isMine = computed(() => props.comment.userIdHashed == props.userIdHashed);
+    const delComment = () => {
+      // todo: confirm
+      deleteComment(props.comment.eventId, props.comment.id, props.userIdHashed);
+    };
     const toggleLike = () => {
       const remove = props.comment.isLikedBy(props.userIdHashed);
       props.comment.setLike(props.userIdHashed, remove);
       saveCommentLike(props.comment.eventId, props.comment.id, props.userIdHashed, remove);
     };
     const likeCount = computed(() => props.comment.likes.length || 0);
-    return { isLiked, isMine, likeCount, toggleLike };
+    return { isLiked, isMine, likeCount, toggleLike, delComment };
   },
 });
 </script>
