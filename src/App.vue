@@ -3,7 +3,7 @@
     <header>
       <nav class="p-3 bg-blue-700 text-white">
         <div class="">
-          <h1 class="text-2xl">LeacTion!</h1>
+          <h1 class="text-2xl"><router-link to="/">LeacTion!</router-link></h1>
         </div>
       </nav>
     </header>
