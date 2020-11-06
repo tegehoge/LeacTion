@@ -10,10 +10,15 @@
           :user-id-hashed="userContext.userIdHashed"
         >
         </CommentBlock>
-        <div v-if="commentsForTalk.length === 0" class="py-10">まだコメントがありません</div>
+        <div v-if="commentsForTalk.length === 0" class="py-10 w-full text-center">
+          まだコメントがありません
+        </div>
       </div>
     </div>
-    <div v-else>ローディング中…</div>
+    <div v-else class="text-center p-10">
+      <div class="animate-spin text-4xl"><font-awesome-icon :icon="['fas', 'spinner']" /></div>
+      <div>イベントを読み込んでいます…</div>
+    </div>
     <!-- FIXME: loading -->
     <div v-if="event" class="relative bottom-0 border-t-2">
       <div class="flex px-3 py-2 w-full text-center items-center max-w-4xl mx-auto">
