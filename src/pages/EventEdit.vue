@@ -107,6 +107,7 @@ export default defineComponent({
     };
 
     const saveUpdatedEvent = () => {
+      event.value.talks = event.value.talks.filter((talk) => !talk.isEmpty());
       saveEvent(event.value, passwordInput.value).then((currentEvent) => {
         router.push(`/event/${currentEvent.id}`);
       });
