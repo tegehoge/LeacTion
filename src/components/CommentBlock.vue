@@ -61,8 +61,10 @@ export default defineComponent({
     const isLiked = computed(() => props.comment.isLikedBy(props.userIdHashed) || false);
     const isMine = computed(() => props.comment.userIdHashed == props.userIdHashed);
     const deleteMyComment = () => {
-      // todo: confirm
-      deleteComment(props.comment.eventId, props.comment.id, props.userIdHashed);
+      if (confirm('削除してよろしいですか？')) {
+        deleteComment(props.comment.eventId, props.comment.id, props.userIdHashed);
+        location.reload();
+      }
     };
     const toggleLike = () => {
       const remove = props.comment.isLikedBy(props.userIdHashed);
