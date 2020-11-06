@@ -11,16 +11,14 @@
           </div>
           <div>
             <button
-              class="bg-green-500 text-white px-3 py-1 rounded-full"
+              v-if="isMine"
+              class="bg-red-500 text-white px-3 py-1 mr-1 rounded-full"
               type="button"
-              :class="{ 'bg-pink-500': isLiked, 'opacity-50': isMine }"
-              :disabled="!isMine"
               @click="deleteMyComment"
             >
-              <span class="mr-1">
+              <span>
                 <font-awesome-icon :icon="['fas', 'trash-alt']" />
               </span>
-              <span>{{ likeCount }}</span>
             </button>
             <button
               class="bg-green-500 text-white px-3 py-1 rounded-full"
