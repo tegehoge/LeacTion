@@ -15,7 +15,7 @@
               type="button"
               :class="{ 'bg-pink-500': isLiked, 'opacity-50': isMine }"
               :disabled="!isMine"
-              @click="delComment"
+              @click="deleteMyComment"
             >
               <span class="mr-1">
                 <font-awesome-icon :icon="['fas', 'trash-alt']" />
@@ -60,7 +60,7 @@ export default defineComponent({
   setup(props) {
     const isLiked = computed(() => props.comment.isLikedBy(props.userIdHashed) || false);
     const isMine = computed(() => props.comment.userIdHashed == props.userIdHashed);
-    const delComment = () => {
+    const deleteMyComment = () => {
       // todo: confirm
       deleteComment(props.comment.eventId, props.comment.id, props.userIdHashed);
     };
@@ -70,7 +70,7 @@ export default defineComponent({
       saveCommentLike(props.comment.eventId, props.comment.id, props.userIdHashed, remove);
     };
     const likeCount = computed(() => props.comment.likes.length || 0);
-    return { isLiked, isMine, likeCount, toggleLike, delComment };
+    return { isLiked, isMine, likeCount, toggleLike, deleteMyComment };
   },
 });
 </script>
