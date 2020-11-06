@@ -52,6 +52,10 @@ export default defineComponent({
       type: Comment,
       required: true,
     },
+    userId: {
+      type: String,
+      required: true,
+    },
     userIdHashed: {
       type: String,
       required: true,
@@ -62,7 +66,7 @@ export default defineComponent({
     const isMine = computed(() => props.comment.userIdHashed == props.userIdHashed);
     const deleteMyComment = () => {
       if (confirm('削除してよろしいですか？')) {
-        deleteComment(props.comment.eventId, props.comment.id, props.userIdHashed);
+        deleteComment(props.comment.eventId, props.comment.id, props.userId);
         location.reload();
       }
     };

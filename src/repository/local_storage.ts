@@ -73,10 +73,10 @@ export class LocalStorageCommentRepository implements CommentRepository {
     return Promise.resolve(true);
   }
 
-  delete(eventId: string, commentId: string, userIdHashed: string): Promise<boolean> {
+  delete(eventId: string, commentId: string, userId: string): Promise<boolean> {
     const comments = Comment.fromJSONArray(storage.getItem("comments") || "[]");
     const replaceIndex = comments.findIndex((c) => c.id == commentId);
-    if (replaceIndex >= 0 && comments[replaceIndex].userIdHashed === userIdHashed) {
+    if (replaceIndex >= 0 && comments[replaceIndex].userIdHashed === jssha256.sha256(userId)) {
       comments.splice(replaceIndex, 1);
     }
     storage.setItem(`comments`, JSON.stringify(comments));
