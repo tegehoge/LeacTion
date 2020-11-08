@@ -40,6 +40,7 @@
         v-for="comment in commentsForTalk"
         :key="comment.id"
         :comment="comment"
+        :user-id="userContext.userId"
         :user-id-hashed="userContext.userIdHashed"
       >
       </CommentBlock>
