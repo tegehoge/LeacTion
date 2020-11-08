@@ -65,7 +65,7 @@ export default defineComponent({
     const deleteMyComment = () => {
       if (confirm("削除してよろしいですか？")) {
         deleteComment(props.comment.eventId, props.comment.id, props.userId);
-        location.reload();
+        location.reload(); // TODO: Fix this on autoload.
       }
     };
     const toggleLike = () => {
