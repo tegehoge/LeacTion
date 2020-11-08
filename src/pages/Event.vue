@@ -8,6 +8,7 @@
           :key="comment.id"
           :comment="comment"
           :user-id-hashed="userContext.userIdHashed"
+          :user-id="userContext.userId"
         >
         </CommentBlock>
         <div v-if="commentsForTalk.length === 0" class="py-10 w-full text-center">
@@ -110,7 +111,6 @@ export default defineComponent({
     const switchTalk = (selectedTalk: Talk) => (currentTalk.value = selectedTalk);
 
     const userContext = createOrGetUserContext();
-
     onMounted(() => {
       findEventById(props.eventId || "").then((ev) => {
         event.value = ev;

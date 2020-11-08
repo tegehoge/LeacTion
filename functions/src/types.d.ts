@@ -33,3 +33,7 @@ export type CommentLikeRequest = {
   userIdHashed: string;
   remove?: boolean;
 };
+
+export type CommentDeleteRequest = {
+  userId: string;
+};

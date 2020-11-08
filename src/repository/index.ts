@@ -18,3 +18,4 @@ export const verifyEventPassword = eventRepository.verifyPassword;
 export const saveComment = commentRepository.save;
 export const findAllCommentByEventId = commentRepository.findAllByEventId;
 export const saveCommentLike = commentRepository.saveLike;
+export const deleteComment = commentRepository.delete;
