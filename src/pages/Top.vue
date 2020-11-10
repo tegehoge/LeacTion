@@ -1,4 +1,5 @@
 <template>
+  <app-header></app-header>
   <div class="text-center">
     <h2 class="my-3 text-xl">イベントを作る</h2>
     <div class="my-3">イベントを作成して参加者とコメントや質問をして盛り上げていきましょう！</div>
@@ -21,6 +22,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+
 export default defineComponent({
   name: "Top",
   setup() {
