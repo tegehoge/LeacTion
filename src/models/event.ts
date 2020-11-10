@@ -1,11 +1,11 @@
 import { emptyTalk, Talk, TalkResponse } from "./talk";
-import { v4 as uuidv4 } from "uuid";
+import { nanoid } from "nanoid";
 import dayjs from "dayjs";
 
 export type EventId = string;
 
 export class Event {
-  id: EventId; // UUID
+  id: EventId;
   name: string;
   dateOfEvent: string; // date
   talks: Talk[];
@@ -18,7 +18,7 @@ export class Event {
     talks?: Talk[],
     externalUrl?: string
   ) {
-    this.id = id || uuidv4();
+    this.id = id || nanoid(8);
     this.name = name;
     this.dateOfEvent = dateOfEvent;
     this.talks = talks || [];
@@ -72,7 +72,7 @@ export class Event {
 }
 
 type EventResponse = {
-  id: string; // UUID
+  id: string;
   name: string;
   dateOfEvent: string; // date
   talks: TalkResponse[];

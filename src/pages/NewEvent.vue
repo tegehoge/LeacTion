@@ -1,4 +1,5 @@
 <template>
+  <app-header></app-header>
   <div>
     <h2 class="my-5 text-3xl text-center font-bold">新規イベントを登録する</h2>
 
