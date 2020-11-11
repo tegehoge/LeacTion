@@ -64,6 +64,14 @@
             >発表枠{{ index + 1 }}</label
           >
           <button
+            v-if="index !== 0"
+            type="button"
+            class="border border-green-500 hover:bg-green-500 text-green-500 hover:text-white transition duration-300 rounded px-1 text-xs mr-2"
+            @click="swapTalkInput(index, index - 1)"
+          >
+            発表順を上げる
+          </button>
+          <button
             type="button"
             class="border border-green-500 hover:bg-green-500 text-green-500 hover:text-white transition duration-300 rounded px-1 text-xs mr-2"
             @click="addTalkInput(index)"
@@ -126,6 +134,9 @@ export default defineComponent({
   setup(props, { emit }) {
     const today = dayjs().format("YYYY-MM-DD");
     const eventInput = reactive(props.initialEvent);
+    const currentTalkIds = props.initialEvent.talks
+      .filter((talk) => !talk.isEmpty())
+      .map((talk) => talk.id);
 
     const fillMinimalTalks = () => {
       while ((eventInput.talks.length || 0) < 3) {
@@ -137,7 +148,22 @@ export default defineComponent({
       eventInput.insertEmptyTalkAt(index);
     };
 
+    const swapTalkInput = (index1: number, index2: number) => {
+      [eventInput.talks[index1], eventInput.talks[index2]] = [
+        eventInput.talks[index2],
+        eventInput.talks[index1],
+      ];
+    };
+
     const removeTalk = (talkId: string) => {
+      if (currentTalkIds.includes(talkId)) {
+        const confirmed = confirm(
+          "既存の発表を削除するとすでに投稿されたコメントが閲覧できなくなります。\n削除してよろしいですか？"
+        );
+        if (!confirmed) {
+          return;
+        }
+      }
       eventInput.talks = eventInput.talks.filter((talk) => talk.id != talkId);
       fillMinimalTalks();
     };
@@ -154,6 +180,7 @@ export default defineComponent({
       eventInput,
       updateEvent,
       addTalkInput,
+      swapTalkInput,
       removeTalk,
       today,
     };

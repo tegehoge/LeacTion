@@ -43,7 +43,13 @@ export class Event {
 
   static fromJSON(payload: string): Event {
     const data = JSON.parse(payload) as EventResponse;
-    return new Event(data.name, data.dateOfEvent, data.id, data.talks as Talk[], data.externalUrl);
+    return new Event(
+      data.name,
+      data.dateOfEvent,
+      data.id,
+      data.talks.map((talk) => Talk.fromObj(talk)),
+      data.externalUrl
+    );
   }
 
   static fromObj(obj: EventResponse): Event {
