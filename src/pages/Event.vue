@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col h-screen">
-    <app-header :event-id="eventId" :event-title="event ? event.name : ''"></app-header>
+    <event-header :event-id="eventId" :event-title="event ? event.name : ''"></event-header>
     <div v-if="event" class="flex-grow overflow-auto">
       <div class="flex flex-wrap max-w-4xl mx-auto">
         <CommentBlock
@@ -70,6 +70,7 @@ import { useRouter } from "vue-router";
 
 import CommentInput from "../components/CommentInput.vue";
 import CommentBlock from "../components/CommentBlock.vue";
+import EventHeader from "../components/EventHeader.vue";
 import { Comment } from "../models/comment";
 import { Event, EventId } from "../models/event";
 import { Talk } from "../models/talk";
@@ -90,7 +91,7 @@ const createOrGetUserContext = () => {
 
 export default defineComponent({
   name: "Event",
-  components: { CommentInput, CommentBlock },
+  components: { CommentInput, CommentBlock, EventHeader },
   props: {
     eventId: {
       type: String,
