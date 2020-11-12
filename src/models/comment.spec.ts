@@ -1,8 +1,8 @@
 import { Comment } from "./comment";
-import { v4 as uuidv4 } from "uuid";
+import { nanoid } from "nanoid";
 
 test("Successful JSON conversion", () => {
-  const comment = new Comment("新しいコメント", uuidv4(), uuidv4(), uuidv4());
+  const comment = new Comment("新しいコメント", nanoid(), nanoid(8), nanoid());
 
   const commentString = JSON.stringify(comment);
   const result = Comment.fromJSON(commentString);
@@ -12,9 +12,9 @@ test("Successful JSON conversion", () => {
 });
 
 test("Successful JSONArray conversion", () => {
-  const userId = uuidv4();
-  const eventId = uuidv4();
-  const talkId = uuidv4();
+  const userId = nanoid();
+  const eventId = nanoid(8);
+  const talkId = nanoid();
   const comments = [
     new Comment("新しいコメント", userId, eventId, talkId),
     new Comment("別の新しいコメント", userId, eventId, talkId),

@@ -1,13 +1,14 @@
+import { nanoid } from "nanoid";
+
 export type TalkId = string;
-import { v4 as uuidv4 } from "uuid";
 
 export class Talk {
-  id: TalkId; // UUID
+  id: TalkId;
   title: string;
   speakerName: string;
 
   constructor(title: string, speakerName: string, id?: string) {
-    this.id = id || uuidv4();
+    this.id = id || nanoid();
     this.title = title;
     this.speakerName = speakerName;
   }

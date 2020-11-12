@@ -1,14 +1,14 @@
 import dayjs, { Dayjs } from "dayjs";
-import { v4 as uuidv4 } from "uuid";
+import { nanoid } from "nanoid";
 
 export type CommentId = string;
 export class Comment {
-  id: CommentId; // UUID
+  id: CommentId;
   text: string;
-  userIdHashed: string; // FIXME: userId のハッシュ値を入れる(なりすまし防止)
+  userIdHashed: string; // userId のハッシュ値を入れる(なりすまし防止)
   postedAt: Dayjs; // datetime
-  eventId: string; // UUID
-  talkId: string; // UUID
+  eventId: string;
+  talkId: string;
   likes: string[];
 
   constructor(
@@ -20,7 +20,7 @@ export class Comment {
     postedAt?: Dayjs,
     likes?: string[]
   ) {
-    this.id = id || uuidv4();
+    this.id = id || nanoid();
     this.text = text;
     this.userIdHashed = userIdHashed;
     this.postedAt = postedAt || dayjs();
@@ -84,11 +84,11 @@ export class Comment {
 }
 
 export type CommentResponse = {
-  id: string; // UUID
+  id: string;
   text: string;
-  userIdHashed: string; // UUID
+  userIdHashed: string;
   postedAt: string; // datetime
-  eventId: string; // UUID
-  talkId: string; // UUID
+  eventId: string;
+  talkId: string;
   likes: string[];
 };

@@ -1,11 +1,11 @@
 import { emptyTalk, Talk, TalkResponse } from "./talk";
-import { v4 as uuidv4 } from "uuid";
+import { nanoid } from "nanoid";
 import dayjs from "dayjs";
 
 export type EventId = string;
 
 export class Event {
-  id: EventId; // UUID
+  id: EventId;
   name: string;
   dateOfEvent: string; // date
   talks: Talk[];
@@ -18,7 +18,7 @@ export class Event {
     talks?: Talk[],
     externalUrl?: string
   ) {
-    this.id = id || uuidv4();
+    this.id = id || nanoid(8);
     this.name = name;
     this.dateOfEvent = dateOfEvent;
     this.talks = talks || [];
@@ -43,7 +43,13 @@ export class Event {
 
   static fromJSON(payload: string): Event {
     const data = JSON.parse(payload) as EventResponse;
-    return new Event(data.name, data.dateOfEvent, data.id, data.talks as Talk[], data.externalUrl);
+    return new Event(
+      data.name,
+      data.dateOfEvent,
+      data.id,
+      data.talks.map((talk) => Talk.fromObj(talk)),
+      data.externalUrl
+    );
   }
 
   static fromObj(obj: EventResponse): Event {
@@ -66,7 +72,7 @@ export class Event {
 }
 
 type EventResponse = {
-  id: string; // UUID
+  id: string;
   name: string;
   dateOfEvent: string; // date
   talks: TalkResponse[];

@@ -2,6 +2,7 @@ import * as functions from "firebase-functions";
 import * as firebase from "firebase-admin";
 import * as express from "express";
 import * as bcrypt from "bcrypt";
+import * as jssha256 from "js-sha256";
 import { WriteResult } from "@google-cloud/firestore";
 
 import {
@@ -9,6 +10,7 @@ import {
   EventPasswordRequest,
   CommentRequest,
   CommentLikeRequest,
+  CommentDeleteRequest,
   CommentResponse,
 } from "./types";
 
@@ -155,6 +157,38 @@ api.post("/event/:eventId/comment/:commentId/like", (req, res) => {
     .catch((e) => {
       console.error(e);
       res.status(400);
+      res.json({ message: "failed" });
+    });
+});
+
+api.post("/event/:eventId/comment/:commentId/delete", (req, res) => {
+  const eventId = req.params["eventId"];
+  const commentId = req.params["commentId"];
+  const deleteReq = req.body as CommentDeleteRequest;
+
+  const deleteComment = (data: { userIdHashed: string }): Promise<WriteResult> => {
+    const { userIdHashed } = data;
+    if (userIdHashed === jssha256.sha256(deleteReq.userId)) {
+      return firestore.doc(`comments-${eventId}/${commentId}`).delete();
+    } else {
+      return Promise.reject("unauthorized");
+    }
+  };
+
+  firestore
+    .doc(`comments-${eventId}/${commentId}`)
+    .get()
+    .then((snapshot) => {
+      if (snapshot.exists) {
+        return deleteComment(snapshot.data() as { userIdHashed: string });
+      } else {
+        return Promise.reject("not found");
+      }
+    })
+    .then(() => res.json({ message: "ok" }))
+    .catch((e) => {
+      console.error(e);
+      res.status(403);
       res.json({ message: "failed" });
     });
 });
