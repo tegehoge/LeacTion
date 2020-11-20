@@ -103,7 +103,7 @@ export default defineComponent({
     const qrcodeUrl = new URL("https://api.qrserver.com/v1/create-qr-code/");
     qrcodeUrl.searchParams.append("data", location.href);
     qrcodeUrl.searchParams.append("size", "300x300");
-    const tweetText = `LeacTion で「${props.eventTitle}」リアクションしよう！`;
+    const tweetText = `LeacTion で「${props.eventTitle}」にリアクションしよう！`;
     const tweetUrl = new URL("https://twitter.com/intent/tweet");
     tweetUrl.searchParams.append("text", tweetText);
     tweetUrl.searchParams.append("url", location.href);
