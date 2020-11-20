@@ -42,12 +42,17 @@
         </li>
       </ul>
     </nav>
-    <modal v-if="showShareModal">
-      <div class="p-4">
-        <div class=""></div>
+    <modal v-show="showShareModal">
+      <div class="px-4">
+        <h3 class="text-center text-2xl font-bold mb-4">イベントをシェアする</h3>
+        <div class="flex justify-center mb-4">
+          <div class="p-3 border-2 rounded-lg">
+            <img :src="qrcodeUrl.href" />
+          </div>
+        </div>
         <div class="flex items-center justify-between">
           <div class="items-center">
-            <a :href="tweetUrl" target="_blank" rel="noopener">
+            <a :href="tweetUrl.href" target="_blank" rel="noopener">
               <button class="bg-blue-400 text-white px-3 py-2 rounded">
                 <font-awesome-icon :icon="['fab', 'twitter']" /> Tweet
               </button>
@@ -69,7 +74,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 
 import Modal from "./Modal.vue";
 
@@ -94,10 +99,16 @@ export default defineComponent({
       showShareModal.value = true;
     };
 
+    // create QR Code image via API. ref http://goqr.me/api/
+    const qrcodeUrl = new URL("https://api.qrserver.com/v1/create-qr-code/");
+    qrcodeUrl.searchParams.append("data", location.href);
+    qrcodeUrl.searchParams.append("size", "300x300");
     const tweetText = `LeacTion で「${props.eventTitle}」リアクションしよう！`;
-    const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${location.href}`;
+    const tweetUrl = new URL("https://twitter.com/intent/tweet");
+    tweetUrl.searchParams.append("text", tweetText);
+    tweetUrl.searchParams.append("url", location.href);
 
-    return { showMenu, showShareModal, openShareModal, tweetUrl };
+    return { showMenu, showShareModal, openShareModal, qrcodeUrl, tweetUrl };
   },
 });
 </script>
