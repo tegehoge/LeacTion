@@ -12,11 +12,13 @@ import {
   faEdit,
   faPlusSquare,
 } from "@fortawesome/free-solid-svg-icons";
+import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import AppHeader from "./components/AppHeader.vue";
 
 library.add(faTrashAlt, faThumbsUp, faSpinner, faBars, faShareAlt, faEdit, faPlusSquare);
+library.add(faTwitter);
 
 const app = createApp(App);
 

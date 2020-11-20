@@ -14,7 +14,7 @@
               type="button"
               class="text-3xl px-2"
               title="メニュー"
-              @click="menuOpened = !menuOpened"
+              @click="showMenu = !showMenu"
             >
               <font-awesome-icon :icon="['fas', 'bars']" />
             </button>
@@ -22,7 +22,7 @@
         </div>
       </div>
       <ul
-        v-if="menuOpened"
+        v-if="showMenu"
         class="md:flex md:items-center md:justify-between container mx-auto px-2 md:px-0 md:py-2"
       >
         <li class="w-full md:w-1/3 md:text-center border-t md:border-t-0 md:border-r">
@@ -42,11 +42,36 @@
         </li>
       </ul>
     </nav>
+    <modal v-if="showShareModal">
+      <div class="p-4">
+        <div class=""></div>
+        <div class="flex items-center justify-between">
+          <div class="items-center">
+            <a :href="tweetUrl" target="_blank" rel="noopener">
+              <button class="bg-blue-400 text-white px-3 py-2 rounded">
+                <font-awesome-icon :icon="['fab', 'twitter']" /> Tweet
+              </button>
+            </a>
+          </div>
+          <div>
+            <button
+              type="button"
+              class="bg-green-500 text-white p-2 rounded"
+              @click="showShareModal = false"
+            >
+              閉じる
+            </button>
+          </div>
+        </div>
+      </div>
+    </modal>
   </header>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+
+import Modal from "./Modal.vue";
 
 export default defineComponent({
   name: "EventHeader",
@@ -60,13 +85,19 @@ export default defineComponent({
       required: true,
     },
   },
+  components: { Modal },
   setup(props, context) {
-    const menuOpened = ref(false);
+    const showMenu = ref(false);
+    const showShareModal = ref(false);
     const openShareModal = () => {
-      menuOpened.value = false;
-      console.log("openShareModal");
+      showMenu.value = false;
+      showShareModal.value = true;
     };
-    return { menuOpened, openShareModal };
+
+    const tweetText = `LeacTion で「${props.eventTitle}」リアクションしよう！`;
+    const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${location.href}`;
+
+    return { showMenu, showShareModal, openShareModal, tweetUrl };
   },
 });
 </script>
