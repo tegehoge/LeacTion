@@ -59,14 +59,14 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ["update:like"],
+  emits: ["update:like", "delete"],
   setup(props, { emit }) {
     const isLiked = computed(() => props.comment.isLikedBy(props.userIdHashed) || false);
     const isMine = computed(() => props.comment.userIdHashed == props.userIdHashed);
     const deleteMyComment = () => {
       if (confirm("削除してよろしいですか？")) {
         deleteComment(props.comment.eventId, props.comment.id, props.userId);
-        location.reload(); // TODO: Fix this on autoload.
+        emit("delete", props.comment.id);
       }
     };
     const toggleLike = () => {

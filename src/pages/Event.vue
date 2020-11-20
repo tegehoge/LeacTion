@@ -10,6 +10,7 @@
           :user-id-hashed="userContext.userIdHashed"
           :user-id="userContext.userId"
           @update:like="updateLike"
+          @delete="deleteComment"
         >
         </CommentBlock>
         <div v-if="commentsForTalk.length === 0" class="py-10 w-full text-center">
@@ -126,6 +127,10 @@ export default defineComponent({
       console.debug(myLikeCache);
     };
 
+    const deleteComment = (commentId: string) => {
+      comments.value = comments.value.filter((comment) => comment.id != commentId);
+    };
+
     const userContext = createOrGetUserContext();
 
     const fetchEvent = () => {
@@ -182,6 +187,7 @@ export default defineComponent({
       commentsForTalk,
       addComment,
       updateLike,
+      deleteComment,
       userContext,
     };
   },
