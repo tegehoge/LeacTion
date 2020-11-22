@@ -1,9 +1,7 @@
 <template>
   <div>
     <div v-show="!passwordVerified" class="fixed z-10 inset-0 overflow-y-auto">
-      <div
-        class="flex item-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
-      >
+      <div class="min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
         <div class="fixed inset-0 transition-opacity">
           <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
@@ -12,6 +10,11 @@
           class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle max-w-lg sm:w-full"
         >
           <div class="bg-white p-4">
+            <div class="mb-2">
+              <router-link :to="`/event/${eventId}`">
+                <span class="text-gray-500 underline">&lt;&nbsp;イベントページに戻る</span>
+              </router-link>
+            </div>
             <div class="text-lg pb-2">パスワードの確認</div>
             <div class="flex items-center">
               <div class="flex-grow pr-3">
