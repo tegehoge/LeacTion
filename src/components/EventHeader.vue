@@ -43,11 +43,29 @@
       </ul>
     </nav>
     <modal v-show="showShareModal">
-      <div class="px-4">
+      <div class="w-full px-4">
         <h3 class="text-center text-2xl font-bold mb-4">イベントをシェアする</h3>
         <div class="flex justify-center mb-4">
           <div class="p-3 border-2 rounded-lg">
             <img :src="qrcodeUrl.href" />
+          </div>
+        </div>
+        <div class="mb-4">
+          <div class="w-full inline-flex">
+            <input
+              id="share-url"
+              ref="share-url"
+              class="p-2 border-2 rounded-l flex-grow"
+              type="text"
+              name="share-url"
+              :value="currentUrl"
+              readonly
+            />
+            <button type="button" class="px-4 py-2 rounded-r bg-gray-300 border-2" @click="copyUrl">
+              <font-awesome-icon :icon="['fas', 'clipboard']" /><span class="hidden md:inline ml-2"
+                >URLをコピーする</span
+              >
+            </button>
           </div>
         </div>
         <div class="flex items-center justify-between">
@@ -98,17 +116,25 @@ export default defineComponent({
       showMenu.value = false;
       showShareModal.value = true;
     };
+    const currentUrl = location.href;
+
+    const copyUrl = () => {
+      const urlInput = document.getElementById("share-url") as HTMLInputElement;
+      urlInput.select();
+      document.execCommand("copy");
+      urlInput.blur();
+    };
 
     // create QR Code image via API. ref http://goqr.me/api/
     const qrcodeUrl = new URL("https://api.qrserver.com/v1/create-qr-code/");
-    qrcodeUrl.searchParams.append("data", location.href);
+    qrcodeUrl.searchParams.append("data", currentUrl);
     qrcodeUrl.searchParams.append("size", "300x300");
     const tweetText = `LeacTion で「${props.eventTitle}」にリアクションしよう！`;
     const tweetUrl = new URL("https://twitter.com/intent/tweet");
     tweetUrl.searchParams.append("text", tweetText);
-    tweetUrl.searchParams.append("url", location.href);
+    tweetUrl.searchParams.append("url", currentUrl);
 
-    return { showMenu, showShareModal, openShareModal, qrcodeUrl, tweetUrl };
+    return { showMenu, showShareModal, openShareModal, qrcodeUrl, tweetUrl, currentUrl, copyUrl };
   },
 });
 </script>
