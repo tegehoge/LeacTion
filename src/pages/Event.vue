@@ -9,6 +9,8 @@
           :comment="comment"
           :user-id-hashed="userContext.userIdHashed"
           :user-id="userContext.userId"
+          @update:like="updateLike"
+          @delete="deleteComment"
         >
         </CommentBlock>
         <div v-if="commentsForTalk.length === 0" class="py-10 w-full text-center">
@@ -20,7 +22,6 @@
       <div class="animate-spin text-4xl"><font-awesome-icon :icon="['fas', 'spinner']" /></div>
       <div>イベントを読み込んでいます…</div>
     </div>
-    <!-- FIXME: loading -->
     <div v-if="event" class="relative bottom-0 border-t-2">
       <div class="flex px-3 py-2 w-full text-center items-center max-w-4xl mx-auto">
         <div class="flex-shrink-0 mb-1 md:mb-0">
@@ -65,7 +66,7 @@
   </div>
 </template>
 <script lang="ts">
-import { ref, defineComponent, onMounted, computed } from "vue";
+import { ref, defineComponent, onMounted, computed, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 
 import CommentInput from "../components/CommentInput.vue";
@@ -102,24 +103,82 @@ export default defineComponent({
     const event = ref<Event>();
     const currentTalk = ref<Talk>();
     const comments = ref<Comment[]>([]);
-    const commentsForTalk = computed(() =>
-      comments.value.filter((c) => c.talkId === currentTalk.value?.id)
-    );
+
+    const myCommentCache: Comment[] = [];
+    const myLikeCache: { commentId: string; liked: boolean }[] = [];
+
+    const commentsForTalk = computed(() => {
+      const talks = comments.value.filter((c) => c.talkId === currentTalk.value?.id);
+      talks.sort((a, b) => a.postedAt.diff(b.postedAt));
+      return talks;
+    });
     const addComment = (comment: Comment) => {
       comments.value.push(comment);
+      myCommentCache.push(comment);
       saveComment(comment);
     };
-    const switchTalk = (selectedTalk: Talk) => (currentTalk.value = selectedTalk);
+
+    const updateLike = (commentId: string, liked: boolean) => {
+      const existCacheIndex = myLikeCache.findIndex((c) => c.commentId !== commentId);
+      if (existCacheIndex >= 0) {
+        myLikeCache.splice(existCacheIndex, 1, { commentId, liked });
+      } else {
+        myLikeCache.push({ commentId, liked });
+      }
+      console.debug(myLikeCache);
+    };
+
+    const deleteComment = (commentId: string) => {
+      comments.value = comments.value.filter((comment) => comment.id != commentId);
+    };
 
     const userContext = createOrGetUserContext();
-    onMounted(() => {
-      findEventById(props.eventId || "").then((ev) => {
+
+    const fetchEvent = () => {
+      return findEventById(props.eventId || "").then((ev) => {
         event.value = ev;
-        currentTalk.value = event.value.talks[0];
       });
-      findAllCommentByEventId(props.eventId || "").then(
-        (existingComments) => (comments.value = existingComments)
-      );
+    };
+    const fetchEventTask = setInterval(fetchEvent, 10 * 1000);
+
+    const mergeLocalCache = () => {
+      while (myCommentCache.length > 0) {
+        const commentUpdate = myCommentCache.shift();
+        if (commentUpdate) {
+          const targetComment = comments.value.filter((c) => c.id === commentUpdate.id)[0];
+          if (!targetComment) {
+            comments.value.push(commentUpdate);
+          }
+        }
+      }
+      while (myLikeCache.length > 0) {
+        const likeUpdate = myLikeCache.shift();
+        if (likeUpdate) {
+          const targetComment = comments.value.filter((c) => c.id === likeUpdate.commentId)[0];
+          if (targetComment) {
+            targetComment.setLike(userContext.userIdHashed, !likeUpdate.liked);
+          } else {
+            console.error(`Unknown commentId ${likeUpdate.commentId}`);
+          }
+        }
+      }
+    };
+    const fetchComments = () => {
+      return findAllCommentByEventId(props.eventId || "").then((existingComments) => {
+        comments.value = existingComments;
+        mergeLocalCache();
+      });
+    };
+    const fetchCommentsTask = setInterval(fetchComments, 2 * 1000);
+
+    onMounted(async () => {
+      await fetchEvent().then(() => (currentTalk.value = event.value?.talks[0]));
+      await fetchComments();
+    });
+
+    onUnmounted(() => {
+      clearInterval(fetchEventTask);
+      clearInterval(fetchCommentsTask);
     });
 
     return {
@@ -128,7 +187,8 @@ export default defineComponent({
       comments,
       commentsForTalk,
       addComment,
-      switchTalk,
+      updateLike,
+      deleteComment,
       userContext,
     };
   },

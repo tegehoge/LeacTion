@@ -30,7 +30,7 @@ api.get("/event/:eventId", (req, res) => {
     .doc(`events/${eventId}`)
     .get()
     .then((snapshot) => {
-      res.set("Cache-Control", "public, max-age=300, s-maxage=10");
+      res.set("Cache-Control", "public, max-age=5, s-maxage=5");
       res.send(snapshot.data());
     })
     .catch((e) => {
@@ -93,7 +93,7 @@ api.get("/event/:eventId/comments", (req, res) => {
       comments.push(snapshot.data());
     })
     .on("end", () => {
-      res.set("Cache-Control", "public, max-age=5, s-maxage=2");
+      res.set("Cache-Control", "public, max-age=1, s-maxage=1");
       res.json(comments);
     });
 });
