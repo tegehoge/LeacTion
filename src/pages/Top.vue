@@ -14,7 +14,7 @@
       </router-link>
     </div>
     <div class="py-10 mb-20 px-4 bg-blue-100 about">
-      <img src="images/baloon.png" class="w-24 mb-3 mx-auto" />
+      <img src="/images/baloon.png" class="w-24 mb-3 mx-auto" />
       <h2 class="mb-10 text-2xl font-semibold">LeacTion! とは？</h2>
       <div class="max-w-lg mx-auto text-sm">
         勉強会やセミナーで、スマートフォンやパソコンを使い、リアルタイムに質問やコメントを投稿できるサービスです。<br />
