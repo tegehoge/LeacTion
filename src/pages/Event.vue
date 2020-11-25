@@ -135,6 +135,9 @@ export default defineComponent({
     const userContext = createOrGetUserContext();
 
     const fetchEvent = () => {
+      if (document.visibilityState === "hidden") {
+        return Promise.resolve();
+      }
       return findEventById(props.eventId || "").then((ev) => {
         event.value = ev;
       });
@@ -164,6 +167,9 @@ export default defineComponent({
       }
     };
     const fetchComments = () => {
+      if (document.visibilityState === "hidden") {
+        return Promise.resolve();
+      }
       return findAllCommentByEventId(props.eventId || "").then((existingComments) => {
         comments.value = existingComments;
         mergeLocalCache();
