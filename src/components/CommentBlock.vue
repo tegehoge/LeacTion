@@ -59,21 +59,19 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ["update:like", "delete"],
+  emits: [],
   setup(props, { emit }) {
     const isLiked = computed(() => props.comment.isLikedBy(props.userIdHashed) || false);
     const isMine = computed(() => props.comment.userIdHashed == props.userIdHashed);
     const deleteMyComment = () => {
       if (confirm("削除してよろしいですか？")) {
         deleteComment(props.comment.eventId, props.comment.id, props.userId);
-        emit("delete", props.comment.id);
       }
     };
     const toggleLike = () => {
       const remove = props.comment.isLikedBy(props.userIdHashed);
       props.comment.setLike(props.userIdHashed, remove);
       saveCommentLike(props.comment.eventId, props.comment.id, props.userIdHashed, remove);
-      emit("update:like", props.comment.id, !remove);
     };
     const likeCount = computed(() => props.comment.likes.length || 0);
     return { isLiked, isMine, likeCount, toggleLike, deleteMyComment };

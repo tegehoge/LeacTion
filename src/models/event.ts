@@ -71,7 +71,7 @@ export class Event {
   }
 }
 
-type EventResponse = {
+export type EventResponse = {
   id: string;
   name: string;
   dateOfEvent: string; // date
