@@ -105,9 +105,9 @@ export default defineComponent({
     const comments = ref<Comment[]>([]);
 
     const commentsForTalk = computed(() => {
-      const talks = comments.value.filter((c) => c.talkId === currentTalk.value?.id);
-      talks.sort((a, b) => a.postedAt.diff(b.postedAt));
-      return talks;
+      const targetComments = comments.value.filter((c) => c.talkId === currentTalk.value?.id);
+      targetComments.sort((a, b) => a.postedAt.diff(b.postedAt));
+      return targetComments;
     });
     const addComment = (comment: Comment) => {
       saveComment(comment);
