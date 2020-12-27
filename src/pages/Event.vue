@@ -52,7 +52,7 @@
           </div>
         </div>
       </div>
-      <div class="max-w-4xl mx-auto">
+      <div v-if="currentTalk" class="max-w-4xl mx-auto">
         <CommentInput
           :event-id="eventId"
           :user-id-hashed="userContext.userIdHashed"
