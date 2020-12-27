@@ -100,6 +100,7 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const isProduction = process.env.NODE_ENV === "production";
     const event = ref<Event>();
     const currentTalk = ref<Talk>();
     const comments = ref<Comment[]>([]);
@@ -111,6 +112,9 @@ export default defineComponent({
     });
     const addComment = (comment: Comment) => {
       saveComment(comment);
+      if (!isProduction) {
+        fetchComments();
+      }
     };
 
     const userContext = createOrGetUserContext();
@@ -120,31 +124,44 @@ export default defineComponent({
         event.value = ev;
       });
     };
+    const fetchComments = () => {
+      return findAllCommentByEventId(event.value?.id || "").then((existingComments: Comment[]) => {
+        comments.value = existingComments;
+      });
+    };
 
-    const unsubscribeEvent = eventRef(props.eventId).onSnapshot((updatedEvent) => {
-      const updatedEventData = updatedEvent.data() as EventResponse | undefined;
-      if (updatedEventData !== undefined) {
-        event.value = Event.fromObj(updatedEventData);
-      }
-    });
-    const unsubscribeComments = commentsRef(props.eventId).onSnapshot((updatedComments) => {
-      const changes = updatedComments.docChanges();
-      changes.forEach((change) => {
-        const targetComment = Comment.fromObj(change.doc.data() as CommentResponse);
-        console.log(change);
-        if (change.type == "added") {
-          comments.value.push(Comment.fromObj(change.doc.data() as CommentResponse));
-        } else if (change.type == "modified") {
-          const i = comments.value.findIndex((c) => c.id === targetComment.id);
-          comments.value.splice(i, 1, targetComment);
-        } else if (change.type == "removed") {
-          comments.value = comments.value.filter((c) => c.id !== targetComment.id);
+    let unsubscribeEvent: void | (() => void);
+    let unsubscribeComments: void | (() => void);
+
+    if (isProduction) {
+      unsubscribeEvent = eventRef(props.eventId).onSnapshot((updatedEvent) => {
+        const updatedEventData = updatedEvent.data() as EventResponse | undefined;
+        if (updatedEventData !== undefined) {
+          event.value = Event.fromObj(updatedEventData);
         }
       });
-    });
+      unsubscribeComments = commentsRef(props.eventId).onSnapshot((updatedComments) => {
+        updatedComments.docChanges().forEach((change) => {
+          const targetComment = Comment.fromObj(change.doc.data() as CommentResponse);
+          if (change.type == "added") {
+            comments.value.push(targetComment);
+          } else if (change.type == "modified") {
+            const i = comments.value.findIndex((c) => c.id === targetComment.id);
+            comments.value.splice(i, 1, targetComment);
+          } else if (change.type == "removed") {
+            comments.value = comments.value.filter((c) => c.id !== targetComment.id);
+          }
+        });
+      });
+    }
 
     onMounted(async () => {
-      await fetchEvent().then(() => (currentTalk.value = event.value?.talks[0]));
+      await fetchEvent().then(() => {
+        currentTalk.value = event.value?.talks[0];
+      });
+      if (!isProduction) {
+        await fetchComments();
+      }
     });
 
     onUnmounted(() => {
