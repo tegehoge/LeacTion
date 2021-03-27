@@ -138,17 +138,20 @@ export default defineComponent({
       unsubscribeEvent = firestore
         .collection("events")
         .doc(props.eventId)
-        .onSnapshot((updatedEvent: DocumentSnapshot) => {
-          const updatedEventData = updatedEvent.data() as EventResponse | undefined;
-          if (updatedEventData !== undefined) {
-            event.value = Event.fromObj(updatedEventData);
-            currentTalk.value = Talk.fromObj(updatedEventData.talks[0]);
+        .onSnapshot(
+          (updatedEvent: DocumentSnapshot) => {
+            const updatedEventData = updatedEvent.data() as EventResponse | undefined;
+            if (updatedEventData !== undefined) {
+              event.value = Event.fromObj(updatedEventData);
+              currentTalk.value = Talk.fromObj(updatedEventData.talks[0]);
+            }
+          },
+          (error: FirestoreError) => {
+            console.error(error);
+            console.debug("Failed to fetch event.");
+            router.push("/");
           }
-        }, (error: FirestoreError) => {
-          console.error(error);
-          console.debug("Failed to fetch event.");
-          router.push("/");
-        });
+        );
       unsubscribeComments = firestore
         .collection(`comments-${props.eventId}`)
         .onSnapshot((updatedComments: QuerySnapshot) => {

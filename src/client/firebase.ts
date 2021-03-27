@@ -4,7 +4,7 @@ import "firebase/firestore";
 function createFirestore() {
   // @ts-ignore
   const isProduction = import.meta.env.PROD;
-  
+
   if (!isProduction) {
     return null;
   }
