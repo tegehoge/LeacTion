@@ -32,6 +32,23 @@ $ yarn dev
 $ npm install -g firebase-tools
 ```
 
+続いて、 `.env`, `.env.emulator` を準備します。設定する値についてはFirebaseの設定を確認するか、開発者に問い合わせてください。
+
+```.env
+VITE_API_KEY=
+VITE_APP_ID=
+VITE_AUTH_DOMAIN=
+VITE_DATABASE_URL=
+VITE_MESSAGING_SENDER_ID=
+VITE_MEASUREMENT_ID=
+VITE_PROJECT_ID=
+VITE_STORAGE_BUCKET=
+```
+
+```.env.emulator
+NODE_ENV=production
+```
+
 次に、 `functions/` ディレクトリに移動し、 TypeScript のコードをコンパイルします。
 
 ```
@@ -40,11 +57,11 @@ $ npm install
 $ npm run build
 ```
 
-プロジェクトのルートディレクトリに戻り、 Vue アプリケーションのビルドを実行します。
+プロジェクトのルートディレクトリに戻り、 `emulator` モードでVue アプリケーションのビルドを実行します。
 
 ```
 $ cd ../
-$ yarn build
+$ yarn build --mode emulator
 ```
 
 エミュレーターを起動します。
@@ -57,8 +74,8 @@ $ firebase emulators:start
 
 ### ソースコードの更新時
 
-Vue アプリケーションの更新時は `yarn build` を、 `functions` の更新時は `npm run build` を実行すると反映されます。
-エミュレーターの再起動は不要です。（再起動するとエミュレーター内の firestore のデータが消えます。）
+Vue アプリケーションの更新時は `yarn build --mode emulator` を、 `functions` の更新時は `npm run build` を実行すると反映されます。
+エミュレーターの再起動は不要です。（停止するとエミュレーター内の firestore のデータが消えます。）
 
 ## Firebase へのデプロイ
 
