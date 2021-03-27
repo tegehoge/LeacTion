@@ -1,40 +1,37 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
 
-firebase.initializeApp({
-  apiKey: "AIzaSyApPQv7fGu30oBrRHi-XzlPZ6nejoemTHo",
-  appId: "1:254727144997:web:be191479df8739008f61cc",
-  authDomain: "leaction.firebaseapp.com",
-  databaseURL: "https://leaction.firebaseio.com",
-  messagingSenderId: "254727144997",
-  projectId: "leaction",
-  storageBucket: "leaction.appspot.com",
-});
+function createFirestore() {
+  // @ts-ignore
+  const isProduction = import.meta.env.PROD;
+  
+  if (!isProduction) {
+    return null;
+  }
 
-const firestore = firebase.firestore();
+  // @ts-ignore
+  const env = import.meta.env;
 
-// for local emulator
-/*
-firestore.settings({
-  host: "localhost:8080",
-  ssl: false,
-});
-*/
-
-const isProduction = process.env.NODE_ENV === "production";
-
-const mockRef = () => {
-  return {
-    onSnapshot(f: Function) {
-      return;
-    },
+  const firebaseConfig = {
+    apiKey: env.VITE_API_KEY || "",
+    appId: env.VITE_APP_ID,
+    authDomain: env.VITE_AUTH_DOMAIN || "",
+    databaseURL: env.VITE_DATABASE_URL,
+    messagingSenderId: env.VITE_MESSAGING_SENDER_ID,
+    projectId: env.VITE_PROJECT_ID || "leaction",
+    storageBucket: env.VITE_STORAGE_BUCKET,
+    measurementId: env.VITE_MEASUREMENT_ID || "",
   };
-};
 
-const eventRef = (eventId: string) =>
-  isProduction ? firestore.collection("events").doc(eventId) : mockRef();
+  firebase.initializeApp(firebaseConfig);
+  const firestore = firebase.firestore();
+  // @ts-ignore
+  if (import.meta.env.MODE == "emulator") {
+    firestore.useEmulator("localhost", 8080);
+  }
+  return firestore;
+}
 
-const commentsRef = (eventId: string) =>
-  isProduction ? firestore.collection(`comments-${eventId}`) : mockRef();
+const firestore = createFirestore();
 
-export { eventRef, commentsRef };
+export { firestore };

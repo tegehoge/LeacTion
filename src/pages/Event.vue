@@ -67,17 +67,17 @@
 import { ref, defineComponent, onMounted, computed, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 
-import { eventRef, commentsRef } from "../client/firebase";
-
 import CommentInput from "../components/CommentInput.vue";
 import CommentBlock from "../components/CommentBlock.vue";
 import EventHeader from "../components/EventHeader.vue";
 import { Comment, CommentResponse } from "../models/comment";
-import { Event, EventId, EventResponse } from "../models/event";
+import { Event, EventResponse } from "../models/event";
 import { Talk } from "../models/talk";
 import { findAllCommentByEventId, findEventById, saveComment } from "../repository";
-import dayjs from "dayjs";
 import { UserContext } from "../models/user_context";
+
+import { firestore } from "../client/firebase";
+import { DocumentSnapshot, FirestoreError, QuerySnapshot } from "@firebase/firestore-types";
 
 const createOrGetUserContext = () => {
   const savedUserContext = localStorage.getItem("user_context");
@@ -100,7 +100,8 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const isProduction = process.env.NODE_ENV === "production";
+    const router = useRouter();
+
     const event = ref<Event>();
     const currentTalk = ref<Talk>();
     const comments = ref<Comment[]>([]);
@@ -112,7 +113,7 @@ export default defineComponent({
     });
     const addComment = (comment: Comment) => {
       saveComment(comment);
-      if (!isProduction) {
+      if (!firestore) {
         fetchComments();
       }
     };
@@ -133,33 +134,43 @@ export default defineComponent({
     let unsubscribeEvent: void | (() => void);
     let unsubscribeComments: void | (() => void);
 
-    if (isProduction) {
-      unsubscribeEvent = eventRef(props.eventId).onSnapshot((updatedEvent) => {
-        const updatedEventData = updatedEvent.data() as EventResponse | undefined;
-        if (updatedEventData !== undefined) {
-          event.value = Event.fromObj(updatedEventData);
-        }
-      });
-      unsubscribeComments = commentsRef(props.eventId).onSnapshot((updatedComments) => {
-        updatedComments.docChanges().forEach((change) => {
-          const targetComment = Comment.fromObj(change.doc.data() as CommentResponse);
-          if (change.type == "added") {
-            comments.value.push(targetComment);
-          } else if (change.type == "modified") {
-            const i = comments.value.findIndex((c) => c.id === targetComment.id);
-            comments.value.splice(i, 1, targetComment);
-          } else if (change.type == "removed") {
-            comments.value = comments.value.filter((c) => c.id !== targetComment.id);
+    if (firestore) {
+      unsubscribeEvent = firestore
+        .collection("events")
+        .doc(props.eventId)
+        .onSnapshot((updatedEvent: DocumentSnapshot) => {
+          const updatedEventData = updatedEvent.data() as EventResponse | undefined;
+          if (updatedEventData !== undefined) {
+            event.value = Event.fromObj(updatedEventData);
+            currentTalk.value = Talk.fromObj(updatedEventData.talks[0]);
           }
+        }, (error: FirestoreError) => {
+          console.error(error);
+          console.debug("Failed to fetch event.");
+          router.push("/");
         });
-      });
+      unsubscribeComments = firestore
+        .collection(`comments-${props.eventId}`)
+        .onSnapshot((updatedComments: QuerySnapshot) => {
+          updatedComments.docChanges().forEach((change) => {
+            const targetComment = Comment.fromObj(change.doc.data() as CommentResponse);
+            if (change.type == "added") {
+              comments.value.push(targetComment);
+            } else if (change.type == "modified") {
+              const i = comments.value.findIndex((c) => c.id === targetComment.id);
+              comments.value.splice(i, 1, targetComment);
+            } else if (change.type == "removed") {
+              comments.value = comments.value.filter((c) => c.id !== targetComment.id);
+            }
+          });
+        });
     }
 
     onMounted(async () => {
-      await fetchEvent().then(() => {
-        currentTalk.value = event.value?.talks[0];
-      });
-      if (!isProduction) {
+      if (!firestore) {
+        await fetchEvent().then(() => {
+          currentTalk.value = event.value?.talks[0];
+        });
         await fetchComments();
       }
     });
