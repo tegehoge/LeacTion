@@ -2,15 +2,15 @@ import { FirebaseCommentRepository, FirebaseEventRepository } from "./firebase";
 import { CommentRepository, EventRepository } from "./interface";
 import { LocalStorageCommentRepository, LocalStorageEventRepository } from "./local_storage";
 
-const eventRepository: EventRepository =
-  process.env.NODE_ENV == "production"
-    ? new FirebaseEventRepository()
-    : new LocalStorageEventRepository();
+const isProduction = process.env.NODE_ENV === "production";
 
-const commentRepository: CommentRepository =
-  process.env.NODE_ENV == "production"
-    ? new FirebaseCommentRepository()
-    : new LocalStorageCommentRepository();
+const eventRepository: EventRepository = isProduction
+  ? new FirebaseEventRepository()
+  : new LocalStorageEventRepository();
+
+const commentRepository: CommentRepository = isProduction
+  ? new FirebaseCommentRepository()
+  : new LocalStorageCommentRepository();
 
 export const saveEvent = eventRepository.save;
 export const findEventById = eventRepository.findById;

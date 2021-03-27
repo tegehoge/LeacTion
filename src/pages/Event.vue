@@ -9,8 +9,6 @@
           :comment="comment"
           :user-id-hashed="userContext.userIdHashed"
           :user-id="userContext.userId"
-          @update:like="updateLike"
-          @delete="deleteComment"
         >
         </CommentBlock>
         <div v-if="commentsForTalk.length === 0" class="py-10 w-full text-center">
@@ -54,7 +52,7 @@
           </div>
         </div>
       </div>
-      <div class="max-w-4xl mx-auto">
+      <div v-if="currentTalk" class="max-w-4xl mx-auto">
         <CommentInput
           :event-id="eventId"
           :user-id-hashed="userContext.userIdHashed"
@@ -72,12 +70,14 @@ import { useRouter } from "vue-router";
 import CommentInput from "../components/CommentInput.vue";
 import CommentBlock from "../components/CommentBlock.vue";
 import EventHeader from "../components/EventHeader.vue";
-import { Comment } from "../models/comment";
-import { Event, EventId } from "../models/event";
+import { Comment, CommentResponse } from "../models/comment";
+import { Event, EventResponse } from "../models/event";
 import { Talk } from "../models/talk";
 import { findAllCommentByEventId, findEventById, saveComment } from "../repository";
-import dayjs from "dayjs";
 import { UserContext } from "../models/user_context";
+
+import { firestore } from "../client/firebase";
+import { DocumentSnapshot, FirestoreError, QuerySnapshot } from "@firebase/firestore-types";
 
 const createOrGetUserContext = () => {
   const savedUserContext = localStorage.getItem("user_context");
@@ -100,91 +100,87 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const router = useRouter();
+
     const event = ref<Event>();
     const currentTalk = ref<Talk>();
     const comments = ref<Comment[]>([]);
 
-    const myCommentCache: Comment[] = [];
-    const myLikeCache: { commentId: string; liked: boolean }[] = [];
-
     const commentsForTalk = computed(() => {
-      const talks = comments.value.filter((c) => c.talkId === currentTalk.value?.id);
-      talks.sort((a, b) => a.postedAt.diff(b.postedAt));
-      return talks;
+      const targetComments = comments.value.filter((c) => c.talkId === currentTalk.value?.id);
+      targetComments.sort((a, b) => a.postedAt.diff(b.postedAt));
+      return targetComments;
     });
     const addComment = (comment: Comment) => {
-      comments.value.push(comment);
-      myCommentCache.push(comment);
       saveComment(comment);
-    };
-
-    const updateLike = (commentId: string, liked: boolean) => {
-      const existCacheIndex = myLikeCache.findIndex((c) => c.commentId !== commentId);
-      if (existCacheIndex >= 0) {
-        myLikeCache.splice(existCacheIndex, 1, { commentId, liked });
-      } else {
-        myLikeCache.push({ commentId, liked });
+      if (!firestore) {
+        fetchComments();
       }
-      console.debug(myLikeCache);
-    };
-
-    const deleteComment = (commentId: string) => {
-      comments.value = comments.value.filter((comment) => comment.id != commentId);
     };
 
     const userContext = createOrGetUserContext();
 
     const fetchEvent = () => {
-      if (document.visibilityState === "hidden") {
-        return Promise.resolve();
-      }
       return findEventById(props.eventId || "").then((ev) => {
         event.value = ev;
       });
     };
-    const fetchEventTask = setInterval(fetchEvent, 10 * 1000);
-
-    const mergeLocalCache = () => {
-      while (myCommentCache.length > 0) {
-        const commentUpdate = myCommentCache.shift();
-        if (commentUpdate) {
-          const targetComment = comments.value.filter((c) => c.id === commentUpdate.id)[0];
-          if (!targetComment) {
-            comments.value.push(commentUpdate);
-          }
-        }
-      }
-      while (myLikeCache.length > 0) {
-        const likeUpdate = myLikeCache.shift();
-        if (likeUpdate) {
-          const targetComment = comments.value.filter((c) => c.id === likeUpdate.commentId)[0];
-          if (targetComment) {
-            targetComment.setLike(userContext.userIdHashed, !likeUpdate.liked);
-          } else {
-            console.error(`Unknown commentId ${likeUpdate.commentId}`);
-          }
-        }
-      }
-    };
     const fetchComments = () => {
-      if (document.visibilityState === "hidden") {
-        return Promise.resolve();
-      }
-      return findAllCommentByEventId(props.eventId || "").then((existingComments) => {
+      return findAllCommentByEventId(event.value?.id || "").then((existingComments: Comment[]) => {
         comments.value = existingComments;
-        mergeLocalCache();
       });
     };
-    const fetchCommentsTask = setInterval(fetchComments, 2 * 1000);
+
+    let unsubscribeEvent: void | (() => void);
+    let unsubscribeComments: void | (() => void);
+
+    if (firestore) {
+      unsubscribeEvent = firestore
+        .collection("events")
+        .doc(props.eventId)
+        .onSnapshot(
+          (updatedEvent: DocumentSnapshot) => {
+            const updatedEventData = updatedEvent.data() as EventResponse | undefined;
+            if (updatedEventData !== undefined) {
+              event.value = Event.fromObj(updatedEventData);
+              currentTalk.value = Talk.fromObj(updatedEventData.talks[0]);
+            }
+          },
+          (error: FirestoreError) => {
+            console.error(error);
+            console.debug("Failed to fetch event.");
+            router.push("/");
+          }
+        );
+      unsubscribeComments = firestore
+        .collection(`comments-${props.eventId}`)
+        .onSnapshot((updatedComments: QuerySnapshot) => {
+          updatedComments.docChanges().forEach((change) => {
+            const targetComment = Comment.fromObj(change.doc.data() as CommentResponse);
+            if (change.type == "added") {
+              comments.value.push(targetComment);
+            } else if (change.type == "modified") {
+              const i = comments.value.findIndex((c) => c.id === targetComment.id);
+              comments.value.splice(i, 1, targetComment);
+            } else if (change.type == "removed") {
+              comments.value = comments.value.filter((c) => c.id !== targetComment.id);
+            }
+          });
+        });
+    }
 
     onMounted(async () => {
-      await fetchEvent().then(() => (currentTalk.value = event.value?.talks[0]));
-      await fetchComments();
+      if (!firestore) {
+        await fetchEvent().then(() => {
+          currentTalk.value = event.value?.talks[0];
+        });
+        await fetchComments();
+      }
     });
 
     onUnmounted(() => {
-      clearInterval(fetchEventTask);
-      clearInterval(fetchCommentsTask);
+      if (unsubscribeEvent) unsubscribeEvent();
+      if (unsubscribeComments) unsubscribeComments();
     });
 
     return {
@@ -193,8 +189,6 @@ export default defineComponent({
       comments,
       commentsForTalk,
       addComment,
-      updateLike,
-      deleteComment,
       userContext,
     };
   },

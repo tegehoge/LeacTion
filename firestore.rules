@@ -4,5 +4,11 @@ service cloud.firestore {
     match /{document=**} {
       allow read, write: if false;
     }
+    match /events/{document=**} {
+      allow read;
+    }
+    match /{collection}/{document=**} {
+      allow read: if collection.matches('comments-.*') == true
+    }
   }
 }
