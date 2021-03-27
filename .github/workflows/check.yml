@@ -13,6 +13,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "14"
+      - uses: actions/cache@v2
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ~/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
       - name: yarn install
         uses: CultureHQ/actions-yarn@master
         with:
@@ -21,19 +26,21 @@ jobs:
         uses: CultureHQ/actions-yarn@master
         with:
           args: test
+      - name: Make dotenv
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_VITE_API_KEY: ${{ secrets.API_KEY }}
+          envkey_VITE_APP_ID: ${{ secrets.APP_ID }}
+          envkey_VITE_AUTH_DOMAIN: ${{ secrets.AUTH_DOMAIN }}
+          envkey_VITE_DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          envkey_VITE_MESSAGING_SENDER_ID: ${{ secrets.MESSAGING_SENDER_ID }}
+          envkey_VITE_MEASUREMENT_ID: ${{ secrets.MEASUREMENT_ID }}
+          envkey_VITE_PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          envkey_VITE_STORAGE_BUCKET: ${{ secrets.STORAGE_BUCKET }}
       - name: yarn build
         uses: CultureHQ/actions-yarn@master
         with:
           args: build
-        env:
-          VITE_API_KEY: secrets.API_KEY
-          VITE_APP_ID: secrets.APP_ID
-          VITE_AUTH_DOMAIN: secrets.AUTH_DOMAIN
-          VITE_DATABASE_URL: secrets.DATABASE_URL
-          VITE_MESSAGING_SENDER_ID: secrets.MESSAGING_SENDER_ID
-          VITE_MEASUREMENT_ID: secrets.MEASUREMENT_ID
-          VITE_PROJECT_ID: secrets.PROJECT_ID
-          VITE_STORAGE_BUCKET: secrets.STORAGE_BUCKET
   build_functions:
     environment: Production Deploy
     runs-on: ubuntu-latest
@@ -64,23 +71,29 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "14"
+      - uses: actions/cache@v2
+        with:
+          path: ~/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
       - name: yarn install
         uses: CultureHQ/actions-yarn@master
         with:
           args: install
+      - name: Make dotenv
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_VITE_API_KEY: ${{ secrets.API_KEY }}
+          envkey_VITE_APP_ID: ${{ secrets.APP_ID }}
+          envkey_VITE_AUTH_DOMAIN: ${{ secrets.AUTH_DOMAIN }}
+          envkey_VITE_DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          envkey_VITE_MESSAGING_SENDER_ID: ${{ secrets.MESSAGING_SENDER_ID }}
+          envkey_VITE_MEASUREMENT_ID: ${{ secrets.MEASUREMENT_ID }}
+          envkey_VITE_PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          envkey_VITE_STORAGE_BUCKET: ${{ secrets.STORAGE_BUCKET }}
       - name: yarn build
         uses: CultureHQ/actions-yarn@master
         with:
           args: build
-        env:
-          VITE_API_KEY: secrets.API_KEY
-          VITE_APP_ID: secrets.APP_ID
-          VITE_AUTH_DOMAIN: secrets.AUTH_DOMAIN
-          VITE_DATABASE_URL: secrets.DATABASE_URL
-          VITE_MESSAGING_SENDER_ID: secrets.MESSAGING_SENDER_ID
-          VITE_MEASUREMENT_ID: secrets.MEASUREMENT_ID
-          VITE_PROJECT_ID: secrets.PROJECT_ID
-          VITE_STORAGE_BUCKET: secrets.STORAGE_BUCKET
       - name: Firebase Preview Deploy
         if: ${{ github.repository_owner == 'tegehoge' }}
         uses: FirebaseExtended/action-hosting-deploy@v0
