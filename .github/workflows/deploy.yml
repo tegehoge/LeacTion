@@ -5,18 +5,9 @@ on:
     branches:
       - master
 
-env:
-  VITE_API_KEY: secrets.API_KEY
-  VITE_APP_ID: secrets.APP_ID
-  VITE_AUTH_DOMAIN: secrets.AUTH_DOMAIN
-  VITE_DATABASE_URL: secrets.DATABASE_URL
-  VITE_MESSAGING_SENDER_ID: secrets.MESSAGING_SENDER_ID
-  VITE_MEASUREMENT_ID: secrets.MEASUREMENT_ID
-  VITE_PROJECT_ID: secrets.PROJECT_ID
-  VITE_STORAGE_BUCKET: secrets.STORAGE_BUCKET
-
 jobs:
   deploy:
+    environment: Production Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -37,7 +28,15 @@ jobs:
         uses: CultureHQ/actions-yarn@master
         with:
           args: build
-
+        env:
+          VITE_API_KEY: secrets.API_KEY
+          VITE_APP_ID: secrets.APP_ID
+          VITE_AUTH_DOMAIN: secrets.AUTH_DOMAIN
+          VITE_DATABASE_URL: secrets.DATABASE_URL
+          VITE_MESSAGING_SENDER_ID: secrets.MESSAGING_SENDER_ID
+          VITE_MEASUREMENT_ID: secrets.MEASUREMENT_ID
+          VITE_PROJECT_ID: secrets.PROJECT_ID
+          VITE_STORAGE_BUCKET: secrets.STORAGE_BUCKET
       - name: npm install for firebase functions
         working-directory: ./functions
         run: npm install
