@@ -13,17 +13,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: "14"
-      - name: yarn install
-        uses: CultureHQ/actions-yarn@master
-        with:
-          args: install
-      - name: yarn test
-        uses: CultureHQ/actions-yarn@master
-        with:
-          args: test
+      - name: Install yarn
+        run: npm install -g yarn
+      - run: yarn install
+      - run: yarn test
       - name: Make dotenv
         uses: SpicyPizza/create-envfile@v1
         with:
@@ -35,10 +31,7 @@ jobs:
           envkey_VITE_MEASUREMENT_ID: ${{ secrets.MEASUREMENT_ID }}
           envkey_VITE_PROJECT_ID: ${{ secrets.PROJECT_ID }}
           envkey_VITE_STORAGE_BUCKET: ${{ secrets.STORAGE_BUCKET }}
-      - name: yarn build
-        uses: CultureHQ/actions-yarn@master
-        with:
-          args: build
+      - run: yarn build
       - name: npm install for firebase functions
         working-directory: ./functions
         run: npm install

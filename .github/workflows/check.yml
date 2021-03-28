@@ -10,22 +10,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: "14"
+      - name: Install yarn
+        run: npm install -g yarn
       - uses: actions/cache@v2
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
           path: ~/node_modules
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-      - name: yarn install
-        uses: CultureHQ/actions-yarn@master
-        with:
-          args: install
-      - name: yarn test
-        uses: CultureHQ/actions-yarn@master
-        with:
-          args: test
+      - run: yarn install
+      - run: yarn test
       - name: Make dotenv
         uses: SpicyPizza/create-envfile@v1
         with:
@@ -37,10 +33,7 @@ jobs:
           envkey_VITE_MEASUREMENT_ID: ${{ secrets.MEASUREMENT_ID }}
           envkey_VITE_PROJECT_ID: ${{ secrets.PROJECT_ID }}
           envkey_VITE_STORAGE_BUCKET: ${{ secrets.STORAGE_BUCKET }}
-      - name: yarn build
-        uses: CultureHQ/actions-yarn@master
-        with:
-          args: build
+      - run: yarn build
   build_functions:
     environment: Production Deploy
     runs-on: ubuntu-latest
@@ -48,7 +41,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: "10"
       - name: Install
@@ -68,17 +61,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: "14"
+      - name: Install yarn
+        run: npm install -g yarn
       - uses: actions/cache@v2
         with:
           path: ~/node_modules
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-      - name: yarn install
-        uses: CultureHQ/actions-yarn@master
-        with:
-          args: install
+      - run: yarn install
       - name: Make dotenv
         uses: SpicyPizza/create-envfile@v1
         with:
@@ -90,10 +82,7 @@ jobs:
           envkey_VITE_MEASUREMENT_ID: ${{ secrets.MEASUREMENT_ID }}
           envkey_VITE_PROJECT_ID: ${{ secrets.PROJECT_ID }}
           envkey_VITE_STORAGE_BUCKET: ${{ secrets.STORAGE_BUCKET }}
-      - name: yarn build
-        uses: CultureHQ/actions-yarn@master
-        with:
-          args: build
+      - run: yarn build
       - name: Firebase Preview Deploy
         if: ${{ github.repository_owner == 'tegehoge' }}
         uses: FirebaseExtended/action-hosting-deploy@v0
