@@ -1,4 +1,5 @@
 <template>
+  <app-header></app-header>
   <div>
     <div v-show="!passwordVerified" class="fixed z-10 inset-0 overflow-y-auto">
       <div class="min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
