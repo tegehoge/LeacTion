@@ -3,7 +3,7 @@
     <div class="rounded shadow-md mx-2 overflow-hidden h-full">
       <div class="flex flex-col px-4 py-3 bg-yellow-200 h-full">
         <div class="flex-grow text-lg text-left">
-          {{ comment.text }}
+          <span v-html="message"></span>
         </div>
         <div class="flex items-end text-sm">
           <div class="flex-grow text-black opacity-25">
@@ -63,6 +63,12 @@ export default defineComponent({
   setup(props, { emit }) {
     const isLiked = computed(() => props.comment.isLikedBy(props.userIdHashed) || false);
     const isMine = computed(() => props.comment.userIdHashed == props.userIdHashed);
+    const message = computed(() =>
+      props.comment.text.replace(
+        /(https?:\/\/([\w-]+\.)+[\w-:]+(\/[\w- ./?%&=~]*)?)/g,
+        '<a href="$1" class="underline text-blue-700" target="_blank" rel="noopener noreferrer">$1</a>'
+      )
+    );
     const deleteMyComment = () => {
       if (confirm("削除してよろしいですか？")) {
         deleteComment(props.comment.eventId, props.comment.id, props.userId);
@@ -74,7 +80,7 @@ export default defineComponent({
       saveCommentLike(props.comment.eventId, props.comment.id, props.userIdHashed, remove);
     };
     const likeCount = computed(() => props.comment.likes.length || 0);
-    return { isLiked, isMine, likeCount, toggleLike, deleteMyComment };
+    return { isLiked, isMine, message, likeCount, toggleLike, deleteMyComment };
   },
 });
 </script>
