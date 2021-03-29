@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col h-screen">
     <event-header :event-id="eventId" :event-title="event ? event.name : ''"></event-header>
-    <div v-if="event" class="flex-grow overflow-auto">
+    <div v-if="event" id="comments" class="flex-grow overflow-auto" @scroll="checkRead()">
       <div class="flex flex-wrap max-w-4xl mx-auto">
         <CommentBlock
           v-for="comment in commentsForTalk"
@@ -14,6 +14,16 @@
         <div v-if="commentsForTalk.length === 0" class="py-10 w-full text-center">
           まだコメントがありません
         </div>
+      </div>
+      <div id="unread" class="sticky bottom-0 text-center pb-2">
+        <button
+          class="transition duration-300 rounded-full px-3 py-1 bg-green-100 shadow-md"
+          :class="{ 'opacity-0': haveReadAll, hidden: haveReadAll }"
+          :disabled="haveReadAll"
+          @click="scrollToBottom()"
+        >
+          <font-awesome-icon :icon="['fas', 'arrow-circle-down']" /> 未読コメント
+        </button>
       </div>
     </div>
     <div v-else class="text-center p-10">
@@ -115,7 +125,9 @@ export default defineComponent({
       saveComment(comment);
       if (!firestore) {
         fetchComments();
+        haveReadAll.value = false;
       }
+      setTimeout(scrollToBottom, 0);
     };
 
     const userContext = createOrGetUserContext();
@@ -159,6 +171,7 @@ export default defineComponent({
             const targetComment = Comment.fromObj(change.doc.data() as CommentResponse);
             if (change.type == "added") {
               comments.value.push(targetComment);
+              haveReadAll.value = false;
             } else if (change.type == "modified") {
               const i = comments.value.findIndex((c) => c.id === targetComment.id);
               comments.value.splice(i, 1, targetComment);
@@ -166,6 +179,7 @@ export default defineComponent({
               comments.value = comments.value.filter((c) => c.id !== targetComment.id);
             }
           });
+          checkRead();
         });
     }
 
@@ -176,12 +190,50 @@ export default defineComponent({
         });
         await fetchComments();
       }
+      const unreadElem = document.getElementById("unread");
+      if (unreadElem) {
+        unreadElem.style.marginTop = `-${unreadElem.clientHeight}px`;
+      }
+      checkRead();
     });
 
     onUnmounted(() => {
       if (unsubscribeEvent) unsubscribeEvent();
       if (unsubscribeComments) unsubscribeComments();
     });
+
+    const haveReadAll = ref(false);
+
+    const isBottom = () => {
+      const elem = document.getElementById("comments");
+      if (!elem) {
+        return true;
+      }
+      const scrollTop = elem.scrollTop;
+      const clientHeight = elem.clientHeight;
+      const scrollHeight = elem.scrollHeight;
+      console.debug(
+        `scrollTop: ${scrollTop}, clientHeight: ${clientHeight}, scrollHeight: ${scrollHeight}, result: ${
+          scrollTop + clientHeight === scrollHeight
+        }`
+      );
+      return scrollTop + clientHeight === scrollHeight;
+    };
+
+    const checkRead = () => {
+      if (!haveReadAll.value && isBottom()) {
+        haveReadAll.value = true;
+      }
+    };
+
+    const scrollToBottom = () => {
+      const elem = document.getElementById("comments");
+      if (elem) {
+        const clientHeight = elem.clientHeight;
+        const scrollHeight = elem.scrollHeight;
+        elem.scrollTop = scrollHeight - clientHeight;
+      }
+    };
 
     return {
       event,
@@ -190,6 +242,9 @@ export default defineComponent({
       commentsForTalk,
       addComment,
       userContext,
+      haveReadAll,
+      checkRead,
+      scrollToBottom,
     };
   },
 });
