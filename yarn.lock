@@ -1092,6 +1092,11 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.0.tgz#7036640b4e21cc2f259ae826ce843d277dad8cff"
   integrity sha512-RJJrrySY7A8havqpGObOB4W92QXKJo63/jFLLgpvOtsGUqbQZ9Sbgl35KMm1DjC6j7AvmmU2bIno+3IyEaemaw==
 
+"@types/xss-filters@^0.0.27":
+  version "0.0.27"
+  resolved "https://registry.yarnpkg.com/@types/xss-filters/-/xss-filters-0.0.27.tgz#82c1e6300654dd771efe01f2f0cc977e8d996655"
+  integrity sha1-gsHmMAZU3Xce/gHy8MyXfo2ZZlU=
+
 "@types/yargs-parser@*":
   version "20.2.0"
   resolved "https://registry.yarnpkg.com/@types/yargs-parser/-/yargs-parser-20.2.0.tgz#dd3e6699ba3237f0348cd085e4698780204842f9"
@@ -9167,6 +9172,11 @@ xmlhttprequest@1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/xmlhttprequest/-/xmlhttprequest-1.8.0.tgz#67fe075c5c24fef39f9d65f5f7b7fe75171968fc"
   integrity sha1-Z/4HXFwk/vOfnWX197f+dRcZaPw=
+
+xss-filters@^1.2.7:
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/xss-filters/-/xss-filters-1.2.7.tgz#59fa1de201f36f2f3470dcac5f58ccc2830b0a9a"
+  integrity sha1-Wfod4gHzby80cNysX1jMwoMLCpo=
 
 xtend@^4.0.2, xtend@~4.0.0:
   version "4.0.2"
