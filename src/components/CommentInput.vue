@@ -49,9 +49,12 @@ export default defineComponent({
     const commentInput = ref("");
     const inputForm = ref<HTMLInputElement>();
     const canSend = computed(() => commentInput.value != "");
+
+    const sanitizeText = (text: string) => text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
     const sendComment = () => {
       const comment = new Comment(
-        commentInput.value,
+        sanitizeText(commentInput.value),
         props.userIdHashed,
         props.eventId,
         props.talkId
