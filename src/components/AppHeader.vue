@@ -5,7 +5,11 @@
         <h1 class="text-3xl">LeacTion!</h1>
       </div>
       <div>
-        <a href="https://github.com/tegehoge/LeacTion" class="text-white"
+        <a
+          href="https://github.com/tegehoge/LeacTion"
+          class="text-white"
+          target="_blank"
+          rel="noopener noreferrer"
           ><font-awesome-icon :icon="['fab', 'github']" class="text-3xl"
         /></a>
       </div>
