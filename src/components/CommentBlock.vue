@@ -40,6 +40,8 @@
 </template>
 
 <script lang="ts">
+import xssFilters from "xss-filters";
+
 import { computed, defineComponent } from "vue";
 import { Comment } from "../models/comment";
 import { saveCommentLike, deleteComment } from "../repository";
@@ -63,12 +65,24 @@ export default defineComponent({
   setup(props, { emit }) {
     const isLiked = computed(() => props.comment.isLikedBy(props.userIdHashed) || false);
     const isMine = computed(() => props.comment.userIdHashed == props.userIdHashed);
-    const message = computed(() =>
-      props.comment.text.replace(
-        /(https?:\/\/([\w-]+\.)+[\w-:]+(\/[\w- ./?%&=~]*)?)/g,
-        '<a href="$1" class="underline text-blue-700" target="_blank" rel="noopener noreferrer">$1</a>'
-      )
-    );
+    const message = computed(() => {
+      const matches = props.comment.text.matchAll(
+        /https?:\/\/([\w-]+\.)+[\w:-]+(\/[\w ./?%&=~-]*)?/g
+      );
+      let cursor = 0;
+      let result = "";
+      for (const match of matches) {
+        result += props.comment.text.slice(cursor, match.index || cursor);
+        result += `<a href="${xssFilters.uriInDoubleQuotedAttr(
+          match[0]
+        )}" class="underline text-blue-700" target="_blank" rel="noopener noreferrer">${xssFilters.uriInHTMLData(
+          match[0]
+        )}</a>`;
+        cursor = (match.index || cursor) + match[0].length;
+      }
+      result += props.comment.text.slice(cursor);
+      return result;
+    });
     const deleteMyComment = () => {
       if (confirm("削除してよろしいですか？")) {
         deleteComment(props.comment.eventId, props.comment.id, props.userId);

@@ -2,7 +2,8 @@
   "compilerOptions": {
     "strict": true,
     "isolatedModules": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "lib": ["ES2020"]
   },
   "include": ["src/**/*"]
 }
