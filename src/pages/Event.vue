@@ -15,16 +15,13 @@
           まだコメントがありません
         </div>
       </div>
-      <div id="unread" class="sticky bottom-0 text-center pb-2">
-        <button
-          class="transition duration-300 rounded-full px-3 py-1 bg-green-100 shadow-md"
-          :class="{ 'opacity-0': haveReadAll, hidden: haveReadAll }"
-          :disabled="haveReadAll"
-          @click="scrollToBottom()"
-        >
-          <font-awesome-icon :icon="['fas', 'arrow-circle-down']" /> 未読コメント
-        </button>
-      </div>
+      <transition name="unread-button">
+        <div v-show="!haveReadAll" id="unread" class="sticky bottom-0 text-center pb-2">
+          <button class="rounded-full px-3 py-1 bg-green-100 shadow-md" @click="scrollToBottom()">
+            <font-awesome-icon :icon="['fas', 'arrow-circle-down']" /> 未読コメント
+          </button>
+        </div>
+      </transition>
     </div>
     <div v-else class="text-center p-10">
       <div class="animate-spin text-4xl"><font-awesome-icon :icon="['fas', 'spinner']" /></div>
@@ -249,3 +246,13 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="postcss" scoped>
+.unread-button-enter-from,
+.unread-button-leave-to {
+  opacity: 0;
+}
+.unread-button-leave-active {
+  transition: all 0.3s linear;
+}
+</style>
