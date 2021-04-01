@@ -2,7 +2,8 @@ import { FirebaseCommentRepository, FirebaseEventRepository } from "./firebase";
 import { CommentRepository, EventRepository } from "./interface";
 import { LocalStorageCommentRepository, LocalStorageEventRepository } from "./local_storage";
 
-const isProduction = process.env.NODE_ENV === "production";
+// @ts-ignore
+const isProduction = import.meta.env.PROD;
 
 const eventRepository: EventRepository = isProduction
   ? new FirebaseEventRepository()
