@@ -10,7 +10,7 @@ import {
   faPlusSquare,
   faClipboard,
 } from "@fortawesome/free-solid-svg-icons";
-import { faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faTwitter, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import App from "./App.vue";
@@ -28,7 +28,7 @@ library.add(
   faPlusSquare,
   faClipboard
 );
-library.add(faTwitter);
+library.add(faTwitter, faGithub);
 
 const app = createApp(App);
 
