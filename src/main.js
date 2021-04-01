@@ -9,6 +9,7 @@ import {
   faEdit,
   faPlusSquare,
   faClipboard,
+  faArrowCircleDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { faTwitter, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -26,7 +27,8 @@ library.add(
   faShareAlt,
   faEdit,
   faPlusSquare,
-  faClipboard
+  faClipboard,
+  faArrowCircleDown
 );
 library.add(faTwitter, faGithub);
 
