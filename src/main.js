@@ -14,6 +14,8 @@ import {
 import { faTwitter, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
+import "sweetalert2/dist/sweetalert2.min.css";
+
 import App from "./App.vue";
 import router from "./router";
 import "./index.css";

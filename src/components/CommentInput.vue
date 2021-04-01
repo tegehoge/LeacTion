@@ -25,6 +25,7 @@
 </template>
 
 <script lang="ts">
+import Swal from "sweetalert2";
 import { defineComponent, computed, onMounted, ref } from "vue";
 
 import { Comment } from "../models/comment";
@@ -60,6 +61,13 @@ export default defineComponent({
         props.talkId
       );
       emit("add-comment", comment);
+      Swal.fire({
+        title: "コメントを投稿しました！",
+        position: "top-end",
+        toast: true,
+        showConfirmButton: false,
+        timer: 1000,
+      });
       commentInput.value = "";
       inputForm.value?.focus();
     };

@@ -41,6 +41,7 @@
 
 <script lang="ts">
 import xssFilters from "xss-filters";
+import Swal from "sweetalert2";
 
 import { computed, defineComponent } from "vue";
 import { Comment } from "../models/comment";
@@ -83,13 +84,43 @@ export default defineComponent({
       result += props.comment.text.slice(cursor);
       return result;
     });
+
+    const confirmDelete = () =>
+      Swal.fire({
+        title: "本当に削除しますか？",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "削除する",
+        cancelButtonText: "キャンセル",
+        confirmButtonColor: "red",
+      });
+
     const deleteMyComment = () => {
-      if (confirm("削除してよろしいですか？")) {
-        deleteComment(props.comment.eventId, props.comment.id, props.userId);
-      }
+      confirmDelete().then((result) => {
+        if (result.isConfirmed) {
+          deleteComment(props.comment.eventId, props.comment.id, props.userId);
+        }
+      });
     };
     const toggleLike = () => {
       const remove = props.comment.isLikedBy(props.userIdHashed);
+      if (remove) {
+        Swal.fire({
+          title: "いいね！を取り消しました",
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } else {
+        Swal.fire({
+          title: "いいね！しました",
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
       props.comment.setLike(props.userIdHashed, remove);
       saveCommentLike(props.comment.eventId, props.comment.id, props.userIdHashed, remove);
     };
