@@ -92,7 +92,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, computed, ref } from "vue";
 
 import Modal from "./Modal.vue";
 
@@ -129,10 +129,12 @@ export default defineComponent({
     const qrcodeUrl = new URL("https://api.qrserver.com/v1/create-qr-code/");
     qrcodeUrl.searchParams.append("data", currentUrl);
     qrcodeUrl.searchParams.append("size", "300x300");
-    const tweetText = `LeacTion で「${props.eventTitle}」にリアクションしよう！`;
-    const tweetUrl = new URL("https://twitter.com/intent/tweet");
-    tweetUrl.searchParams.append("text", tweetText);
-    tweetUrl.searchParams.append("url", currentUrl);
+    const tweetUrl = computed(() => {
+      const url = new URL("https://twitter.com/intent/tweet");
+      url.searchParams.append("text", `LeacTion で「${props.eventTitle}」にリアクションしよう！`);
+      url.searchParams.append("url", currentUrl);
+      return url;
+    });
 
     return { showMenu, showShareModal, openShareModal, qrcodeUrl, tweetUrl, currentUrl, copyUrl };
   },
