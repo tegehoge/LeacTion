@@ -72,12 +72,10 @@ export default defineComponent({
       let cursor = 0;
       let result = "";
       for (const match of matches) {
+        const urlForAttr = xssFilters.uriInDoubleQuotedAttr(match[0]);
+        const urlForHtml = xssFilters.uriInHTMLData(match[0]);
         result += props.comment.text.slice(cursor, match.index || cursor);
-        result += `<a href="${xssFilters.uriInDoubleQuotedAttr(
-          match[0]
-        )}" class="underline text-blue-700" target="_blank" rel="noopener noreferrer">${xssFilters.uriInHTMLData(
-          match[0]
-        )}</a>`;
+        result += `<a href="${urlForAttr}" class="underline text-blue-700" target="_blank" rel="noopener noreferrer">${urlForHtml}</a>`;
         cursor = (match.index || cursor) + match[0].length;
       }
       result += props.comment.text.slice(cursor);
