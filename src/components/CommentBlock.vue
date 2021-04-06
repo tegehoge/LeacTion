@@ -20,14 +20,18 @@
         </div>
         <div>
           <button
-            class="bg-green-500 text-white px-2 rounded-full"
+            class="text-white px-2 rounded-full"
             title="いいね！"
             type="button"
-            :class="{ 'bg-pink-500': isLiked, 'opacity-50': isMine }"
+            :class="{
+              'bg-green-500': !isMine,
+              'bg-gray-500 opacity-50 cursor-not-allowed': isMine,
+            }"
             :disabled="isMine"
             @click="toggleLike"
           >
-            <font-awesome-icon :icon="['fas', 'thumbs-up']" />
+            <font-awesome-icon v-if="!isLiked" :icon="['fas', 'thumbs-up']" />
+            <font-awesome-icon v-if="isLiked" :icon="['fas', 'check']" />
             <span class="font-mono pl-1">{{ likeCount }}</span>
           </button>
         </div>
@@ -97,4 +101,17 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style scoped>
+.like-button-enter-active,
+.like-button-leave-active {
+  transition: opacity 0.5s;
+}
+.like-button-enter-to,
+.like-button-leave-from {
+  opacity: 1;
+}
+.like-button-enter-from,
+.like-button-leave-to {
+  opacity: 0;
+}
+</style>
