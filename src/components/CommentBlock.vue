@@ -1,39 +1,39 @@
 <template>
-  <div class="w-full sm:w-1/2 md:w-1/3 my-2">
-    <div class="rounded shadow-md mx-2 overflow-hidden h-full">
-      <div class="flex flex-col px-4 py-3 bg-yellow-200 h-full">
-        <div class="flex-grow text-lg text-left">
-          <span v-html="message"></span>
+  <div class="w-full my-1">
+    <div
+      class="rounded-lg shadow-md mx-2 px-2 py-2 bg-yellow-200 h-full"
+      :title="comment.postedAt.format('YYYY-MM-DD HH:mm:ss')"
+    >
+      <div class="float-right flex">
+        <div>
+          <button
+            v-if="isMine"
+            class="text-red-500 px-2 mr-1"
+            type="button"
+            title="コメントを削除する"
+            @click="deleteMyComment"
+          >
+            <span>
+              <font-awesome-icon :icon="['fas', 'trash-alt']" />
+            </span>
+          </button>
         </div>
-        <div class="flex items-end text-sm">
-          <div class="flex-grow text-black opacity-25">
-            {{ comment.postedAt.format("YYYY-MM-DD HH:mm:ss") }}
-          </div>
-          <div>
-            <button
-              v-if="isMine"
-              class="bg-red-500 text-white px-3 py-1 mr-1 rounded-full"
-              type="button"
-              @click="deleteMyComment"
-            >
-              <span>
-                <font-awesome-icon :icon="['fas', 'trash-alt']" />
-              </span>
-            </button>
-            <button
-              class="bg-green-500 text-white px-3 py-1 rounded-full"
-              type="button"
-              :class="{ 'bg-pink-500': isLiked, 'opacity-50': isMine }"
-              :disabled="isMine"
-              @click="toggleLike"
-            >
-              <span class="mr-1">
-                <font-awesome-icon :icon="['fas', 'thumbs-up']" />
-              </span>
-              <span>{{ likeCount }}</span>
-            </button>
-          </div>
+        <div>
+          <button
+            class="bg-green-500 text-white px-2 rounded-full"
+            title="いいね！"
+            type="button"
+            :class="{ 'bg-pink-500': isLiked, 'opacity-50': isMine }"
+            :disabled="isMine"
+            @click="toggleLike"
+          >
+            <font-awesome-icon :icon="['fas', 'thumbs-up']" />
+            <span class="font-mono pl-1">{{ likeCount }}</span>
+          </button>
         </div>
+      </div>
+      <div class="flex-grow text-lg text-left">
+        <span class="break-all" v-html="message"></span>
       </div>
     </div>
   </div>
