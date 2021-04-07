@@ -58,73 +58,79 @@
     </div>
 
     <div>
-      <div v-for="(talk, index) in eventInput.talks" :key="talk.id" class="transition pb-3">
-        <div class="flex items-center">
-          <label for="externalUrl" class="block flex-grow text-input-label"
-            >発表枠{{ index + 1 }}</label
+      <label for="talks" class="text-input-label">イベントの発表順 (順序を変更できます)</label>
+    </div>
+    <draggable
+      v-if="eventInput"
+      v-model="eventInput.talks"
+      item-key="id"
+      handle=".handle"
+      class="list-group"
+      tag="transition-group"
+      v-bind="dragOptions"
+      :component-data="{ name: 'fade' }"
+      @start="drag = true"
+      @end="drag = false"
+    >
+      <template #item="{ element }">
+        <div class="flex items-center py-2">
+          <div
+            class="handle text-xl px-2"
+            :class="{ 'cursor-grabbing': drag, 'cursor-grab': !drag }"
           >
-          <button
-            v-if="index !== 0"
-            type="button"
-            class="border border-green-500 hover:bg-green-500 text-green-500 hover:text-white transition duration-300 rounded px-1 text-xs mr-2"
-            @click="swapTalkInput(index, index - 1)"
-          >
-            発表順を上げる
-          </button>
-          <button
-            type="button"
-            class="border border-green-500 hover:bg-green-500 text-green-500 hover:text-white transition duration-300 rounded px-1 text-xs mr-2"
-            @click="addTalkInput(index)"
-          >
-            ここに発表枠を追加
-          </button>
-          <button type="button" class="text-red-500 text-sm" @click="removeTalk(talk.id)">
-            <font-awesome-icon :icon="['fas', 'trash-alt']" />
-          </button>
-        </div>
-        <div class="md:flex md:items-center md:mb-2">
-          <div class="md:w-1/4 mb-1 md:mb-0">
-            <input
-              v-model.trim="talk.speakerName"
-              type="text"
-              class="text-input-form w-full"
-              placeholder="発表者名"
-              @input="updateEvent"
-            />
+            <font-awesome-icon :icon="['fas', 'grip-lines']" />
           </div>
-          <div class="md:flex-grow md:pl-2 mb-1 md:mb-0">
-            <input
-              v-model.trim="talk.title"
-              type="text"
-              class="text-input-form w-full"
-              placeholder="発表タイトル"
-              @input="updateEvent"
-            />
+          <div class="flex-grow md:flex md:items-center">
+            <div class="w-full md:w-1/3 mb-1 md:mb-0">
+              <input
+                v-model.trim="element.speakerName"
+                type="text"
+                class="text-input-form w-full"
+                placeholder="発表者名"
+                @input="updateEvent"
+              />
+            </div>
+            <div class="w-full md:w-2/3 md:flex-grow md:pl-2 mb-1 md:mb-0">
+              <input
+                v-model.trim="element.title"
+                type="text"
+                class="text-input-form w-full"
+                placeholder="発表タイトル"
+                @input="updateEvent"
+              />
+            </div>
+          </div>
+          <div class="ml-2">
+            <button class="px-2 py-1 text-red-300 text-lg" @click="removeTalk(element.id)">
+              <font-awesome-icon :icon="['fas', 'trash-alt']" />
+            </button>
           </div>
         </div>
-      </div>
-      <div class="py-1">
-        <button
-          type="button"
-          class="w-full border-2 border-green-500 hover:bg-green-500 hover:text-white text-green-500 py-1 rounded transition duration-300"
-          @click="addTalkInput()"
-        >
-          発表枠を追加する
-        </button>
-      </div>
+      </template>
+    </draggable>
+    <div class="my-2">
+      <button
+        type="button"
+        class="w-full border-2 border-green-500 text-green-500 hover:bg-green-500 hover:border-white hover:text-white text-lg p-2 rounded"
+        @click="addTalkInput()"
+      >
+        <font-awesome-icon :icon="['fas', 'plus-square']" class="mr-2" />発表枠の追加
+      </button>
     </div>
   </form>
 </template>
 <script lang="ts">
 import dayjs from "dayjs";
-import { defineComponent, onMounted, reactive } from "vue";
+import { defineComponent, onMounted, ref, reactive } from "vue";
 import Swal from "sweetalert2";
+import draggable from "vuedraggable";
 
 import { Event } from "../models/event";
 import { emptyTalk } from "../models/talk";
 
 export default defineComponent({
   name: "EventInput",
+  components: { draggable },
   props: {
     initialEvent: {
       type: Event,
@@ -139,21 +145,22 @@ export default defineComponent({
       .filter((talk) => !talk.isEmpty())
       .map((talk) => talk.id);
 
+    const drag = ref(false);
+    const dragOptions = {
+      animation: 200,
+      group: "description",
+      disabled: false,
+      ghostClass: "ghost",
+    };
+
     const fillMinimalTalks = () => {
-      while ((eventInput.talks.length || 0) < 3) {
+      while ((eventInput.talks.length || 0) < 1) {
         eventInput.talks.push(emptyTalk());
       }
     };
 
     const addTalkInput = (index?: number) => {
       eventInput.insertEmptyTalkAt(index);
-    };
-
-    const swapTalkInput = (index1: number, index2: number) => {
-      [eventInput.talks[index1], eventInput.talks[index2]] = [
-        eventInput.talks[index2],
-        eventInput.talks[index1],
-      ];
     };
 
     const removeTalk = (talkId: string) => {
@@ -180,17 +187,26 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      fillMinimalTalks();
+      if (eventInput.talks.length === 0) {
+        eventInput.talks = [emptyTalk(), emptyTalk(), emptyTalk()];
+      }
     });
 
     return {
       eventInput,
       updateEvent,
       addTalkInput,
-      swapTalkInput,
       removeTalk,
       today,
+      drag,
+      dragOptions,
     };
   },
 });
 </script>
+
+<style scoped>
+.ghost {
+  opacity: 0.5;
+}
+</style>

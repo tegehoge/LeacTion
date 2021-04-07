@@ -23,6 +23,7 @@
     "sweetalert2": "^10.15.7",
     "vue": "^3.0.9",
     "vue-router": "^4.0.0",
+    "vuedraggable": "^4.0.1",
     "xss-filters": "^1.2.7"
   },
   "devDependencies": {
