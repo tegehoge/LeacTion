@@ -1,16 +1,17 @@
 import { createApp } from "vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-  faTrashAlt,
-  faThumbsUp,
-  faCheck,
-  faSpinner,
-  faBars,
-  faShareAlt,
-  faEdit,
-  faPlusSquare,
-  faClipboard,
   faArrowCircleDown,
+  faBars,
+  faCheck,
+  faClipboard,
+  faEdit,
+  faGripLines,
+  faPlusSquare,
+  faShareAlt,
+  faSpinner,
+  faThumbsUp,
+  faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { faTwitter, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -21,16 +22,17 @@ import "./index.css";
 import AppHeader from "./components/AppHeader.vue";
 
 library.add(
-  faTrashAlt,
-  faThumbsUp,
-  faCheck,
-  faSpinner,
+  faArrowCircleDown,
   faBars,
-  faShareAlt,
-  faEdit,
-  faPlusSquare,
+  faCheck,
   faClipboard,
-  faArrowCircleDown
+  faEdit,
+  faGripLines,
+  faPlusSquare,
+  faShareAlt,
+  faSpinner,
+  faThumbsUp,
+  faTrashAlt
 );
 library.add(faTwitter, faGithub);
 
