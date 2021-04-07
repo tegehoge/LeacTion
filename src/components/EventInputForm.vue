@@ -122,6 +122,7 @@
 <script lang="ts">
 import dayjs from "dayjs";
 import { defineComponent, onMounted, ref, reactive } from "vue";
+import Swal from "sweetalert2";
 import draggable from "vuedraggable";
 
 import { Event } from "../models/event";
@@ -164,15 +165,21 @@ export default defineComponent({
 
     const removeTalk = (talkId: string) => {
       if (currentTalkIds.includes(talkId)) {
-        const confirmed = confirm(
-          "既存の発表を削除するとすでに投稿されたコメントが閲覧できなくなります。\n削除してよろしいですか？"
-        );
-        if (!confirmed) {
-          return;
-        }
+        Swal.fire({
+          title: "発表枠の削除",
+          text:
+            "既存の発表を削除するとすでに投稿されたコメントが閲覧できなくなります。削除してよろしいですか？",
+          icon: "warning",
+          confirmButtonText: "削除する",
+          showCancelButton: true,
+          cancelButtonText: "キャンセル",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            eventInput.talks = eventInput.talks.filter((talk) => talk.id != talkId);
+            fillMinimalTalks();
+          }
+        });
       }
-      eventInput.talks = eventInput.talks.filter((talk) => talk.id != talkId);
-      fillMinimalTalks();
     };
 
     const updateEvent = (): void => {

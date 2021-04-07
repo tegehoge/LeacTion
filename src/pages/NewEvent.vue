@@ -64,6 +64,7 @@
 import dayjs from "dayjs";
 import { ref, defineComponent, computed } from "vue";
 import { useRouter } from "vue-router";
+import Swal from "sweetalert2";
 
 import { Event } from "../models/event";
 import { saveEvent } from "../repository";
@@ -88,6 +89,11 @@ export default defineComponent({
         // console.log(JSON.stringify(event));
         saveEvent(event.value, eventPassword.value)
           .then((savedEvent) => {
+            Swal.fire({
+              title: "完了！",
+              html: `イベントを作成しました！<br />URLを共有してイベントを盛り上げましょう！`,
+              icon: "success",
+            });
             router.push(`/event/${savedEvent.id}`);
           })
           .catch((e) => {
