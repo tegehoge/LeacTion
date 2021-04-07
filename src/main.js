@@ -3,6 +3,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faArrowCircleDown,
   faBars,
+  faCheck,
   faClipboard,
   faEdit,
   faGripLines,
@@ -23,6 +24,7 @@ import AppHeader from "./components/AppHeader.vue";
 library.add(
   faArrowCircleDown,
   faBars,
+  faCheck,
   faClipboard,
   faEdit,
   faGripLines,
