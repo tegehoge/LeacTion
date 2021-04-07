@@ -3,6 +3,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faTrashAlt,
   faThumbsUp,
+  faCheck,
   faSpinner,
   faBars,
   faShareAlt,
@@ -22,6 +23,7 @@ import AppHeader from "./components/AppHeader.vue";
 library.add(
   faTrashAlt,
   faThumbsUp,
+  faCheck,
   faSpinner,
   faBars,
   faShareAlt,

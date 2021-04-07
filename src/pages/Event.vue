@@ -124,6 +124,7 @@ export default defineComponent({
         fetchComments();
         haveReadAll.value = false;
       }
+      checkRead();
       setTimeout(scrollToBottom, 0);
     };
 
