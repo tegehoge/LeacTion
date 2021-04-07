@@ -1,13 +1,16 @@
 <template>
-  <div class="flex px-3 py-2 w-full text-center items-center mx-auto">
+  <div class="flex px-3 py-2 w-full text-center items-start mx-auto">
     <div class="flex-grow pr-2">
-      <input
+      <textarea
         id="commentInput"
         ref="inputForm"
-        v-model="commentInput"
-        type="text"
+        v-model.trim="commentInput"
         class="w-full border-2 rounded p-2"
         placeholder="質問・コメント"
+        :rows="lineCount"
+        @keydown.enter.prevent
+        @keydown.enter.exact="addNewline()"
+        @keydown.shift.enter.exact="sendComment()"
       />
     </div>
     <div>
@@ -18,7 +21,7 @@
         :disabled="!canSend"
         @click="sendComment()"
       >
-        投稿する(Enter)
+        投稿する<span class="hidden md:inline">(Shift+Enter)</span>
       </button>
     </div>
   </div>
@@ -48,40 +51,41 @@ export default defineComponent({
   emits: ["add-comment"],
   setup(props, { emit }) {
     const commentInput = ref("");
-    const inputForm = ref<HTMLInputElement>();
-    const canSend = computed(() => commentInput.value != "");
+    const inputForm = ref<HTMLTextAreaElement>();
+    const canSend = computed(() => commentInput.value.replace(/\s*/m, "") !== "");
+    const lineCount = computed(() => commentInput.value.split(/\r\n|\r|\n/).length);
 
     const sanitizeText = (text: string) => text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
     const sendComment = () => {
-      const comment = new Comment(
-        sanitizeText(commentInput.value),
-        props.userIdHashed,
-        props.eventId,
-        props.talkId
-      );
-      emit("add-comment", comment);
-      Swal.fire({
-        title: "コメントを投稿しました！",
-        position: "top-end",
-        toast: true,
-        showConfirmButton: false,
-        timer: 1000,
-      });
-      commentInput.value = "";
-      inputForm.value?.focus();
+      if (canSend.value) {
+        const comment = new Comment(
+          sanitizeText(commentInput.value),
+          props.userIdHashed,
+          props.eventId,
+          props.talkId
+        );
+        emit("add-comment", comment);
+        Swal.fire({
+          title: "コメントを投稿しました！",
+          position: "top-end",
+          toast: true,
+          showConfirmButton: false,
+          timer: 1000,
+        });
+        commentInput.value = "";
+        inputForm.value?.focus();
+      }
+    };
+
+    const addNewline = () => {
+      commentInput.value = `${commentInput.value}\n`;
     };
 
     onMounted(() => {
-      // Enterでコメント送信を可能にする
-      inputForm.value?.addEventListener("keydown", (e) => {
-        if (e.keyCode == 13 && commentInput.value) {
-          sendComment();
-        }
-      });
       inputForm.value?.focus();
     });
-    return { commentInput, sendComment, inputForm, canSend };
+    return { commentInput, lineCount, sendComment, addNewline, inputForm, canSend };
   },
 });
 </script>

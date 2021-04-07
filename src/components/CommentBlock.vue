@@ -71,20 +71,19 @@ export default defineComponent({
     const isLiked = computed(() => props.comment.isLikedBy(props.userIdHashed) || false);
     const isMine = computed(() => props.comment.userIdHashed == props.userIdHashed);
     const message = computed(() => {
-      const matches = props.comment.text.matchAll(
-        /https?:\/\/([\w-]+\.)+[\w:-]+(\/[\w ./?%&=~-]*)?/g
-      );
+      const target = props.comment.text.replace(/ /g, "&nbsp;");
+      const matches = target.matchAll(/https?:\/\/([\w-]+\.)+[\w:-]+(\/[\w ./?%&=~-]*)?/g);
       let cursor = 0;
       let result = "";
       for (const match of matches) {
         const urlForAttr = xssFilters.uriInDoubleQuotedAttr(match[0]);
         const urlForHtml = xssFilters.uriInHTMLData(match[0]);
-        result += props.comment.text.slice(cursor, match.index || cursor);
+        result += target.slice(cursor, match.index || cursor);
         result += `<a href="${urlForAttr}" class="underline text-blue-700" target="_blank" rel="noopener noreferrer">${urlForHtml}</a>`;
         cursor = (match.index || cursor) + match[0].length;
       }
-      result += props.comment.text.slice(cursor);
-      return result;
+      result += target.slice(cursor);
+      return result.replace(/\r\n|\r|\n/g, "<br />");
     });
 
     const confirmDelete = () =>
