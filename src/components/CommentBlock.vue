@@ -37,14 +37,13 @@
         </div>
       </div>
       <div class="flex-grow text-lg text-left">
-        <span class="break-all" v-html="message"></span>
+        <span class="break-all" v-html="comment.asHTML"></span>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import xssFilters from "xss-filters";
 import Swal from "sweetalert2";
 
 import { computed, defineComponent } from "vue";
@@ -70,21 +69,6 @@ export default defineComponent({
   setup(props, { emit }) {
     const isLiked = computed(() => props.comment.isLikedBy(props.userIdHashed) || false);
     const isMine = computed(() => props.comment.userIdHashed == props.userIdHashed);
-    const message = computed(() => {
-      const target = props.comment.text.replace(/ /g, "&nbsp;");
-      const matches = target.matchAll(/https?:\/\/([\w-]+\.)+[\w:-]+(\/[\w ./?%&=~-]*)?/g);
-      let cursor = 0;
-      let result = "";
-      for (const match of matches) {
-        const urlForAttr = xssFilters.uriInDoubleQuotedAttr(match[0]);
-        const urlForHtml = xssFilters.uriInHTMLData(match[0]);
-        result += target.slice(cursor, match.index || cursor);
-        result += `<a href="${urlForAttr}" class="underline text-blue-700" target="_blank" rel="noopener noreferrer">${urlForHtml}</a>`;
-        cursor = (match.index || cursor) + match[0].length;
-      }
-      result += target.slice(cursor);
-      return result.replace(/\r\n|\r|\n/g, "<br />");
-    });
 
     const confirmDelete = () =>
       Swal.fire({
@@ -126,7 +110,7 @@ export default defineComponent({
       saveCommentLike(props.comment.eventId, props.comment.id, props.userIdHashed, remove);
     };
     const likeCount = computed(() => props.comment.likes.length || 0);
-    return { isLiked, isMine, message, likeCount, toggleLike, deleteMyComment };
+    return { isLiked, isMine, likeCount, toggleLike, deleteMyComment };
   },
 });
 </script>
