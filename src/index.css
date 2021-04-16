@@ -15,4 +15,8 @@
     @apply border-2 border-gray-400 rounded px-2 py-2;
     height: 44px;
   }
+
+  .link-text {
+    @apply text-blue-700 underline;
+  }
 }

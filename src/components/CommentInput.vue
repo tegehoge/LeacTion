@@ -55,12 +55,10 @@ export default defineComponent({
     const canSend = computed(() => commentInput.value.replace(/\s*/m, "") !== "");
     const lineCount = computed(() => commentInput.value.split(/\r\n|\r|\n/).length);
 
-    const sanitizeText = (text: string) => text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-
     const sendComment = () => {
       if (canSend.value) {
         const comment = new Comment(
-          sanitizeText(commentInput.value),
+          commentInput.value,
           props.userIdHashed,
           props.eventId,
           props.talkId

@@ -25,3 +25,30 @@ test("Successful JSONArray conversion", () => {
 
   expect(result).toStrictEqual(comments);
 });
+
+test("Sanitize text on create", () => {
+  const comment = new Comment("<script></script>", nanoid(), nanoid(8), nanoid());
+  expect(comment.text).toStrictEqual("&lt;script&gt;&lt;/script&gt;");
+});
+
+test("URL is translated as <a> tag", () => {
+  const comment = new Comment("https://example.com/", nanoid(), nanoid(8), nanoid());
+  expect(comment.asHTML).toStrictEqual(
+    '<a href="https://example.com/" class="link-text" target="_blank" rel="noopener noreferrer">https://example.com/</a>'
+  );
+});
+
+test("With newline", () => {
+  const comment = new Comment("aaa\nbbb  ccc\nddd", nanoid(), nanoid(8), nanoid());
+  expect(comment.asHTML).toStrictEqual("aaa<br />bbb&nbsp;&nbsp;ccc<br />ddd");
+});
+
+test("Sanitize javascript code", () => {
+  const comment = new Comment(
+    "<script>javascript:alert('sample');</script>",
+    nanoid(),
+    nanoid(8),
+    nanoid()
+  );
+  expect(comment.asHTML).toStrictEqual("&lt;script&gt;javascript:alert('sample');&lt;/script&gt;");
+});
