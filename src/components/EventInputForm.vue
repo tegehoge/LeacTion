@@ -69,6 +69,7 @@
             type="text"
             name="hashtag"
             placeholder="Webナイト宮崎"
+            pattern="([^\s!$%^&*+.]*[^0-9\s!$%^&*+.][^\s!$%^&*+.]*)?"
             class="w-full pl-6 text-input-form"
             @input="updateEvent"
           />
@@ -227,5 +228,8 @@ export default defineComponent({
 <style scoped>
 .ghost {
   opacity: 0.5;
+}
+#hashtag:invalid {
+  border-color: red;
 }
 </style>

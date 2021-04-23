@@ -67,7 +67,11 @@ export class Event {
   }
 
   isValid(): boolean {
-    return this.name.length > 0 && this.talks.some((talk) => !talk.isEmpty());
+    return (
+      this.name.length > 0 &&
+      /^([^\s!$%^&*+.]*[^0-9\s!$%^&*+.][^\s!$%^&*+.]*)?$/.test(this.hashtag || "") &&
+      this.talks.some((talk) => !talk.isEmpty())
+    );
   }
 
   isValidFuture(): boolean {
