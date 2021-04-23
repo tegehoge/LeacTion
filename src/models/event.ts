@@ -10,19 +10,22 @@ export class Event {
   dateOfEvent: string; // date
   talks: Talk[];
   externalUrl?: string; // URL
+  hashtag?: string;
 
   constructor(
     name: string,
     dateOfEvent: string,
     id?: EventId,
     talks?: Talk[],
-    externalUrl?: string
+    externalUrl?: string,
+    hashtag?: string
   ) {
     this.id = id || nanoid(8);
     this.name = name;
     this.dateOfEvent = dateOfEvent;
     this.talks = talks || [];
     this.externalUrl = externalUrl;
+    this.hashtag = hashtag;
   }
 
   setExternalUrl(url: string): void {
@@ -48,7 +51,8 @@ export class Event {
       data.dateOfEvent,
       data.id,
       data.talks.map((talk) => Talk.fromObj(talk)),
-      data.externalUrl
+      data.externalUrl,
+      data.hashtag
     );
   }
 
@@ -77,6 +81,7 @@ export type EventResponse = {
   dateOfEvent: string; // date
   talks: TalkResponse[];
   externalUrl?: string; // URL
+  hashtag?: string;
 };
 
 export const emptyEvent = (): Event => new Event("", dayjs().format("YYYY-MM-DD"));
