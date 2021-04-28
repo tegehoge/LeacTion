@@ -62,7 +62,8 @@ export class Event {
       obj.dateOfEvent,
       obj.id,
       obj.talks.map((talk) => Talk.fromObj(talk)),
-      obj.externalUrl
+      obj.externalUrl,
+      obj.hashtag
     );
   }
 
