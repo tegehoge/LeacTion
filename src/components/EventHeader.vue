@@ -9,6 +9,16 @@
           <div class="flex-grow text-center">
             <h2 class="text-2xl">{{ eventTitle }}</h2>
           </div>
+          <div v-if="eventHashtag.length > 0" class="hidden md:block">
+            <a
+              :href="`https://twitter.com/intent/tweet/?hashtags=${eventHashtag}`"
+              target="_blank"
+              rel="noopener noreferrer"
+              ><button class="twitter-share-button">
+                <font-awesome-icon :icon="['fab', 'twitter']" /> tweet #{{ eventHashtag }}
+              </button></a
+            >
+          </div>
           <div>
             <button
               type="button"
@@ -25,6 +35,16 @@
         v-if="showMenu"
         class="md:flex md:items-center md:justify-between container mx-auto px-2 md:px-0 md:py-2"
       >
+        <li v-if="eventHashtag.length > 0" class="w-full md:hidden border-t py-2 pl-6">
+          <a
+            :href="`https://twitter.com/intent/tweet/?hashtags=${eventHashtag}`"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><button class="twitter-share-button">
+              <font-awesome-icon :icon="['fab', 'twitter']" /> tweet #{{ eventHashtag }}
+            </button></a
+          >
+        </li>
         <li class="w-full md:w-1/3 md:text-center border-t md:border-t-0 md:border-r">
           <a class="block w-full my-2 md:my-0 py-2 px-6 cursor-pointer" @click="openShareModal">
             <font-awesome-icon :icon="['fas', 'share-alt']" class="mr-2" />イベントをシェアする</a
@@ -107,6 +127,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    eventHashtag: {
+      type: String,
+      required: true,
+    },
   },
   components: { Modal },
   setup(props, context) {
@@ -133,6 +157,10 @@ export default defineComponent({
       const url = new URL("https://twitter.com/intent/tweet");
       url.searchParams.append("text", `LeacTion で「${props.eventTitle}」にリアクションしよう！`);
       url.searchParams.append("url", currentUrl);
+      url.searchParams.append(
+        "hashtags",
+        props.eventHashtag.length > 0 ? `${props.eventHashtag},LeacTion` : "LeacTion"
+      );
       return url;
     });
 
@@ -140,3 +168,15 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="postcss" scoped>
+.twitter-share-button {
+  color: white;
+  background-color: #1b95e0;
+  border-radius: 3px;
+  padding: 0.25em 0.5em;
+}
+.twitter-share-button:hover {
+  background-color: #0c7abf;
+}
+</style>

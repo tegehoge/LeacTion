@@ -1,6 +1,10 @@
 <template>
   <div class="flex flex-col h-screen">
-    <event-header :event-id="eventId" :event-title="event ? event.name : ''"></event-header>
+    <event-header
+      :event-id="eventId"
+      :event-title="event?.name || ''"
+      :event-hashtag="event?.hashtag || ''"
+    ></event-header>
     <div
       v-if="event"
       id="comments"
@@ -23,7 +27,7 @@
       <transition name="unread-button">
         <div v-show="!haveReadAll" id="unread" class="sticky bottom-0 text-center pb-2">
           <button
-            class="rounded-full px-3 py-1 bg-yellow-400 text-white text-sm shadow-md"
+            class="rounded-full px-3 py-1 bg-yellow-300 text-white text-sm shadow-md"
             @click="scrollToBottom()"
           >
             <font-awesome-icon :icon="['fas', 'arrow-circle-down']" /> 未読コメント
