@@ -20,7 +20,7 @@
         </div>
         <div>
           <button
-            class="text-white text-sm px-2 py-1 rounded-full"
+            class="text-white text-sm px-2 py-1 rounded-full flex flex-nowrap items-center"
             title="いいね！"
             type="button"
             :class="{
