@@ -1,14 +1,14 @@
 <template>
   <div class="w-full mb-2">
     <div
-      class="rounded-md shadow-sm mx-2 px-3 py-2 bg-white h-full flex flex-row-reverse"
+      class="rounded-md shadow-sm mx-2 px-3 py-2 bg-white h-full"
       :title="comment.postedAt.format('YYYY-MM-DD HH:mm:ss')"
     >
-      <div class="flex">
-        <div>
+      <div class="float-right flex">
+        <div class="text-sm leading-6">
           <button
             v-if="isMine"
-            class="text-red-500 text-sm px-2 mr-1"
+            class="text-red-500 px-1 mr-0.5"
             type="button"
             title="コメントを削除する"
             @click="deleteMyComment"
@@ -20,7 +20,7 @@
         </div>
         <div>
           <button
-            class="text-white text-sm px-2 py-1 rounded-full flex flex-nowrap items-center"
+            class="text-white text-sm leading-4 px-2 py-1 rounded-full flex flex-nowrap items-center"
             title="いいね！"
             type="button"
             :class="{
@@ -36,8 +36,8 @@
           </button>
         </div>
       </div>
-      <div class="flex-grow text-md text-left text-gray-700 flex items-center">
-        <p class="break-all leading-5" v-html="comment.asHTML"></p>
+      <div class="flex-grow text-md text-left text-gray-700">
+        <p class="break-all leading-6" v-html="comment.asHTML"></p>
       </div>
     </div>
   </div>
