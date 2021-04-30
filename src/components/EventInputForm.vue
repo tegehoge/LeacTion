@@ -40,20 +40,40 @@
       </div>
     </div>
 
-    <div class="w-full mb-10">
-      <div>
-        <label for="externalUrl" class="text-input-label">イベントページのURL</label>
+    <div class="md:flex mb-10">
+      <div class="w-full md:w-2/3 pb-3 md:pb-0">
+        <div>
+          <label for="externalUrl" class="text-input-label">イベントページのURL</label>
+        </div>
+        <div class="w-full">
+          <input
+            id="externalUrl"
+            v-model.trim="eventInput.externalUrl"
+            type="text"
+            name="externalUrl"
+            placeholder="connpassイベントURLなど (optional)"
+            class="text-input-form w-full"
+            @input="updateEvent"
+          />
+        </div>
       </div>
-      <div class="w-full">
-        <input
-          id="externalUrl"
-          v-model.trim="eventInput.externalUrl"
-          type="text"
-          name="externalUrl"
-          placeholder="connpassイベントURLなど (optional)"
-          class="text-input-form w-full"
-          @input="updateEvent"
-        />
+      <div class="w-full md:w-1/3 md:pl-2 pb-3 md:pb-0">
+        <div>
+          <label for="hashtag" class="text-input-label">Twitterハッシュタグ</label>
+        </div>
+        <div class="relative w-full">
+          <div class="absolute inset-y-0 pl-3 flex items-center"><span>#</span></div>
+          <input
+            id="hashtag"
+            v-model.trim="eventInput.hashtag"
+            type="text"
+            name="hashtag"
+            placeholder="Webナイト宮崎"
+            pattern="([^\s!$%^&*+.]*[^0-9\s!$%^&*+.][^\s!$%^&*+.]*)?"
+            class="w-full pl-6 text-input-form"
+            @input="updateEvent"
+          />
+        </div>
       </div>
     </div>
 
@@ -208,5 +228,8 @@ export default defineComponent({
 <style scoped>
 .ghost {
   opacity: 0.5;
+}
+#hashtag:invalid {
+  border-color: red;
 }
 </style>

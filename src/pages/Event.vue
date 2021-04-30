@@ -1,6 +1,10 @@
 <template>
   <div class="flex flex-col h-screen">
-    <event-header :event-id="eventId" :event-title="event ? event.name : ''"></event-header>
+    <event-header
+      :event-id="eventId"
+      :event-title="event?.name || ''"
+      :event-hashtag="event?.hashtag || ''"
+    ></event-header>
     <div v-if="event" id="comments" class="flex-grow overflow-auto" @scroll="checkRead()">
       <div class="flex flex-wrap max-w-4xl mx-auto">
         <CommentBlock
