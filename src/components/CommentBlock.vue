@@ -1,26 +1,26 @@
 <template>
-  <div class="w-full my-1">
+  <div class="w-full mb-2">
     <div
-      class="rounded-lg shadow-md mx-2 px-2 py-2 bg-yellow-200 h-full"
+      class="rounded-md shadow-sm mx-2 px-3 py-2 bg-white h-full"
       :title="comment.postedAt.format('YYYY-MM-DD HH:mm:ss')"
     >
       <div class="float-right flex">
-        <div>
+        <div class="text-sm leading-6">
           <button
             v-if="isMine"
-            class="text-red-500 px-2 mr-1"
+            class="text-red-500 px-1 mr-0.5"
             type="button"
             title="コメントを削除する"
             @click="deleteMyComment"
           >
             <span>
-              <font-awesome-icon :icon="['fas', 'trash-alt']" />
+              <font-awesome-icon :icon="['fas', 'trash-alt']" fixed-width />
             </span>
           </button>
         </div>
         <div>
           <button
-            class="text-white px-2 rounded-full"
+            class="text-white text-sm leading-4 px-2 py-1 rounded-full flex flex-nowrap items-center"
             title="いいね！"
             type="button"
             :class="{
@@ -30,14 +30,14 @@
             :disabled="isMine"
             @click="toggleLike"
           >
-            <font-awesome-icon v-if="!isLiked" :icon="['fas', 'thumbs-up']" />
-            <font-awesome-icon v-if="isLiked" :icon="['fas', 'check']" />
+            <font-awesome-icon v-if="!isLiked" :icon="['fas', 'thumbs-up']" fixed-width />
+            <font-awesome-icon v-if="isLiked" :icon="['fas', 'check']" fixed-width />
             <span class="font-mono pl-1">{{ likeCount }}</span>
           </button>
         </div>
       </div>
-      <div class="flex-grow text-lg text-left">
-        <span class="break-all" v-html="comment.asHTML"></span>
+      <div class="flex-grow text-md text-left text-gray-700">
+        <p class="break-all leading-6" v-html="comment.asHTML"></p>
       </div>
     </div>
   </div>

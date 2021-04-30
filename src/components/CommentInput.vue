@@ -1,5 +1,5 @@
 <template>
-  <div class="flex px-3 py-2 w-full text-center items-start mx-auto">
+  <div class="flex w-full text-center items-start mx-auto">
     <div class="flex-grow pr-2">
       <textarea
         id="commentInput"

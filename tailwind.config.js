@@ -4,7 +4,11 @@ module.exports = {
     content: ["./src/**/*.vue", "./src/**/*.html"],
   },
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "blue-700": "#066CB5",
+      },
+    },
     cursor: {
       grab: "grab",
       grabbing: "grabbing",

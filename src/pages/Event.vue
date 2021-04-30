@@ -5,8 +5,13 @@
       :event-title="event?.name || ''"
       :event-hashtag="event?.hashtag || ''"
     ></event-header>
-    <div v-if="event" id="comments" class="flex-grow overflow-auto" @scroll="checkRead()">
-      <div class="flex flex-wrap max-w-4xl mx-auto">
+    <div
+      v-if="event"
+      id="comments"
+      class="bg-blue-50 flex-grow overflow-auto"
+      @scroll="checkRead()"
+    >
+      <div class="flex flex-wrap max-w-4xl mx-auto py-3">
         <CommentBlock
           v-for="comment in commentsForTalk"
           :key="comment.id"
@@ -21,7 +26,10 @@
       </div>
       <transition name="unread-button">
         <div v-show="!haveReadAll" id="unread" class="sticky bottom-0 text-center pb-2">
-          <button class="rounded-full px-3 py-1 bg-green-100 shadow-md" @click="scrollToBottom()">
+          <button
+            class="rounded-full px-3 py-1 bg-yellow-300 text-white text-sm shadow-md"
+            @click="scrollToBottom()"
+          >
             <font-awesome-icon :icon="['fas', 'arrow-circle-down']" /> 未読コメント
           </button>
         </div>
@@ -31,10 +39,10 @@
       <div class="animate-spin text-4xl"><font-awesome-icon :icon="['fas', 'spinner']" /></div>
       <div>イベントを読み込んでいます…</div>
     </div>
-    <div v-if="event" class="relative bottom-0 border-t-2">
-      <div class="flex px-3 py-2 w-full text-center items-center max-w-4xl mx-auto">
+    <div v-if="event" class="relative bottom-0 pt-3 shadow">
+      <div class="flex px-3 mb-2 w-full text-center items-center max-w-4xl mx-auto">
         <div class="flex-shrink-0 mb-1 md:mb-0">
-          <label for="talk_select" class="block text-gray-700 font-bold md:text-right pr-4 md:mb-0"
+          <label for="talk_select" class="block text-gray-700 font-bold md:text-right pr-2 md:mb-0"
             >発表枠</label
           >
         </div>
@@ -42,7 +50,7 @@
           <select
             id="talk_select"
             v-model="currentTalk"
-            class="w-full block appearance-none bg-gray-200 rounded p-2"
+            class="w-full block appearance-none border-2 rounded p-2"
           >
             <option v-for="talk in event.talks" :key="talk.id" :value="talk">
               {{ talk.speakerName }}「{{ talk.title }}」
@@ -63,7 +71,7 @@
           </div>
         </div>
       </div>
-      <div v-if="currentTalk" class="max-w-4xl mx-auto">
+      <div v-if="currentTalk" class="max-w-4xl mx-autopx-3 px-3 pb-1 mx-auto">
         <CommentInput
           :event-id="eventId"
           :user-id-hashed="userContext.userIdHashed"
