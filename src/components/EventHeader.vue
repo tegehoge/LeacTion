@@ -14,7 +14,7 @@
               :href="`https://twitter.com/intent/tweet/?hashtags=${eventHashtag}`"
               target="_blank"
               rel="noopener noreferrer"
-              ><button class="twitter-share-button">
+              ><button class="twitter-share-button bg-white hover:bg-gray-100">
                 <font-awesome-icon :icon="['fab', 'twitter']" /> tweet #{{ eventHashtag }}
               </button></a
             >
@@ -40,7 +40,7 @@
             :href="`https://twitter.com/intent/tweet/?hashtags=${eventHashtag}`"
             target="_blank"
             rel="noopener noreferrer"
-            ><button class="twitter-share-button">
+            ><button class="twitter-share-button bg-white hover:bg-gray-100">
               <font-awesome-icon :icon="['fab', 'twitter']" /> tweet #{{ eventHashtag }}
             </button></a
           >
@@ -171,12 +171,8 @@ export default defineComponent({
 
 <style lang="postcss" scoped>
 .twitter-share-button {
-  color: white;
-  background-color: #1b95e0;
+  color: #1b95e0;
   border-radius: 3px;
   padding: 0.25em 0.5em;
-}
-.twitter-share-button:hover {
-  background-color: #0c7abf;
 }
 </style>
