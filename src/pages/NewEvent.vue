@@ -62,7 +62,7 @@
 
 <script lang="ts">
 import dayjs from "dayjs";
-import { ref, defineComponent, computed } from "vue";
+import { ref, defineComponent, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 
@@ -119,6 +119,22 @@ export default defineComponent({
 
     const formValidated = computed(() => {
       return event.value.isValidFuture() && invalidPassword.value == false;
+    });
+
+    onMounted(() => {
+      Swal.fire({
+        icon: "warning",
+        title: "サービス利用に関する注意",
+        html:
+          '<ul class="list-disc leading-relaxed text-left">' +
+          "<li>本サービスへ投稿されたイベント名やコメントは全て一般公開されています。<br>他の利用者を不快にさせるコメントや公開してはならない情報は書き込まないようにイベント参加者へ注意喚起をお願いします。</li>" +
+          '<li>個別のサポートは行っておりません。不具合報告・要望などは<a class="text-blue-500" href="https://github.com/tegehoge/LeacTion/issues/new" target="_blank" rel="noopener noreferrer">Github</a>へ投稿してください。</li>' +
+          "<li>予告なくサービスの変更や停止を行う場合があります。予めご了承ください。</li>" +
+          "</ul>",
+        confirmButtonText: "確認しました",
+        allowOutsideClick: false,
+        width: "80vw",
+      });
     });
 
     return {
