@@ -85,6 +85,7 @@
 <script lang="ts">
 import { ref, defineComponent, onMounted, computed, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
+import Swal from "sweetalert2";
 
 import CommentInput from "../components/CommentInput.vue";
 import CommentBlock from "../components/CommentBlock.vue";
@@ -105,6 +106,18 @@ const createOrGetUserContext = () => {
   } else {
     const userContext = new UserContext();
     localStorage.setItem("user_context", userContext.toJSON());
+    Swal.fire({
+      icon: "warning",
+      title: "サービス利用に関する注意",
+      html:
+        '<ul class="list-disc leading-relaxed text-left">' +
+        "<li>本サービスへ投稿されたイベント名やコメントは全て一般公開されています。<br>他の利用者を不快にさせるコメントや公開してはならない情報は書き込まないようにしてください。</li>" +
+        '<li>個別のサポートは行っておりません。不具合報告・要望などは<a class="text-blue-500" href="https://github.com/tegehoge/LeacTion/issues/new" target="_blank" rel="noopener noreferrer">Github</a>へ投稿してください。</li>' +
+        "</ul>",
+      confirmButtonText: "確認して利用する",
+      allowOutsideClick: false,
+      width: "80vw",
+    });
     return userContext;
   }
 };
