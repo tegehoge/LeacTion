@@ -45,6 +45,11 @@
     </div>
 
     <div class="text-center py-8">
+      <p>
+        <a href="/terms" target="_blank" rel="noopener noreferrer" class="text-blue-500 underline"
+          >利用規約</a
+        >に同意して
+      </p>
       <div class="">
         <button
           type="button"
