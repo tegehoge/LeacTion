@@ -177,6 +177,7 @@ export default defineComponent({
       unsubscribeComments = firestore
         .collection(`comments-${props.eventId}`)
         .onSnapshot((updatedComments: QuerySnapshot) => {
+          const wasBottom = isBottom();
           updatedComments.docChanges().forEach((change) => {
             const targetComment = Comment.fromObj(change.doc.data() as CommentResponse);
             if (change.type == "added") {
@@ -189,6 +190,9 @@ export default defineComponent({
               comments.value = comments.value.filter((c) => c.id !== targetComment.id);
             }
           });
+          if (wasBottom) {
+            setTimeout(scrollToBottom, 0);
+          }
           checkRead();
         });
     }
