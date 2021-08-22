@@ -52,5 +52,9 @@
   },
   "eslintConfig": {
     "ignorePatterns": "functions/**"
+  },
+  "volta": {
+    "node": "14.17.5",
+    "yarn": "1.22.11"
   }
 }
