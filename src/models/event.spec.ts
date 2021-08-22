@@ -9,7 +9,8 @@ test("Successful JSON conversion", () => {
     nanoid(8),
     [new Talk("aaa", "bbb", nanoid())],
     "https://example.com",
-    "hashtag"
+    "hashtag",
+    true
   );
   const eventString = JSON.stringify(event);
   const result = Event.fromJSON(eventString);
@@ -26,6 +27,7 @@ test("Create from Obj", () => {
     talks: [{ id: nanoid(), title: "てげほげ", speakerName: "てげほげ" }],
     externalUrl: "https://tege.work/",
     hashtag: "tegehoge",
+    isArchived: false,
   };
   const event = Event.fromObj(eventObj);
   expect(event.id).toStrictEqual(eventId);
