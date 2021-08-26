@@ -180,6 +180,10 @@ export default defineComponent({
               event.value = Event.fromObj(updatedEventData);
               currentTalk.value = Talk.fromObj(updatedEventData.talks[0]);
             }
+            if (event.value?.isArchived) {
+              fetchComments();
+              return;
+            }
           },
           (error: FirestoreError) => {
             console.error(error);
@@ -211,10 +215,10 @@ export default defineComponent({
     }
 
     onMounted(async () => {
+      await fetchEvent().then(() => {
+        currentTalk.value = event.value?.talks[0];
+      });
       if (!firestore) {
-        await fetchEvent().then(() => {
-          currentTalk.value = event.value?.talks[0];
-        });
         await fetchComments();
       }
       const unreadElem = document.getElementById("unread");

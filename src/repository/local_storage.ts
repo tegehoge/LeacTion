@@ -38,6 +38,18 @@ export class LocalStorageEventRepository implements EventRepository {
     const passwordHashed = storage.getItem(`event-${eventId}-password`);
     return Promise.resolve(jssha256.sha256(password) == passwordHashed);
   }
+
+  archiveEvent(eventId: string, password: string): Promise<boolean> {
+    const payload = storage.getItem(`event-${eventId}`);
+    if (payload) {
+      const event = Event.fromJSON(payload);
+      event.isArchived = true;
+      storage.setItem(`event-${eventId}`, JSON.stringify(event));
+      return Promise.resolve(true);
+    } else {
+      return Promise.reject();
+    }
+  }
 }
 
 export class LocalStorageCommentRepository implements CommentRepository {

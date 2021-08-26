@@ -9,11 +9,20 @@
           <button
             type="button"
             :disabled="!formValidated"
-            class="bg-blue-500 opacity-50 text-white px-4 py-2 rounded"
+            class="bg-blue-500 opacity-50 text-white mx-2 px-4 py-2 rounded"
             :class="{ 'opacity-100 hover:bg-blue-700': formValidated }"
             @click="saveUpdatedEvent"
           >
             イベント情報を保存する
+          </button>
+          <button
+            type="button"
+            :disabled="event.isArchived"
+            class="bg-red-500 opacity-50 text-white mx-2 px-4 py-2 rounded"
+            :class="{ 'opacity-100': !event.isArchived }"
+            @click="archiveCurrentEvent"
+          >
+            イベントをアーカイブする
           </button>
         </div>
       </div>
@@ -28,7 +37,7 @@ import Swal from "sweetalert2";
 
 import EventInputForm from "../components/EventInputForm.vue";
 import { emptyEvent, Event } from "../models/event";
-import { findEventById, saveEvent, verifyEventPassword } from "../repository";
+import { findEventById, saveEvent, verifyEventPassword, archiveEvent } from "../repository";
 
 export default defineComponent({
   name: "EventEdit",
@@ -51,7 +60,7 @@ export default defineComponent({
     };
 
     const formValidated = computed(() => {
-      return event.value.isValid();
+      return event.value.isValid() && !event.value.isArchived;
     });
 
     const saveUpdatedEvent = () => {
@@ -69,6 +78,17 @@ export default defineComponent({
       });
     };
 
+    const archiveCurrentEvent = () => {
+      archiveEvent(event.value.id, passwordInput).then(() => {
+        Swal.fire({
+          title: "イベントをアーカイブしました",
+          icon: "info",
+          showConfirmButton: false,
+        });
+        router.push(`/event/${event.value.id}`);
+      });
+    };
+
     onMounted(() => {
       findEventById(props.eventId).then((currentEvent) => {
         initialEvent.value = currentEvent;
@@ -80,13 +100,19 @@ export default defineComponent({
         input: "password",
         inputPlaceholder: "パスワード",
         inputValidator: (value: string) =>
-          verifyEventPassword(props.eventId, value).then((verified) => {
-            if (!verified) {
-              return "パスワードが間違っています";
-            }
-            passwordInput = value;
-            return null;
-          }),
+          verifyEventPassword(props.eventId, value)
+            .then((verified) => {
+              console.dir({ verified });
+              if (!verified) {
+                return "パスワードが間違っています";
+              }
+              passwordInput = value;
+              return null;
+            })
+            .catch((e) => {
+              console.error(e);
+              return "エラーのため編集できません";
+            }),
         confirmButtonText: "確認する",
         showCancelButton: true,
         cancelButtonText: "戻る",
@@ -103,6 +129,7 @@ export default defineComponent({
       updateEvent,
       formValidated,
       saveUpdatedEvent,
+      archiveCurrentEvent,
     };
   },
 });
