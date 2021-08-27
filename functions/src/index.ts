@@ -115,41 +115,41 @@ api.get("/event/:eventId/comments", (req, res) => {
   const eventId = req.params["eventId"];
   const comments: CommentResponse[] = [];
 
-  eventIsArchived(eventId).then((isArchived: boolean) => {
-      if (isArchived) {
-        storage.bucket().file(`archives/${eventId}.json`).createReadStream()
-          .on("error", (error) => {
-            console.error(error);
-            res.status(500);
-          })
-          .on("data", (data) => {
-            // console.dir({ data });
-            res.set("Cache-Control", "public, max-age=86400, s-maxage=86400");
-            res.send(data);
-          });
-      } else {
-        firestore.collection(`comments-${eventId}`).stream()
-          .on("error", (error) => {
-            console.error(error);
-            res.status(500);
-          })
-          .on("data", (snapshot) => {
-            // console.dir({ snapshot });
-            comments.push(snapshot.data());
-          })
-          .on("end", () => {
-            res.set("Cache-Control", "public, max-age=1, s-maxage=1");
-            res.json(comments);
-          });
-      }
-    })
+  return eventIsArchived(eventId).then((isArchived: boolean) => {
+    if (isArchived) {
+      storage.bucket().file(`archives/${eventId}.json`).createReadStream()
+        .on("error", (error) => {
+          console.error(error);
+          res.status(500);
+        })
+        .on("data", (data) => {
+          // console.dir({ data });
+          res.set("Cache-Control", "public, max-age=86400, s-maxage=86400");
+          res.send(data);
+        });
+    } else {
+      firestore.collection(`comments-${eventId}`).stream()
+        .on("error", (error) => {
+          console.error(error);
+          res.status(500);
+        })
+        .on("data", (snapshot) => {
+          // console.dir({ snapshot });
+          comments.push(snapshot.data());
+        })
+        .on("end", () => {
+          res.set("Cache-Control", "public, max-age=1, s-maxage=1");
+          res.json(comments);
+        });
+    }
+  })
 });
 
 api.post("/event/:eventId/verify", async (req, res) => {
   const eventId = req.params["eventId"];
   const { password } = req.body as EventPasswordRequest;
 
-  firestore
+  return firestore
     .doc(`event-secrets/${eventId}`)
     .get()
     .then((snapshot) => {
@@ -196,20 +196,19 @@ const archiveEvent = (event: Event): Promise<boolean> => {
   // コメントをfirestoreから削除
   const removeComments = () => {
     return firestore.collection(`comments-${event.id}`).get().then((commentsSnapshot: QuerySnapshot) => {
-      return commentsSnapshot.docs.forEach(doc => { doc.ref.delete() });
+      return commentsSnapshot.docs.forEach(doc => doc.ref.delete());
     })
   }
 
-  fetchComments
+  return fetchComments
     .then(uploadCommentsToStorage)
     .then(updateEvent)
     .then(removeComments)
+    .then(() => { return true; })
     .catch((e) => {
       console.error(e);
       return false;
     });
-
-  return Promise.resolve(true);
 }
 
 /**
@@ -224,8 +223,10 @@ api.post("/event/:eventId/archive", async (req, res) => {
   const eventId = req.params["eventId"];
   const { password } = req.body as EventPasswordRequest;
 
-  Promise.all([firestore.doc(`event-secrets/${eventId}`).get(),
-  firestore.doc(`events/${eventId}`).get()])
+  return Promise.all([
+    firestore.doc(`event-secrets/${eventId}`).get(),
+    firestore.doc(`events/${eventId}`).get()
+  ])
     .then(([secretSnapshot, eventSnapshot]) => {
       const { hashedPassword } = secretSnapshot.data() as { hashedPassword: string };
       const event = eventSnapshot.data() as Event;
@@ -259,22 +260,23 @@ api.post("/event/:eventId/comment", (req, res) => {
   const eventId = req.params["eventId"];
   const comment = req.body as CommentRequest;
 
-  eventIsArchived(eventId).then((isArchived) => {
+  return eventIsArchived(eventId).then((isArchived) => {
     if (isArchived) {
       res.status(400).json({ message: "This event is already archived." });
       return;
+    } else {
+      return firestore
+        .doc(`comments-${eventId}/${comment.id}`)
+        .create(comment)
+        .then(() => res.json({ message: "ok" }))
+        .catch((e) => {
+          console.error(e);
+          res.status(404);
+          res.json({ message: "not found" });
+        });
     }
   });
-
-  firestore
-    .doc(`comments-${eventId}/${comment.id}`)
-    .create(comment)
-    .then(() => res.json({ message: "ok" }))
-    .catch((e) => {
-      console.error(e);
-      res.status(404);
-      res.json({ message: "not found" });
-    });
+  
 });
 
 api.post("/event/:eventId/comment/:commentId/like", (req, res) => {
@@ -282,44 +284,35 @@ api.post("/event/:eventId/comment/:commentId/like", (req, res) => {
   const commentId = req.params["commentId"];
   const likeReq = req.body as CommentLikeRequest;
 
-  eventIsArchived(eventId).then((isArchived) => {
-    if (isArchived) {
-      res.status(400).json({ message: "This event is already archived." });
-      return;
-    }
-  });
-
   const arrayUpdate = likeReq.remove
     ? firebase.firestore.FieldValue.arrayRemove
     : firebase.firestore.FieldValue.arrayUnion;
 
-  const docRef = firestore.doc(`comments-${eventId}/${commentId}`);
-  docRef
-    .update({
-      likes: arrayUpdate(likeReq.userIdHashed),
-    })
-    .then(() => {
-      res.json({ message: "ok" });
-    })
-    .catch((e) => {
-      console.error(e);
-      res.status(400);
-      res.json({ message: "failed" });
-    });
+  return eventIsArchived(eventId).then((isArchived) => {
+    if (isArchived) {
+      res.status(400).json({ message: "This event is already archived." });
+      return;
+    } else {
+      return firestore.doc(`comments-${eventId}/${commentId}`)
+        .update({
+          likes: arrayUpdate(likeReq.userIdHashed),
+        })
+        .then(() => {
+          res.json({ message: "ok" });
+        })
+        .catch((e) => {
+          console.error(e);
+          res.status(400);
+          res.json({ message: "failed" });
+        });
+    }
+  });
 });
 
 api.post("/event/:eventId/comment/:commentId/delete", (req, res) => {
   const eventId = req.params["eventId"];
   const commentId = req.params["commentId"];
   const deleteReq = req.body as CommentDeleteRequest;
-
-  eventIsArchived(eventId).then((isArchived) => {
-    if (isArchived) {
-      res.status(400).json({ message: "This event is already archived." });
-      return;
-    }
-  });
-
   const deleteComment = (data: { userIdHashed: string }): Promise<WriteResult> => {
     const { userIdHashed } = data;
     if (userIdHashed === jssha256.sha256(deleteReq.userId)) {
@@ -329,22 +322,29 @@ api.post("/event/:eventId/comment/:commentId/delete", (req, res) => {
     }
   };
 
-  firestore
-    .doc(`comments-${eventId}/${commentId}`)
-    .get()
-    .then((snapshot) => {
-      if (snapshot.exists) {
-        return deleteComment(snapshot.data() as { userIdHashed: string });
-      } else {
-        return Promise.reject("not found");
-      }
-    })
-    .then(() => res.json({ message: "ok" }))
-    .catch((e) => {
-      console.error(e);
-      res.status(403);
-      res.json({ message: "failed" });
-    });
+  return eventIsArchived(eventId).then((isArchived) => {
+    if (isArchived) {
+      res.status(400).json({ message: "This event is already archived." });
+      return;
+    } else {
+      return firestore
+        .doc(`comments-${eventId}/${commentId}`)
+        .get()
+        .then((snapshot) => {
+          if (snapshot.exists) {
+            return deleteComment(snapshot.data() as { userIdHashed: string });
+          } else {
+            return Promise.reject("not found");
+          }
+        })
+        .then(() => res.json({ message: "ok" }))
+        .catch((e) => {
+          console.error(e);
+          res.status(403);
+          res.json({ message: "failed" });
+        });
+    }
+  });
 });
 
 app.use("/api", api);
@@ -354,13 +354,14 @@ exports.app = functions.https.onRequest(app);
 // 定期的に開催日を過ぎたイベントをアーカイブする
 exports.scheduledArchiveEvent = functions.pubsub.schedule("0 12 * * * ").timeZone("Asia/Tokyo").onRun((context) => {
   console.log("Checking events to be archived...");
-  firestore.collection("events").where("isArchived", "!=", true).get().then((querySnapshot) => {
-    querySnapshot.docs.forEach((eventSnapshot) => {
+  return firestore.collection("events").where("isArchived", "!=", true).get().then((querySnapshot) => {
+    return querySnapshot.docs.forEach((eventSnapshot) => {
       const event = eventSnapshot.data() as Event;
       console.dir({ event });
-      if (dayjs(event.dateOfEvent).add(2, "day").isBefore(dayjs())) {
-        archiveEvent(event);
+      if (dayjs(event.dateOfEvent).add(8, "day").isBefore(dayjs())) {
+        return archiveEvent(event);
       }
+      return;
     })
   })
 })
