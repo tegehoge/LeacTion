@@ -78,15 +78,23 @@ export default defineComponent({
       });
     };
 
-    const archiveCurrentEvent = () => {
-      archiveEvent(event.value.id, passwordInput).then(() => {
-        Swal.fire({
-          title: "イベントをアーカイブしました",
-          icon: "info",
-          showConfirmButton: false,
-        });
-        router.push(`/event/${event.value.id}`);
+    const archiveCurrentEvent = async () => {
+      const confirmResult = await Swal.fire({
+        title: "アーカイブするとコメントできなくなります。<br>本当に削除しますか？",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "アーカイブ",
+        cancelButtonText: "キャンセル",
+        confirmButtonColor: "red",
       });
+      if (confirmResult.isConfirmed) {
+        const archiveResult = await archiveEvent(event.value.id, passwordInput);
+        if (archiveResult) {
+          router.push(`/event/${event.value.id}`);
+        } else {
+          console.error("Failed to archive event.");
+        }
+      }
     };
 
     onMounted(() => {
@@ -102,7 +110,7 @@ export default defineComponent({
         inputValidator: (value: string) =>
           verifyEventPassword(props.eventId, value)
             .then((verified) => {
-              console.dir({ verified });
+              // console.dir({ verified });
               if (!verified) {
                 return "パスワードが間違っています";
               }
