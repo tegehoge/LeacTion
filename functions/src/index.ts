@@ -4,7 +4,7 @@ import * as express from "express";
 import * as bcrypt from "bcrypt";
 import * as jssha256 from "js-sha256";
 import * as fs from "fs";
-import * as dayjs from "dayjs";
+// import * as dayjs from "dayjs";
 import { WriteResult, QuerySnapshot } from "@google-cloud/firestore";
 
 import {
