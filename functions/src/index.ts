@@ -352,6 +352,7 @@ app.use("/api", api);
 exports.app = functions.https.onRequest(app);
 
 // 定期的に開催日を過ぎたイベントをアーカイブする
+/*
 exports.scheduledArchiveEvent = functions.pubsub.schedule("0 12 * * * ").timeZone("Asia/Tokyo").onRun((context) => {
   console.log("Checking events to be archived...");
   return firestore.collection("events").where("isArchived", "!=", true).get().then((querySnapshot) => {
@@ -364,4 +365,5 @@ exports.scheduledArchiveEvent = functions.pubsub.schedule("0 12 * * * ").timeZon
       return;
     })
   })
-})
+});
+*/

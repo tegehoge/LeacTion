@@ -37,7 +37,7 @@
             @input="updateEvent"
           />
         </div>
-        <p class="text-xs text-gray-500">※開催日から一週間後に自動的にアーカイブされます</p>
+        <!--<p class="text-xs text-gray-500">※開催日から一週間後に自動的にアーカイブされます</p>-->
       </div>
     </div>
 
