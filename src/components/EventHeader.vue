@@ -113,6 +113,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref } from "vue";
+import Swal from "sweetalert2";
 
 import Modal from "./Modal.vue";
 
@@ -143,10 +144,15 @@ export default defineComponent({
     const currentUrl = location.href;
 
     const copyUrl = () => {
-      const urlInput = document.getElementById("share-url") as HTMLInputElement;
-      urlInput.select();
-      document.execCommand("copy");
-      urlInput.blur();
+      navigator.clipboard.writeText(currentUrl).then(() => {
+        Swal.fire({
+          title: "URLをコピーしました！",
+          position: "top-end",
+          toast: true,
+          showConfirmButton: false,
+          timer: 1000,
+        });
+      });
     };
 
     // create QR Code image via API. ref http://goqr.me/api/
