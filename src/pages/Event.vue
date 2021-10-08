@@ -19,6 +19,8 @@
           :user-id-hashed="userContext.userIdHashed"
           :user-id="userContext.userId"
           :is-archived="event?.isArchived"
+          :highlighted="highlightedCommentId == comment.id"
+          @toggle-highlight="toggleHighlight(comment.id)"
         >
         </CommentBlock>
         <div v-if="commentsForTalk.length === 0" class="py-10 w-full text-center">
@@ -138,6 +140,10 @@ export default defineComponent({
     const event = ref<Event>();
     const currentTalk = ref<Talk>();
     const comments = ref<Comment[]>([]);
+    const highlightedCommentId = ref<String>();
+    const toggleHighlight = (commentId: string) => {
+      highlightedCommentId.value = highlightedCommentId.value == commentId ? undefined : commentId;
+    };
 
     const commentsForTalk = computed(() => {
       const targetComments = comments.value.filter((c) => c.talkId === currentTalk.value?.id);
@@ -271,6 +277,8 @@ export default defineComponent({
       event,
       currentTalk,
       comments,
+      highlightedCommentId,
+      toggleHighlight,
       commentsForTalk,
       addComment,
       userContext,
