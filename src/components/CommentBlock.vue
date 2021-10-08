@@ -2,7 +2,9 @@
   <div class="w-full mb-2">
     <div
       class="rounded-md shadow-sm mx-2 px-3 py-2 bg-white h-full"
+      :class="{ 'bg-yellow-200': highlighted }"
       :title="comment.postedAt.format('YYYY-MM-DD HH:mm:ss')"
+      @click="$emit('toggleHighlight')"
     >
       <div class="float-right flex">
         <div class="text-sm leading-6">
@@ -64,8 +66,12 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    highlighted: {
+      type: Boolean,
+      required: true,
+    },
   },
-  emits: [],
+  emits: ["toggleHighlight"],
   setup(props, { emit }) {
     const isLiked = computed(() => props.comment.isLikedBy(props.userIdHashed) || false);
     const isMine = computed(() => props.comment.userIdHashed == props.userIdHashed);
