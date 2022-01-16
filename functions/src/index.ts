@@ -3,7 +3,7 @@ import * as firebase from "firebase-admin";
 import * as express from "express";
 import * as bcrypt from "bcrypt";
 import * as jssha256 from "js-sha256";
-import { WriteResult } from "@google-cloud/firestore";
+import { WriteResult } from "firebase-admin/firestore";
 
 import {
   EventRequestWithPassword,
