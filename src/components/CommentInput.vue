@@ -1,3 +1,56 @@
+<script setup lang="ts">
+import Swal from "sweetalert2";
+import { computed, onMounted, ref } from "vue";
+
+import { Comment } from "../models/comment";
+
+interface Props {
+  eventId: string;
+  userIdHashed: string;
+  talkId: string;
+}
+const props = defineProps<Props>();
+
+interface Emits {
+  (e: "add-comment", comment: Comment): void;
+}
+const emit = defineEmits<Emits>();
+
+const commentInput = ref("");
+const inputForm = ref<HTMLTextAreaElement>();
+const canSend = computed(() => commentInput.value.replace(/\s*/m, "") !== "");
+const lineCount = computed(() => commentInput.value.split(/\r\n|\r|\n/).length);
+
+const sendComment = () => {
+  if (canSend.value) {
+    const comment = new Comment(
+      commentInput.value,
+      props.userIdHashed,
+      props.eventId,
+      props.talkId
+    );
+    emit("add-comment", comment);
+    Swal.fire({
+      title: "コメントを投稿しました！",
+      position: "top-end",
+      toast: true,
+      showConfirmButton: false,
+      timer: 1000,
+    });
+    commentInput.value = "";
+    inputForm.value?.focus();
+  }
+};
+
+const addNewline = () => {
+  commentInput.value = `${commentInput.value}\n`;
+};
+
+onMounted(() => {
+  inputForm.value?.focus();
+});
+</script>
+
 <template>
   <div class="flex w-full text-center items-start mx-auto">
     <div class="flex-grow pr-2">
@@ -26,64 +79,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import Swal from "sweetalert2";
-import { defineComponent, computed, onMounted, ref } from "vue";
-
-import { Comment } from "../models/comment";
-
-export default defineComponent({
-  props: {
-    eventId: {
-      type: String,
-      required: true,
-    },
-    userIdHashed: {
-      type: String,
-      required: true,
-    },
-    talkId: {
-      type: String,
-      required: true,
-    },
-  },
-  emits: ["add-comment"],
-  setup(props, { emit }) {
-    const commentInput = ref("");
-    const inputForm = ref<HTMLTextAreaElement>();
-    const canSend = computed(() => commentInput.value.replace(/\s*/m, "") !== "");
-    const lineCount = computed(() => commentInput.value.split(/\r\n|\r|\n/).length);
-
-    const sendComment = () => {
-      if (canSend.value) {
-        const comment = new Comment(
-          commentInput.value,
-          props.userIdHashed,
-          props.eventId,
-          props.talkId
-        );
-        emit("add-comment", comment);
-        Swal.fire({
-          title: "コメントを投稿しました！",
-          position: "top-end",
-          toast: true,
-          showConfirmButton: false,
-          timer: 1000,
-        });
-        commentInput.value = "";
-        inputForm.value?.focus();
-      }
-    };
-
-    const addNewline = () => {
-      commentInput.value = `${commentInput.value}\n`;
-    };
-
-    onMounted(() => {
-      inputForm.value?.focus();
-    });
-    return { commentInput, lineCount, sendComment, addNewline, inputForm, canSend };
-  },
-});
-</script>

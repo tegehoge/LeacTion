@@ -1,3 +1,5 @@
+<script setup lang="ts"></script>
+
 <template>
   <header class="bg-blue-700 text-white">
     <nav class="flex items-center justify-between p-1 md:p-3">
@@ -10,20 +12,9 @@
           class="text-white"
           target="_blank"
           rel="noopener noreferrer"
-          ><font-awesome-icon :icon="['fab', 'github']" class="text-3xl"
+          ><FontAwesomeIcon :icon="['fab', 'github']" class="text-3xl"
         /></a>
       </div>
     </nav>
   </header>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "AppHeader",
-  setup() {
-    return {};
-  },
-});
-</script>

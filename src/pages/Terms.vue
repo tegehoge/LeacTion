@@ -1,5 +1,7 @@
+<script setup lang="ts"></script>
+
 <template>
-  <app-header></app-header>
+  <AppHeader />
   <div class="py-3 px-5 pt-8 mx-auto text-gray-700 leading-7 container">
     <h1 class="text-2xl py-2">利用規約</h1>
     <p class="pl-2">
@@ -105,18 +107,5 @@
     <div class="text-right">以上</div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-import AppHeader from "../components/AppHeader.vue";
-
-export default defineComponent({
-  components: { AppHeader },
-  name: "Terms",
-  setup(props, context) {
-    return {};
-  },
-});
-</script>
 
 <style></style>

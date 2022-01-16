@@ -1,5 +1,76 @@
+<script setup lang="ts">
+import dayjs from "dayjs";
+import { ref, computed, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import Swal from "sweetalert2";
+
+import { Event } from "../models/event";
+import { saveEvent } from "../repository";
+import EventInputForm from "../components/EventInputForm.vue";
+
+const router = useRouter();
+
+const initialEvent = new Event("", dayjs().format("YYYY-MM-DD"));
+const event = ref<Event>(initialEvent);
+
+const updateEvent = (e: Event): void => {
+  event.value = e;
+};
+
+const saveCurrentEvent = () => {
+  if (formValidated.value && eventPassword.value != null) {
+    event.value.talks = event.value.talks.filter((talk) => !talk.isEmpty());
+    // console.log(JSON.stringify(event));
+    saveEvent(event.value, eventPassword.value)
+      .then((savedEvent) => {
+        Swal.fire({
+          title: "完了！",
+          html: `イベントを作成しました！<br />URLを共有してイベントを盛り上げましょう！`,
+          icon: "success",
+        });
+        router.push(`/event/${savedEvent.id}`);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  }
+};
+
+const eventPassword = ref<string | null>(null);
+const eventPasswordConfirm = ref<string | null>(null);
+const invalidPassword = computed(() => {
+  if (eventPasswordConfirm.value == null) {
+    return null; // 未入力
+  }
+  if ((eventPassword.value || "").length > 0 && eventPassword.value == eventPasswordConfirm.value) {
+    return false;
+  }
+  return true;
+});
+
+const formValidated = computed(() => {
+  return event.value.isValidFuture() && invalidPassword.value == false;
+});
+
+onMounted(() => {
+  Swal.fire({
+    icon: "warning",
+    title: "サービス利用に関する注意",
+    html:
+      '<ul class="list-disc leading-relaxed text-left">' +
+      "<li>本サービスへ投稿されたイベント名やコメントは全て一般公開されています。<br>他の利用者を不快にさせるコメントや公開してはならない情報は書き込まないようにイベント参加者へ注意喚起をお願いします。</li>" +
+      '<li>個別のサポートは行っておりません。不具合報告・要望などは<a class="text-blue-500" href="https://github.com/tegehoge/LeacTion/issues/new" target="_blank" rel="noopener noreferrer">Github</a>へ投稿してください。</li>' +
+      "<li>予告なくサービスの変更や停止を行う場合があります。予めご了承ください。</li>" +
+      "</ul>",
+    confirmButtonText: "確認しました",
+    allowOutsideClick: false,
+    width: "80vw",
+  });
+});
+</script>
+
 <template>
-  <app-header></app-header>
+  <AppHeader />
   <div>
     <h2 class="my-5 text-3xl text-center font-bold">新規イベントを登録する</h2>
 
@@ -64,94 +135,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import dayjs from "dayjs";
-import { ref, defineComponent, computed, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import Swal from "sweetalert2";
-
-import { Event } from "../models/event";
-import { saveEvent } from "../repository";
-import EventInputForm from "../components/EventInputForm.vue";
-
-export default defineComponent({
-  name: "NewEvent",
-  components: { EventInputForm },
-  setup() {
-    const router = useRouter();
-
-    const initialEvent = new Event("", dayjs().format("YYYY-MM-DD"));
-    const event = ref<Event>(initialEvent);
-
-    const updateEvent = (e: Event): void => {
-      event.value = e;
-    };
-
-    const saveCurrentEvent = () => {
-      if (formValidated.value && eventPassword.value != null) {
-        event.value.talks = event.value.talks.filter((talk) => !talk.isEmpty());
-        // console.log(JSON.stringify(event));
-        saveEvent(event.value, eventPassword.value)
-          .then((savedEvent) => {
-            Swal.fire({
-              title: "完了！",
-              html: `イベントを作成しました！<br />URLを共有してイベントを盛り上げましょう！`,
-              icon: "success",
-            });
-            router.push(`/event/${savedEvent.id}`);
-          })
-          .catch((e) => {
-            console.error(e);
-          });
-      }
-    };
-
-    const eventPassword = ref<string | null>(null);
-    const eventPasswordConfirm = ref<string | null>(null);
-    const invalidPassword = computed(() => {
-      if (eventPasswordConfirm.value == null) {
-        return null; // 未入力
-      }
-      if (
-        (eventPassword.value || "").length > 0 &&
-        eventPassword.value == eventPasswordConfirm.value
-      ) {
-        return false;
-      }
-      return true;
-    });
-
-    const formValidated = computed(() => {
-      return event.value.isValidFuture() && invalidPassword.value == false;
-    });
-
-    onMounted(() => {
-      Swal.fire({
-        icon: "warning",
-        title: "サービス利用に関する注意",
-        html:
-          '<ul class="list-disc leading-relaxed text-left">' +
-          "<li>本サービスへ投稿されたイベント名やコメントは全て一般公開されています。<br>他の利用者を不快にさせるコメントや公開してはならない情報は書き込まないようにイベント参加者へ注意喚起をお願いします。</li>" +
-          '<li>個別のサポートは行っておりません。不具合報告・要望などは<a class="text-blue-500" href="https://github.com/tegehoge/LeacTion/issues/new" target="_blank" rel="noopener noreferrer">Github</a>へ投稿してください。</li>' +
-          "<li>予告なくサービスの変更や停止を行う場合があります。予めご了承ください。</li>" +
-          "</ul>",
-        confirmButtonText: "確認しました",
-        allowOutsideClick: false,
-        width: "80vw",
-      });
-    });
-
-    return {
-      initialEvent,
-      event,
-      updateEvent,
-      saveCurrentEvent,
-      eventPassword,
-      eventPasswordConfirm,
-      invalidPassword,
-      formValidated,
-    };
-  },
-});
-</script>
