@@ -98,8 +98,8 @@ import { Talk } from "../models/talk";
 import { findAllCommentByEventId, findEventById, saveComment } from "../repository";
 import { UserContext } from "../models/user_context";
 
-import { firestore } from "../client/firebase";
-import { DocumentSnapshot, FirestoreError, QuerySnapshot } from "@firebase/firestore-types";
+import { createFirestore } from "../client/firebase";
+import { Firestore, collection, doc, onSnapshot } from "firebase/firestore";
 
 const createOrGetUserContext = () => {
   const savedUserContext = localStorage.getItem("user_context");
@@ -135,6 +135,7 @@ export default defineComponent({
   },
   setup(props) {
     const router = useRouter();
+    const firestore: Firestore | null = createFirestore();
 
     const event = ref<Event>();
     const currentTalk = ref<Talk>();
@@ -176,44 +177,35 @@ export default defineComponent({
     let unsubscribeComments: void | (() => void);
 
     if (firestore) {
-      unsubscribeEvent = firestore
-        .collection("events")
-        .doc(props.eventId)
-        .onSnapshot(
-          (updatedEvent: DocumentSnapshot) => {
-            const updatedEventData = updatedEvent.data() as EventResponse | undefined;
-            if (updatedEventData !== undefined) {
-              event.value = Event.fromObj(updatedEventData);
-              currentTalk.value = Talk.fromObj(updatedEventData.talks[0]);
-            }
-          },
-          (error: FirestoreError) => {
-            console.error(error);
-            console.debug("Failed to fetch event.");
-            router.push("/");
+      const docRef = doc(firestore, `events/${props.eventId}`);
+      unsubscribeEvent = onSnapshot(docRef, (snapshot) => {
+        const updatedEventData = snapshot.data() as EventResponse | undefined;
+        if (updatedEventData !== undefined) {
+          event.value = Event.fromObj(updatedEventData);
+          console.dir(event.value);
+          currentTalk.value = Talk.fromObj(updatedEventData.talks[0]);
+        }
+      });
+      const collectionRef = collection(firestore, `comments-${props.eventId}`);
+      unsubscribeComments = onSnapshot(collectionRef, (snapshot) => {
+        const wasBottom = isBottom();
+        snapshot.docChanges().forEach((change) => {
+          const targetComment = Comment.fromObj(change.doc.data() as CommentResponse);
+          if (change.type == "added") {
+            comments.value.push(targetComment);
+            haveReadAll.value = false;
+          } else if (change.type == "modified") {
+            const i = comments.value.findIndex((c) => c.id === targetComment.id);
+            comments.value.splice(i, 1, targetComment);
+          } else if (change.type == "removed") {
+            comments.value = comments.value.filter((c) => c.id !== targetComment.id);
           }
-        );
-      unsubscribeComments = firestore
-        .collection(`comments-${props.eventId}`)
-        .onSnapshot((updatedComments: QuerySnapshot) => {
-          const wasBottom = isBottom();
-          updatedComments.docChanges().forEach((change) => {
-            const targetComment = Comment.fromObj(change.doc.data() as CommentResponse);
-            if (change.type == "added") {
-              comments.value.push(targetComment);
-              haveReadAll.value = false;
-            } else if (change.type == "modified") {
-              const i = comments.value.findIndex((c) => c.id === targetComment.id);
-              comments.value.splice(i, 1, targetComment);
-            } else if (change.type == "removed") {
-              comments.value = comments.value.filter((c) => c.id !== targetComment.id);
-            }
-          });
-          if (wasBottom) {
-            setTimeout(scrollToBottom, 0);
-          }
-          checkRead();
         });
+        if (wasBottom) {
+          setTimeout(scrollToBottom, 0);
+        }
+        checkRead();
+      });
     }
 
     onMounted(async () => {
