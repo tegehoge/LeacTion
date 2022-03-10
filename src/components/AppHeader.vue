@@ -2,7 +2,7 @@
   <header class="bg-blue-700 text-white">
     <nav class="flex items-center justify-between p-1 md:p-3">
       <div class="pr-5">
-        <h1 class="text-3xl">LeacTion!</h1>
+        <h1 class="text-3xl"><router-link to="/">LeacTion!</router-link></h1>
       </div>
       <div>
         <a
