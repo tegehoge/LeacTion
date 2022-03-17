@@ -80,12 +80,14 @@ export default defineComponent({
 
     const archiveCurrentEvent = async () => {
       const confirmResult = await Swal.fire({
-        title: "アーカイブするとコメントできなくなります。<br>本当に削除しますか？",
+        title: "アーカイブしてよろしいですか？",
+        html: "アーカイブするとコメントの追加や削除、イベント情報の更新ができなくなります。<br>一度アーカイブすると解除することができません。",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "アーカイブ",
+        confirmButtonText: "上記理解した上でアーカイブする",
         cancelButtonText: "キャンセル",
         confirmButtonColor: "red",
+        width: "80vw",
       });
       if (confirmResult.isConfirmed) {
         const archiveResult = await archiveEvent(event.value.id, passwordInput);
