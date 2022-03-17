@@ -9,7 +9,7 @@
       <div class="float-right flex">
         <div class="text-sm leading-6">
           <button
-            v-if="isMine"
+            v-if="isMine && !isArchived"
             class="text-red-500 px-1 mr-0.5"
             type="button"
             title="コメントを削除する"
@@ -29,7 +29,7 @@
               'bg-green-500': !isMine,
               'bg-gray-500 opacity-50 cursor-not-allowed': isMine,
             }"
-            :disabled="isMine"
+            :disabled="isMine || isArchived"
             @click="toggleLike"
           >
             <font-awesome-icon v-if="!isLiked" :icon="['fas', 'thumbs-up']" fixed-width />
@@ -65,6 +65,11 @@ export default defineComponent({
     userIdHashed: {
       type: String,
       required: true,
+    },
+    isArchived: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
     highlighted: {
       type: Boolean,

@@ -20,7 +20,19 @@ export class FirebaseEventRepository implements EventRepository {
   }
 
   verifyPassword(eventId: string, password: string): Promise<boolean> {
-    return axios.post(`/api/event/${eventId}/verify`, { password }).then((res) => {
+    return axios
+      .post(`/api/event/${eventId}/verify`, { password })
+      .then((res) => {
+        return res.data.message == "ok";
+      })
+      .catch((e) => {
+        console.dir(e);
+        return Promise.reject(e);
+      });
+  }
+
+  archiveEvent(eventId: string, password: string): Promise<boolean> {
+    return axios.post(`/api/event/${eventId}/archive`, { password }).then((res) => {
       return res.status == 200;
     });
   }
@@ -52,8 +64,10 @@ export class FirebaseCommentRepository implements CommentRepository {
   }
 
   delete(eventId: string, commentId: string, userId: string): Promise<boolean> {
-    return axios.post(`/api/event/${eventId}/comment/${commentId}/delete`, { userId }).then((res) => {
-      return res.status == 200;
-    });
+    return axios
+      .post(`/api/event/${eventId}/comment/${commentId}/delete`, { userId })
+      .then((res) => {
+        return res.status == 200;
+      });
   }
 }
