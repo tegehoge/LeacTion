@@ -71,7 +71,7 @@ onMounted(() => {
 
 <template>
   <form class="max-w-5xl mx-auto px-2">
-    <div class="md:flex md:items-center pb-0 md:pb-3">
+    <div class="md:flex pb-0 md:pb-3">
       <div class="md:w-2/3">
         <div>
           <label for="eventName" class="text-input-label"
@@ -108,6 +108,7 @@ onMounted(() => {
             @input="updateEvent"
           />
         </div>
+        <!--<p class="text-xs text-gray-500">※開催日から一週間後に自動的にアーカイブされます</p>-->
       </div>
     </div>
 

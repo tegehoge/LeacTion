@@ -11,6 +11,7 @@ export class Event {
   talks: Talk[];
   externalUrl?: string; // URL
   hashtag?: string;
+  isArchived: boolean;
 
   constructor(
     name: string,
@@ -18,7 +19,8 @@ export class Event {
     id?: EventId,
     talks?: Talk[],
     externalUrl?: string,
-    hashtag?: string
+    hashtag?: string,
+    isArchived?: boolean
   ) {
     this.id = id || nanoid(8);
     this.name = name;
@@ -26,6 +28,7 @@ export class Event {
     this.talks = talks || [];
     this.externalUrl = externalUrl;
     this.hashtag = hashtag;
+    this.isArchived = isArchived || false;
   }
 
   setExternalUrl(url: string): void {
@@ -52,7 +55,8 @@ export class Event {
       data.id,
       data.talks.map((talk) => Talk.fromObj(talk)),
       data.externalUrl,
-      data.hashtag
+      data.hashtag,
+      data.isArchived
     );
   }
 
@@ -63,7 +67,8 @@ export class Event {
       obj.id,
       obj.talks.map((talk) => Talk.fromObj(talk)),
       obj.externalUrl,
-      obj.hashtag
+      obj.hashtag,
+      obj.isArchived
     );
   }
 
@@ -78,6 +83,10 @@ export class Event {
   isValidFuture(): boolean {
     return this.isValid() && dayjs(this.dateOfEvent) >= dayjs().startOf("day");
   }
+
+  archive(): void {
+    this.isArchived = true;
+  }
 }
 
 export type EventResponse = {
@@ -87,6 +96,7 @@ export type EventResponse = {
   talks: TalkResponse[];
   externalUrl?: string; // URL
   hashtag?: string;
+  isArchived: boolean;
 };
 
 export const emptyEvent = (): Event => new Event("", dayjs().format("YYYY-MM-DD"));

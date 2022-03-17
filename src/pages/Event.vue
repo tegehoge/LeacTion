@@ -190,6 +190,7 @@ const scrollToBottom = () => {
           :comment="comment"
           :user-id-hashed="userContext.userIdHashed"
           :user-id="userContext.userId"
+          :is-archived="event?.isArchived"
           :highlighted="highlightedCommentId == comment.id"
           @toggle-highlight="toggleHighlight(comment.id)"
         >
@@ -245,7 +246,7 @@ const scrollToBottom = () => {
           </div>
         </div>
       </div>
-      <div v-if="currentTalk" class="max-w-4xl mx-autopx-3 px-3 pb-1 mx-auto">
+      <div v-if="currentTalk && !event?.isArchived" class="max-w-4xl mx-autopx-3 px-3 pb-1 mx-auto">
         <CommentInput
           :event-id="eventId"
           :user-id-hashed="userContext.userIdHashed"

@@ -22,6 +22,11 @@ export interface EventRepository {
    * @param password 管理用パスワード
    */
   verifyPassword(eventId: string, password: string): Promise<boolean>;
+
+  /**
+   * イベントをアーカイブする
+   */
+  archiveEvent(eventId: string, password: string): Promise<boolean>;
 }
 
 export interface CommentRepository {
@@ -56,9 +61,5 @@ export interface CommentRepository {
    * @param commentId コメントID
    * @param userId ハッシュ化する前のユーザーID
    */
-  delete(
-    eventId: EventId,
-    commentId: CommentId,
-    userId: string,
-  ): Promise<boolean>;
+  delete(eventId: EventId, commentId: CommentId, userId: string): Promise<boolean>;
 }

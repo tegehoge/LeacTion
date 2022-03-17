@@ -72,7 +72,7 @@ const likeCount = computed(() => props.comment.likes.length || 0);
       <div class="float-right flex">
         <div class="text-sm leading-6">
           <button
-            v-if="isMine"
+            v-if="isMine && !isArchived"
             class="text-red-500 px-1 mr-0.5"
             type="button"
             title="コメントを削除する"
@@ -92,7 +92,7 @@ const likeCount = computed(() => props.comment.likes.length || 0);
               'bg-green-500': !isMine,
               'bg-gray-500 opacity-50 cursor-not-allowed': isMine,
             }"
-            :disabled="isMine"
+            :disabled="isMine || isArchived"
             @click="toggleLike"
           >
             <FontAwesomeIcon v-if="!isLiked" :icon="['fas', 'thumbs-up']" fixed-width />

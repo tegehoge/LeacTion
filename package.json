@@ -8,8 +8,8 @@
     "serve": "(cd functions/ && tsc) && firebase serve",
     "test": "jest",
     "format": "eslint --fix src/**/*.{ts,js,vue}",
-    "deploy": "firebase deploy",
-    "emulate": "firebase emulators:start"
+    "emulate": "(cd functions/ && npm run build) && yarn build --mode emulator && firebase emulators:start",
+    "deploy": "firebase deploy"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.32",

@@ -77,15 +77,24 @@ onMounted(() => {
       <h2 class="my-5 text-3xl text-center font-bold">イベントを編集する</h2>
       <EventInputForm :initial-event="initialEvent" @update-event="updateEvent" />
       <div class="text-center py-5">
-        <div class="">
+        <div class>
           <button
             type="button"
             :disabled="!formValidated"
-            class="bg-blue-500 opacity-50 text-white px-4 py-2 rounded"
+            class="bg-blue-500 opacity-50 text-white mx-2 px-4 py-2 rounded"
             :class="{ 'opacity-100 hover:bg-blue-700': formValidated }"
             @click="saveUpdatedEvent"
           >
             イベント情報を保存する
+          </button>
+          <button
+            type="button"
+            :disabled="event.isArchived"
+            class="bg-red-500 opacity-50 text-white mx-2 px-4 py-2 rounded"
+            :class="{ 'opacity-100': !event.isArchived }"
+            @click="archiveCurrentEvent"
+          >
+            イベントをアーカイブする
           </button>
         </div>
       </div>
