@@ -3,8 +3,9 @@ import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 
 function createFirestore() {
   const isProduction = import.meta.env.PROD;
+  const isEmulator = import.meta.env.MODE == "emulator";
 
-  if (!isProduction) {
+  if (!isProduction && !isEmulator) {
     return null;
   }
 
@@ -23,7 +24,7 @@ function createFirestore() {
 
   const app = initializeApp(firebaseConfig);
   const firestore = getFirestore(app);
-  if (import.meta.env.MODE == "emulator") {
+  if (isEmulator) {
     connectFirestoreEmulator(firestore, "localhost", 8080);
   }
   return firestore;
