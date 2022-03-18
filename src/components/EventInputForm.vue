@@ -122,7 +122,11 @@
             </div>
           </div>
           <div class="ml-2">
-            <button class="px-2 py-1 text-red-300 text-lg" @click="removeTalk(element.id)">
+            <button
+              type="button"
+              class="px-2 py-1 text-red-300 text-lg"
+              @click="removeTalk(element.id)"
+            >
               <font-awesome-icon :icon="['fas', 'trash-alt']" />
             </button>
           </div>
@@ -188,8 +192,7 @@ export default defineComponent({
       if (currentTalkIds.includes(talkId)) {
         Swal.fire({
           title: "発表枠の削除",
-          text:
-            "既存の発表を削除するとすでに投稿されたコメントが閲覧できなくなります。削除してよろしいですか？",
+          text: "既存の発表を削除するとすでに投稿されたコメントが閲覧できなくなります。削除してよろしいですか？",
           icon: "warning",
           confirmButtonText: "削除する",
           showCancelButton: true,
@@ -200,6 +203,8 @@ export default defineComponent({
             fillMinimalTalks();
           }
         });
+      } else {
+        eventInput.talks = eventInput.talks.filter((talk) => talk.id != talkId);
       }
     };
 
