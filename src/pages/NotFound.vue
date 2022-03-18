@@ -11,7 +11,7 @@ import AppHeader from "../components/AppHeader.vue";
 
 export default defineComponent({
   components: { AppHeader },
-  name: "Terms",
+  name: "NotFound",
   setup(props, context) {
     return {};
   },

@@ -56,6 +56,8 @@ const removeTalk = (talkId: string) => {
         fillMinimalTalks();
       }
     });
+  } else {
+    eventInput.talks = eventInput.talks.filter((talk) => talk.id != talkId);
   }
 };
 
@@ -194,8 +196,12 @@ onMounted(() => {
             </div>
           </div>
           <div class="ml-2">
-            <button class="px-2 py-1 text-red-300 text-lg" @click="removeTalk(element.id)">
-              <FontAwesomeIcon :icon="['fas', 'trash-alt']" />
+            <button
+              type="button"
+              class="px-2 py-1 text-red-300 text-lg"
+              @click="removeTalk(element.id)"
+            >
+              <font-awesome-icon :icon="['fas', 'trash-alt']" />
             </button>
           </div>
         </div>
