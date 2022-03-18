@@ -2,6 +2,7 @@
 import dayjs from "dayjs";
 import { onMounted, ref, reactive } from "vue";
 import Swal from "sweetalert2";
+import draggable from "vuedraggable";
 
 import { Event } from "../models/event";
 import { emptyTalk } from "../models/talk";

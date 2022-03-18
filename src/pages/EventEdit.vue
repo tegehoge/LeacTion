@@ -4,7 +4,7 @@ import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 
 import { emptyEvent, Event } from "../models/event";
-import { findEventById, saveEvent, verifyEventPassword } from "../repository";
+import { findEventById, saveEvent, verifyEventPassword, archiveEvent } from "../repository";
 
 import EventInputForm from "../components/EventInputForm.vue";
 
@@ -39,6 +39,26 @@ const saveUpdatedEvent = () => {
     });
     router.push(`/event/${currentEvent.id}`);
   });
+};
+const archiveCurrentEvent = async () => {
+  const confirmResult = await Swal.fire({
+    title: "アーカイブしてよろしいですか？",
+    html: "アーカイブするとコメントの追加や削除、イベント情報の更新ができなくなります。<br>一度アーカイブすると解除することができません。",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "上記理解した上でアーカイブする",
+    cancelButtonText: "キャンセル",
+    confirmButtonColor: "red",
+    width: "80vw",
+  });
+  if (confirmResult.isConfirmed) {
+    const archiveResult = await archiveEvent(event.value.id, passwordInput);
+    if (archiveResult) {
+      router.push(`/event/${event.value.id}`);
+    } else {
+      console.error("Failed to archive event.");
+    }
+  }
 };
 
 onMounted(() => {

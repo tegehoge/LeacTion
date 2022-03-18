@@ -10,6 +10,7 @@ const props = defineProps<{
   userId: string;
   userIdHashed: string;
   highlighted: boolean;
+  isArchived: boolean;
 }>();
 
 const emit = defineEmits<{

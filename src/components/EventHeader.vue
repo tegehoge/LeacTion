@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import Swal from "sweetalert2";
+import Modal from "./Modal.vue";
 
 interface Props {
   eventId: string;
