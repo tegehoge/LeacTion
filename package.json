@@ -9,7 +9,7 @@
     "test": "jest",
     "format": "eslint --fix src/**/*.{ts,vue}",
     "emulate": "yarn build_function_for_emulator && yarn build_for_emulator && firebase emulators:start",
-    "build_for_emulator": "tsc --noEmit && NODE_ENV=production vite build --mode emulator",
+    "build_for_emulator": "tsc --noEmit && vite build --mode emulator",
     "build_function_for_emulator": "(cd functions/ && npm run build)",
     "deploy": "firebase deploy"
   },
