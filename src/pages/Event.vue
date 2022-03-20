@@ -14,8 +14,8 @@ import EventHeader from "../components/EventHeader.vue";
 import CommentBlock from "../components/CommentBlock.vue";
 import CommentInput from "../components/CommentInput.vue";
 
-import { createFirestore } from "../client/firebase";
-import { Firestore, collection, doc, onSnapshot } from "firebase/firestore";
+import { firestore } from "../client/firebase";
+import { collection, doc, onSnapshot } from "firebase/firestore";
 
 const createOrGetUserContext = () => {
   const savedUserContext = localStorage.getItem("user_context");
@@ -44,7 +44,6 @@ const props = defineProps<{
   eventId: string;
 }>();
 const router = useRouter();
-const firestore: Firestore | null = createFirestore();
 
 const event = ref<Event>();
 const currentTalk = ref<Talk>();
@@ -87,14 +86,25 @@ let unsubscribeComments: void | (() => void);
 
 if (firestore) {
   const docRef = doc(firestore, `events/${props.eventId}`);
-  unsubscribeEvent = onSnapshot(docRef, (snapshot) => {
-    const updatedEventData = snapshot.data() as EventResponse | undefined;
-    if (updatedEventData !== undefined) {
-      event.value = Event.fromObj(updatedEventData);
-      console.dir(event.value);
-      currentTalk.value = Talk.fromObj(updatedEventData.talks[0]);
+  unsubscribeEvent = onSnapshot(
+    docRef,
+    (snapshot) => {
+      const updatedEventData = snapshot.data() as EventResponse | undefined;
+      if (updatedEventData !== undefined) {
+        event.value = Event.fromObj(updatedEventData);
+        console.dir(event.value);
+        currentTalk.value = Talk.fromObj(updatedEventData.talks[0]);
+      }
+      if (event.value?.isArchived) {
+        fetchComments();
+      }
+    },
+    (error) => {
+      console.error(error);
+      console.debug("Failed to fetch event.");
+      router.push("/");
     }
-  });
+  );
   const collectionRef = collection(firestore, `comments-${props.eventId}`);
   unsubscribeComments = onSnapshot(collectionRef, (snapshot) => {
     const wasBottom = isBottom();
@@ -190,7 +200,7 @@ const scrollToBottom = () => {
           :comment="comment"
           :user-id-hashed="userContext.userIdHashed"
           :user-id="userContext.userId"
-          :is-archived="event?.isArchived"
+          :is-archived="event?.isArchived || false"
           :highlighted="highlightedCommentId == comment.id"
           @toggle-highlight="toggleHighlight(comment.id)"
         >
