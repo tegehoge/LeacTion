@@ -4,6 +4,9 @@ import * as express from "express";
 import * as bcrypt from "bcrypt";
 import * as jssha256 from "js-sha256";
 import * as fs from "fs";
+import { tmpdir } from "os";
+import { join } from "path";
+
 // import * as dayjs from "dayjs";
 import { WriteResult, QuerySnapshot } from "@google-cloud/firestore";
 
@@ -179,8 +182,7 @@ const archiveEvent = (event: Event): Promise<boolean> => {
     const comments = commentsSnapshot.docs.map(doc => doc.data()) as Comments;
 
     // 一時ファイルに保存
-    const tmpFolderPath = fs.mkdtempSync("archive");
-    const tmpFilePath = `${tmpFolderPath}/${event.id}.json`;
+    const tmpFilePath = join(tmpdir(), `${event.id}.json`);
     fs.writeFileSync(tmpFilePath, JSON.stringify(comments))
 
     // storage に保存
