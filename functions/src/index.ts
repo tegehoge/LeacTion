@@ -120,16 +120,15 @@ api.get("/event/:eventId/comments", (req, res) => {
 
   return eventIsArchived(eventId).then((isArchived: boolean) => {
     if (isArchived) {
-      storage.bucket().file(`archives/${eventId}.json`).createReadStream()
-        .on("error", (error) => {
-          console.error(error);
-          res.status(500);
-        })
-        .on("data", (data) => {
-          // console.dir({ data });
+      const tmpFilePath = join(tmpdir(), `${eventId}.json`);
+      storage.bucket().file(`archives/${eventId}.json`).download({ destination: tmpFilePath })
+        .then((_res) => {
           res.set("Cache-Control", "public, max-age=86400, s-maxage=86400");
-          res.send(data);
-        });
+          res.sendFile(tmpFilePath);
+        })
+        .catch((e) => {
+          console.error(e);
+        })
     } else {
       firestore.collection(`comments-${eventId}`).stream()
         .on("error", (error) => {
@@ -278,7 +277,7 @@ api.post("/event/:eventId/comment", (req, res) => {
         });
     }
   });
-  
+
 });
 
 api.post("/event/:eventId/comment/:commentId/like", (req, res) => {
