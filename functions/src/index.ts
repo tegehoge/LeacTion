@@ -6,6 +6,8 @@ import * as express from "express";
 import * as bcrypt from "bcrypt";
 import * as jssha256 from "js-sha256";
 import * as fs from "fs";
+import { tmpdir } from "os";
+import { join } from "path";
 
 import {
   EventRequestWithPassword,
@@ -117,16 +119,15 @@ api.get("/event/:eventId/comments", (req, res) => {
 
   return eventIsArchived(eventId).then((isArchived: boolean) => {
     if (isArchived) {
-      storage.bucket().file(`archives/${eventId}.json`).createReadStream()
-        .on("error", (error) => {
-          console.error(error);
-          res.status(500);
-        })
-        .on("data", (data) => {
-          // console.dir({ data });
+      const tmpFilePath = join(tmpdir(), `${eventId}.json`);
+      storage.bucket().file(`archives/${eventId}.json`).download({ destination: tmpFilePath })
+        .then((_res) => {
           res.set("Cache-Control", "public, max-age=86400, s-maxage=86400");
-          res.send(data);
-        });
+          res.sendFile(tmpFilePath);
+        })
+        .catch((e) => {
+          console.error(e);
+        })
     } else {
       firestore.collection(`comments-${eventId}`).stream()
         .on("error", (error) => {
@@ -179,8 +180,7 @@ const archiveEvent = (event: Event): Promise<boolean> => {
     const comments = commentsSnapshot.docs.map(doc => doc.data()) as Comments;
 
     // 一時ファイルに保存
-    const tmpFolderPath = fs.mkdtempSync("archive");
-    const tmpFilePath = `${tmpFolderPath}/${event.id}.json`;
+    const tmpFilePath = join(tmpdir(), `${event.id}.json`);
     fs.writeFileSync(tmpFilePath, JSON.stringify(comments))
 
     // storage に保存
