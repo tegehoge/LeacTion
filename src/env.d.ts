@@ -18,3 +18,12 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+// Fake type to avoid problems in "vue-gtag-next"
+// See: https://github.com/MatteoGabriele/vue-gtag-next/issues/16
+declare module "vue-gtag-next" {
+  export type VueRouter = any;
+}
+declare module "vue-router/types/router" {
+  export type Route = any;
+}
