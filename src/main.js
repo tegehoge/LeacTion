@@ -17,6 +17,7 @@ import { faTwitter, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import "sweetalert2/dist/sweetalert2.min.css";
+import VueGtag from "vue-gtag-next";
 
 import App from "./App.vue";
 import router from "./router";
@@ -44,4 +45,5 @@ app.component("FontAwesomeIcon", FontAwesomeIcon);
 app.component("AppHeader", AppHeader);
 
 app.use(router);
+app.use(VueGtag, { property: { id: "G-40Q02KF6HD" } });
 app.mount("#app");
