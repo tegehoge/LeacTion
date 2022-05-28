@@ -3,12 +3,14 @@ import dayjs from "dayjs";
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
+import { useGtag } from "vue-gtag-next";
 
 import { Event } from "../models/event";
 import { saveEvent } from "../repository";
 import EventInputForm from "../components/EventInputForm.vue";
 
 const router = useRouter();
+const gtag = useGtag();
 
 const initialEvent = new Event("", dayjs().format("YYYY-MM-DD"));
 const event = ref<Event>(initialEvent);
@@ -23,6 +25,7 @@ const saveCurrentEvent = () => {
     // console.log(JSON.stringify(event));
     saveEvent(event.value, eventPassword.value)
       .then((savedEvent) => {
+        gtag.event("leaction_event_created");
         Swal.fire({
           title: "完了！",
           html: `イベントを作成しました！<br />URLを共有してイベントを盛り上げましょう！`,

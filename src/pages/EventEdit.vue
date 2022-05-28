@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, defineProps, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
+import { useGtag } from "vue-gtag-next";
 
 import { emptyEvent, Event } from "../models/event";
 import { findEventById, saveEvent, verifyEventPassword, archiveEvent } from "../repository";
@@ -13,6 +14,7 @@ const props = defineProps<{
 }>();
 
 const router = useRouter();
+const gtag = useGtag();
 
 const initialEvent = ref<Event>();
 const event = ref<Event>(emptyEvent());
@@ -29,6 +31,7 @@ const formValidated = computed(() => {
 const saveUpdatedEvent = () => {
   event.value.talks = event.value.talks.filter((talk) => !talk.isEmpty());
   saveEvent(event.value, passwordInput).then((currentEvent) => {
+    gtag.event("leaction_event_modified");
     Swal.fire({
       title: "イベント情報を保存しました",
       icon: "info",
@@ -43,7 +46,8 @@ const saveUpdatedEvent = () => {
 const archiveCurrentEvent = async () => {
   const confirmResult = await Swal.fire({
     title: "アーカイブしてよろしいですか？",
-    html: "アーカイブするとコメントの追加や削除、イベント情報の更新ができなくなります。<br>一度アーカイブすると解除することができません。",
+    html:
+      "アーカイブするとコメントの追加や削除、イベント情報の更新ができなくなります。<br>一度アーカイブすると解除することができません。",
     icon: "warning",
     showCancelButton: true,
     confirmButtonText: "上記理解した上でアーカイブする",
@@ -53,6 +57,7 @@ const archiveCurrentEvent = async () => {
   });
   if (confirmResult.isConfirmed) {
     const archiveResult = await archiveEvent(event.value.id, passwordInput);
+    gtag.event("leaction_event_archived");
     if (archiveResult) {
       router.push(`/event/${event.value.id}`);
     } else {

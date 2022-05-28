@@ -25,6 +25,7 @@
     "nanoid": "^3.1.32",
     "sweetalert2": "^11.3.5",
     "vue": "^3.2.26",
+    "vue-gtag-next": "^1.14.0",
     "vue-router": "^4.0.12",
     "vuedraggable": "^4.0.1",
     "xss-filters": "^1.2.7"
