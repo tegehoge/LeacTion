@@ -45,5 +45,5 @@ app.component("FontAwesomeIcon", FontAwesomeIcon);
 app.component("AppHeader", AppHeader);
 
 app.use(router);
-app.use(VueGtag, { property: { id: "G-XTN587EBJZ" } });
+app.use(VueGtag, { property: { id: "G-40Q02KF6HD" } });
 app.mount("#app");
