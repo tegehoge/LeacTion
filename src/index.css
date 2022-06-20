@@ -1,22 +1,13 @@
-@tailwind base;
-
-@tailwind components;
-
-@tailwind utilities;
-
-@layer components {
-  .text-input-form {
-    @apply border-2 border-gray-400 rounded px-2 py-2;
-  }
-  .text-input-label {
-    @apply text-gray-700 font-bold text-base;
-  }
-  .date-input-form {
-    @apply border-2 border-gray-400 rounded px-2 py-2;
-    height: 44px;
-  }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.link-text {
-  @apply text-blue-700 underline;
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }

@@ -1,13 +1,10 @@
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
+import { defineConfig } from 'vite';
+import solidPlugin from 'vite-plugin-solid';
 
-export default defineConfig(({ mode }) => {
-  const isProduction = mode == "production";
-
-  return {
-    plugins: [vue()],
-    build: {
-      sourcemap: !isProduction,
-    },
-  };
+export default defineConfig({
+  plugins: [solidPlugin()],
+  build: {
+    target: 'esnext',
+    polyfillDynamicImport: false,
+  },
 });

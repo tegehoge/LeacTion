@@ -1,11 +1,2 @@
 node_modules
-.DS_Store
 dist
-*.local
-.env
-.env.*
-
-## firebase
-
-.firebase
-*-debug.log
