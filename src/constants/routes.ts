@@ -1,8 +1,9 @@
-import { Home } from "~/components/pages";
+import { lazy } from "solid-js";
 
+// @ref: https://github.com/solidjs/solid-router#config-based-routing
 export const routes = [
   {
     path: "/",
-    component: Home,
+    component: lazy(() => import("~/components/pages/Home")),
   },
-] as const;
+];

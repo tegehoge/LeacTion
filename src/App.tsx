@@ -1,17 +1,17 @@
-import { Routes, Router, Route } from "@solidjs/router";
+import { Router, useRoutes } from "@solidjs/router";
 import { ThemeProvider } from "@suid/material/styles";
-import { Component, For } from "solid-js";
+import { Component } from "solid-js";
 
 import { routes } from "~/constants/routes";
 import { createTheme } from "~/theme/createTheme";
 
 const App: Component = () => {
+  const Routes = useRoutes(routes);
+
   return (
     <ThemeProvider theme={createTheme}>
       <Router>
-        <Routes>
-          <For each={routes}>{(route) => <Route {...route} />}</For>
-        </Routes>
+        <Routes />
       </Router>
     </ThemeProvider>
   );
