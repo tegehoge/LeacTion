@@ -915,6 +915,11 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
   integrity sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==
 
+"@solidjs/router@^0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@solidjs/router/-/router-0.4.2.tgz#0755a9212e648f1220c081f65aaaa049475ab09f"
+  integrity sha512-RswymVhqnGVHMCo/01X9wE+u98pzYZQ/b23SgjO/PK+8oTgdY1f83OrsWR1A01LieTySkCSw7nunWTi+VOQyWA==
+
 "@suid/base@0.2.5":
   version "0.2.5"
   resolved "https://registry.yarnpkg.com/@suid/base/-/base-0.2.5.tgz#50143c63e343283bab9cd0505b6fec267f1f431a"
