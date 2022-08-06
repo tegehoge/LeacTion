@@ -10,7 +10,7 @@ import { Component } from "solid-js";
 import { RouterLink } from "~/components/atoms/links";
 import { Header } from "~/components/molecules/navs";
 
-const Home: Component = () => {
+const Top: Component = () => {
   const theme = useTheme();
   const { light: primaryLightColor, main: primaryMainColor } = theme.palette.primary;
 
@@ -187,4 +187,4 @@ const Home: Component = () => {
   );
 };
 
-export default Home;
+export default Top;
