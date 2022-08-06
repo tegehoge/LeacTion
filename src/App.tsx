@@ -1,4 +1,5 @@
 import { Router, useRoutes } from "@solidjs/router";
+import CssBaseline from "@suid/material/CssBaseline";
 import { ThemeProvider } from "@suid/material/styles";
 import { Component } from "solid-js";
 
@@ -10,6 +11,7 @@ const App: Component = () => {
 
   return (
     <ThemeProvider theme={createTheme}>
+      <CssBaseline />
       <Router>
         <Routes />
       </Router>
