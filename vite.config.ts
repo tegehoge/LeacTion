@@ -1,10 +1,17 @@
-import { defineConfig } from 'vite';
-import solidPlugin from 'vite-plugin-solid';
+import { resolve } from "path";
+import { defineConfig } from "vite";
+import solidPlugin from "vite-plugin-solid";
 
 export default defineConfig({
   plugins: [solidPlugin()],
   build: {
-    target: 'esnext',
+    target: "esnext",
     polyfillDynamicImport: false,
+  },
+  resolve: {
+    alias: {
+      // eslint-disable-next-line no-undef
+      "~": resolve(__dirname, "src"),
+    },
   },
 });
