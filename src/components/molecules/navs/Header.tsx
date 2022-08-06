@@ -19,24 +19,26 @@ const GitHubIcon = (props: SvgIconProps) => {
 
 const Header: Component = () => {
   return (
-    <Box>
-      <AppBar position="static" sx={{ padding: 0 }}>
-        <Toolbar>
-          <Typography variant="h5" sx={{ flexGrow: 1, fontWeight: "bold" }}>
-            <RouterLink href="/">LeacTion!</RouterLink>
-          </Typography>
-          <Link
-            href="https://github.com/tegehoge/LeacTion"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <IconButton component="span">
-              <GitHubIcon sx={{ color: "white" }} />
-            </IconButton>
-          </Link>
-        </Toolbar>
-      </AppBar>
-    </Box>
+    <header>
+      <Box>
+        <AppBar position="static" sx={{ padding: 0 }}>
+          <Toolbar>
+            <Typography variant="h5" sx={{ flexGrow: 1, fontWeight: "bold" }}>
+              <RouterLink href="/">LeacTion!</RouterLink>
+            </Typography>
+            <Link
+              href="https://github.com/tegehoge/LeacTion"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <IconButton component="span">
+                <GitHubIcon sx={{ color: "white" }} />
+              </IconButton>
+            </Link>
+          </Toolbar>
+        </AppBar>
+      </Box>
+    </header>
   );
 };
 
