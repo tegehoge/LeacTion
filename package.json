@@ -49,14 +49,14 @@
     "preset": "ts-jest",
     "globals": {
       "ts-jest": {
-        "tsconfig": "<rootDir>/src/test/tsconfig.json",
+        "tsconfig": "./tsconfig.json",
+        "isolatedModules": false,
         "babelConfig": {
           "presets": [
             "babel-preset-solid",
             "@babel/preset-env"
           ]
         },
-        "isolatedModules": false
       }
     },
     "testEnvironment": "jsdom",
