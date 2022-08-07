@@ -50,13 +50,12 @@
     "globals": {
       "ts-jest": {
         "tsconfig": "./tsconfig.json",
-        "isolatedModules": false,
         "babelConfig": {
           "presets": [
             "babel-preset-solid",
             "@babel/preset-env"
           ]
-        },
+        }
       }
     },
     "testEnvironment": "jsdom",
