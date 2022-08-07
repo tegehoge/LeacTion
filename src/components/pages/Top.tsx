@@ -14,6 +14,7 @@ import { BaseLayout } from "~/components/templates";
 const Top: Component = () => {
   const theme = useTheme();
   const { light: primaryLightColor, main: primaryMainColor } = theme.palette.primary;
+  const textColor = theme.palette.grey[700];
 
   return (
     <BaseLayout>
@@ -70,6 +71,7 @@ const Top: Component = () => {
               <Typography
                 variant="h6"
                 marginBottom="40px"
+                color={textColor}
                 sx={{
                   fontWeight: "bold",
                 }}
@@ -82,7 +84,6 @@ const Top: Component = () => {
                   <br />
                   オフラインのセミナーや勉強会はもちろん、オンラインイベントやオンライン・オフライン同時開催イベントでも利用できます。
                 </MediumSizeTextParagraph>
-                <Typography variant="subtitle2" paragraph marginBottom={0} />
               </Box>
             </Stack>
           </Paper>
@@ -92,7 +93,7 @@ const Top: Component = () => {
           <Paper elevation={0}>
             <Box marginBottom="40px">
               <LargeSizeText>LeacTion! でイベントが盛り上がる</LargeSizeText>
-              <Typography variant="h5" fontWeight="bold">
+              <Typography variant="h5" fontWeight="bold" color={textColor}>
                 ３つの理由
               </Typography>
             </Box>
@@ -102,6 +103,7 @@ const Top: Component = () => {
                   variant="subtitle1"
                   fontWeight="bold"
                   marginBottom="16px"
+                  color={textColor}
                   sx={{
                     textDecoration: "underline",
                   }}
@@ -119,6 +121,7 @@ const Top: Component = () => {
                   variant="subtitle1"
                   fontWeight="bold"
                   marginBottom="16px"
+                  color={textColor}
                   sx={{
                     textDecoration: "underline",
                   }}
@@ -135,6 +138,7 @@ const Top: Component = () => {
                   variant="subtitle1"
                   fontWeight="bold"
                   marginBottom="16px"
+                  color={textColor}
                   sx={{
                     textDecoration: "underline",
                   }}
