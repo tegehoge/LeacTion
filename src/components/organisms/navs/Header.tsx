@@ -6,8 +6,8 @@ import Toolbar from "@suid/material/Toolbar";
 import Typography from "@suid/material/Typography";
 import { Component } from "solid-js";
 
+import { GitHubIcon } from "~/components/atoms/icons";
 import { RouterLink } from "~/components/atoms/links";
-import { GitHubIcon } from "~/components/icons";
 
 const Header: Component = () => {
   return (
