@@ -4,3 +4,5 @@ describe("検証用のテスト項目", () => {
     expect(result).toBe(4);
   });
 });
+
+// export {}
