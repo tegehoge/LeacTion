@@ -49,7 +49,7 @@
     "preset": "ts-jest",
     "globals": {
       "ts-jest": {
-        "tsconfig": "./tsconfig.json",
+        "tsconfig": "<rootDir>/src/test/tsconfig.json",
         "babelConfig": {
           "presets": [
             "babel-preset-solid",
