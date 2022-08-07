@@ -55,7 +55,8 @@
             "babel-preset-solid",
             "@babel/preset-env"
           ]
-        }
+        },
+        "isolatedModules": false
       }
     },
     "testEnvironment": "jsdom",
