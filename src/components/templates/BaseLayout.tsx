@@ -1,5 +1,5 @@
 import { Component, JSXElement } from "solid-js";
-import { Header } from "~/components/molecules/navs";
+import { Header } from "~/components/organisms/navs";
 
 export type Props = {
   children: JSXElement;
