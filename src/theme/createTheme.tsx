@@ -6,6 +6,9 @@ export const createTheme = BaseCreateTheme({
       light: "#dbeafe",
       main: "#066cb5",
     },
+    grey: {
+      700: "#374151",
+    },
   },
   breakpoints: {
     values: {

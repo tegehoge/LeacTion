@@ -1,13 +1,14 @@
 import { useTheme } from "@suid/material";
 import Box from "@suid/material/Box";
-import Button from "@suid/material/Button";
 import Container from "@suid/material/Container";
 import Paper from "@suid/material/Paper";
 import Stack from "@suid/material/Stack";
 import Typography from "@suid/material/Typography";
 import { Component } from "solid-js";
 
-import { RouterLink } from "~/components/atoms/links";
+import { LargeButtonWithRouterLink } from "~/components/atoms/buttons";
+import { MediumSizeTextParagraph } from "~/components/atoms/typographies";
+import { LargeSizeText } from "~/components/atoms/typographies";
 import { BaseLayout } from "~/components/templates";
 
 const Top: Component = () => {
@@ -32,28 +33,16 @@ const Top: Component = () => {
               border: `2px solid ${primaryMainColor}`,
             }}
           >
-            <Typography variant="subtitle1" sx={{ fontWeight: "bold", color: primaryMainColor }}>
+            <LargeSizeText color={primaryMainColor}>
               「LeacTion!」は、勉強会やセミナーで発表者と参加者をつなぐ、
               <br />
               オンラインコメントツールです
-            </Typography>
+            </LargeSizeText>
           </Paper>
         </Box>
 
         <Box marginBottom="40px">
-          <RouterLink href="/new">
-            <Button
-              variant="contained"
-              fullWidth
-              size="large"
-              sx={{
-                fontWeight: "bold",
-                letterSpacing: ".1em",
-              }}
-            >
-              イベントを登録する
-            </Button>
-          </RouterLink>
+          <LargeButtonWithRouterLink href="/new">イベントを登録する</LargeButtonWithRouterLink>
         </Box>
 
         <Box marginBottom="80px">
@@ -88,11 +77,12 @@ const Top: Component = () => {
                 LeacTion! とは？
               </Typography>
               <Box maxWidth={512} marginX="auto">
-                <Typography variant="subtitle2" paragraph marginBottom={0}>
+                <MediumSizeTextParagraph>
                   勉強会やセミナーで、スマートフォンやパソコンを使い、リアルタイムに質問やコメントを投稿できるサービスです。
                   <br />
                   オフラインのセミナーや勉強会はもちろん、オンラインイベントやオンライン・オフライン同時開催イベントでも利用できます。
-                </Typography>
+                </MediumSizeTextParagraph>
+                <Typography variant="subtitle2" paragraph marginBottom={0} />
               </Box>
             </Stack>
           </Paper>
@@ -101,9 +91,7 @@ const Top: Component = () => {
         <Box marginBottom="40px">
           <Paper elevation={0}>
             <Box marginBottom="40px">
-              <Typography variant="subtitle1" fontWeight="bold">
-                LeacTion! でイベントが盛り上がる
-              </Typography>
+              <LargeSizeText>LeacTion! でイベントが盛り上がる</LargeSizeText>
               <Typography variant="h5" fontWeight="bold">
                 ３つの理由
               </Typography>
@@ -120,11 +108,11 @@ const Top: Component = () => {
                 >
                   参加者も管理者もログイン不要！
                 </Typography>
-                <Typography variant="subtitle2">
+                <MediumSizeTextParagraph>
                   参加者は、イベントページを開くだけですぐにコメントや質問を投稿できます。
                   <br />
                   管理者も、面倒な会員登録やログインは不要。イベントにパスワードを設定するだけで、後から編集も可能です。
-                </Typography>
+                </MediumSizeTextParagraph>
               </Box>
               <Box>
                 <Typography
@@ -137,10 +125,10 @@ const Top: Component = () => {
                 >
                   質問やコメントに「いいね！」できる
                 </Typography>
-                <Typography variant="subtitle2">
+                <MediumSizeTextParagraph>
                   発表者は「いいね！」ボタンで「自分も気になる！」「自分もそう思う」と意思表明できます。
                   発表中や質問タイムに、特に参加者の関心がある質問・コメントを見つけやすくなります。
-                </Typography>
+                </MediumSizeTextParagraph>
               </Box>
               <Box>
                 <Typography
@@ -153,29 +141,17 @@ const Top: Component = () => {
                 >
                   発表枠ごとに、質問やコメントを投稿できる
                 </Typography>
-                <Typography variant="subtitle2">
+                <MediumSizeTextParagraph>
                   発表者は「いいね！」ボタンで「自分も気になる！」「自分もそう思う」と意思表明できます。
                   発表中や質問タイムに、特に参加者の関心がある質問・コメントを見つけやすくなります。
-                </Typography>
+                </MediumSizeTextParagraph>
               </Box>
             </Stack>
           </Paper>
         </Box>
 
         <Box marginBottom="8px">
-          <RouterLink href="/new">
-            <Button
-              variant="contained"
-              fullWidth
-              size="large"
-              sx={{
-                fontWeight: "bold",
-                letterSpacing: ".1em",
-              }}
-            >
-              イベントを登録する
-            </Button>
-          </RouterLink>
+          <LargeButtonWithRouterLink href="/new">イベントを登録する</LargeButtonWithRouterLink>
         </Box>
       </Container>
     </BaseLayout>
