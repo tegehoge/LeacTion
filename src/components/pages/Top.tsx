@@ -6,6 +6,8 @@ import Stack from "@suid/material/Stack";
 import Typography from "@suid/material/Typography";
 import { Component } from "solid-js";
 
+// @ref: https://ja.vitejs.dev/guide/assets.html#importing-asset-as-url
+import baloonUrl from "~/assets/baloon.png";
 import { LargeButtonWithRouterLink } from "~/components/atoms/buttons";
 import { MediumSizeTextParagraph } from "~/components/atoms/typographies";
 import { LargeSizeText } from "~/components/atoms/typographies";
@@ -62,8 +64,8 @@ const Top: Component = () => {
             <Stack>
               <Box
                 component="img"
-                src="/src/assets/baloon.png"
-                alt="コメントロゴ"
+                src={baloonUrl}
+                alt="コメントアイコン"
                 marginX="auto"
                 marginBottom="12px"
                 width="96px"
