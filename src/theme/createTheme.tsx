@@ -6,13 +6,20 @@ export const createTheme = BaseCreateTheme({
       light: "#dbeafe",
       main: "#066cb5",
     },
+    secondary: {
+      main: "#10b981",
+    },
     grey: {
       700: "#374151",
     },
   },
   breakpoints: {
     values: {
+      xs: 0,
+      sm: 600,
       "2sm": 768,
+      lg: 1200,
+      xl: 1536,
     },
   },
   typography: {
