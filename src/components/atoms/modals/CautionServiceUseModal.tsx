@@ -12,7 +12,7 @@ import Modal from "@suid/material/Modal";
 import { orange } from "@suid/material/colors";
 import { Component } from "solid-js";
 
-import "./styles.css";
+import "./modal.css";
 import { PrimaryButton } from "~/components/atoms/buttons";
 import { LargeHeading } from "~/components/atoms/typographies";
 
