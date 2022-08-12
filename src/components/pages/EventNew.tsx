@@ -19,14 +19,28 @@ import { PrimaryButton, SecondaryButton } from "~/components/atoms/buttons";
 import { CautionServiceUseModal } from "~/components/atoms/modals";
 import { useModal } from "~/components/atoms/modals/useModal";
 import { LargeHeading } from "~/components/atoms/typographies";
+import { EventNewMemberForm } from "~/components/organisms/events";
 
 const EventNew: Component = () => {
   const { isOpen, onClose } = useModal(true);
   const [date, setDate] = createSignal("2020-08-01");
-  const [events, setEvents] = createStore([{}, {}, {}]);
+  const [events, setEvents] = createStore([
+    {
+      memberName: "たなか",
+      title: "Laravelについて",
+    },
+    {
+      memberName: "すずき",
+      title: "Ruby on Railsについて",
+    },
+    {
+      memberName: "たかはし",
+      title: "Next.jsについて",
+    },
+  ]);
 
   const addEvent = (): void => {
-    setEvents(() => [...events, {}]);
+    setEvents(() => [...events, { memberName: "", title: "" }]);
   };
 
   return (
@@ -100,40 +114,7 @@ const EventNew: Component = () => {
 
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <For each={events}>
-              {() => (
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }} component="form">
-                  <IconButton disableRipple sx={{ cursor: "grab" }}>
-                    <FormatLineSpacing />
-                  </IconButton>
-
-                  <Grid container spacing={1}>
-                    <Grid item xs={12} sm={8}>
-                      <TextField
-                        required
-                        placeholder="発表者名"
-                        fullWidth
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} sm={4}>
-                      <TextField
-                        required
-                        placeholder="発表タイトル"
-                        fullWidth
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                      />
-                    </Grid>
-                  </Grid>
-                  <IconButton>
-                    <Delete sx={{ color: red[300] }} />
-                  </IconButton>
-                </Box>
-              )}
+              {(event) => <EventNewMemberForm title={event.title} memberName={event.memberName} />}
             </For>
           </Box>
         </Box>
