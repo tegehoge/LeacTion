@@ -5,23 +5,40 @@ import Grid from "@suid/material/Grid";
 import IconButton from "@suid/material/IconButton";
 import TextField from "@suid/material/TextField";
 import { red } from "@suid/material/colors";
-import { Component } from "solid-js";
+import { Component, createEffect } from "solid-js";
+import { eventStore } from "~/components/pages/EventNew";
+import { MouseDownEvent, TouchStartEvent } from "~/types/useCustomeDirective";
 
 export type Props = {
+  id: number;
   title: string;
   memberName: string;
+  dragDisabled: boolean;
+  startDrag: (e: MouseDownEvent | TouchStartEvent) => void;
+  handleInputEvent: (id: number, key: "title" | "memberName", value: string) => void;
 };
 
 const EventNewMemberForm: Component<Props> = (props) => {
+  createEffect(() => {
+    console.log("event child component", eventStore.presentationList[0].memberName);
+  });
+
   return (
-    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }} component="form">
-      <IconButton disableRipple sx={{ cursor: "grab" }}>
-        <FormatLineSpacing />
-      </IconButton>
+    <Box
+      sx={{ display: "flex", alignItems: "center", gap: 1 }}
+      component="form"
+      tabIndex={props.dragDisabled ? 0 : -1}
+    >
+      <div on:mousedown={(e) => props.startDrag(e)} on:touchstart={(e) => props.startDrag(e)}>
+        <IconButton disableRipple sx={{ cursor: "grab" }}>
+          <FormatLineSpacing />
+        </IconButton>
+      </div>
 
       <Grid container spacing={1}>
         <Grid item xs={12} sm={8}>
           <TextField
+            name="memberName"
             value={props.memberName}
             required
             placeholder="発表者名"
@@ -29,6 +46,7 @@ const EventNewMemberForm: Component<Props> = (props) => {
             InputLabelProps={{
               shrink: true,
             }}
+            onChange={(e) => props.handleInputEvent(props.id, "memberName", e.target.value)}
           />
         </Grid>
 
@@ -41,6 +59,7 @@ const EventNewMemberForm: Component<Props> = (props) => {
             InputLabelProps={{
               shrink: true,
             }}
+            onChange={(e) => props.handleInputEvent(props.id, "title", e.target.value)}
           />
         </Grid>
       </Grid>
