@@ -18,6 +18,10 @@ export const routes = [
         path: "/new",
         component: lazy(() => import("~/components/pages/EventNew")),
       },
+      {
+        path: "/todo",
+        component: lazy(() => import("~/components/pages/Todo")),
+      },
     ],
   },
 ];
