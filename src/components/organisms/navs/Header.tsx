@@ -1,13 +1,12 @@
 import AppBar from "@suid/material/AppBar";
 import Box from "@suid/material/Box";
 import IconButton from "@suid/material/IconButton";
-import Link from "@suid/material/Link";
 import Toolbar from "@suid/material/Toolbar";
 import Typography from "@suid/material/Typography";
 import { Component } from "solid-js";
 
 import { GitHubIcon } from "~/components/atoms/icons";
-import { RouterLink } from "~/components/atoms/links";
+import { ExternalLink, RouterLink } from "~/components/atoms/links";
 
 export const Header: Component = () => {
   return (
@@ -18,15 +17,11 @@ export const Header: Component = () => {
             <Typography variant="h5" sx={{ flexGrow: 1, fontWeight: "bold" }}>
               <RouterLink href="/">LeacTion!</RouterLink>
             </Typography>
-            <Link
-              href="https://github.com/tegehoge/LeacTion"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <ExternalLink href="https://github.com/tegehoge/LeacTion">
               <IconButton component="span">
                 <GitHubIcon sx={{ color: "white" }} />
               </IconButton>
-            </Link>
+            </ExternalLink>
           </Toolbar>
         </AppBar>
       </Box>
