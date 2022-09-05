@@ -1,15 +1,15 @@
-import { Component, JSXElement } from "solid-js";
+import { Outlet } from "@solidjs/router";
+import { Component } from "solid-js";
+
 import { Header } from "~/components/organisms/navs";
 
-export type Props = {
-  children: JSXElement;
-};
-
-const BaseLayout: Component<Props> = (props) => {
+const BaseLayout: Component = () => {
   return (
     <>
       <Header />
-      <main>{props.children}</main>
+      <main>
+        <Outlet />
+      </main>
     </>
   );
 };

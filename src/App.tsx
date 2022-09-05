@@ -3,7 +3,7 @@ import CssBaseline from "@suid/material/CssBaseline";
 import { ThemeProvider } from "@suid/material/styles";
 import { Component } from "solid-js";
 
-import { routes } from "~/constants/routes";
+import { routes } from "~/routes";
 import { createTheme } from "~/theme/createTheme";
 
 const App: Component = () => {
