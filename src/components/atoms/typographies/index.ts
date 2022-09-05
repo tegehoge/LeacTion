@@ -1,2 +1,2 @@
-export { default as LargeSizeText } from "./LargeSizeText";
-export { default as MediumSizeTextParagraph } from "./MediumSizeTextParagraph";
+export { LargeSizeText } from "./LargeSizeText";
+export { MediumSizeTextParagraph } from "./MediumSizeTextParagraph";

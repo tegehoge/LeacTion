@@ -1,1 +1,1 @@
-export { default as LargeButtonWithRouterLink } from "./LargeButtonWithRouterLink";
+export { LargeButtonWithRouterLink } from "./LargeButtonWithRouterLink";

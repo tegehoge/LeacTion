@@ -1,1 +1,1 @@
-export { default as GitHubIcon } from "./GitHubIcon";
+export { GitHubIcon } from "./GitHubIcon";

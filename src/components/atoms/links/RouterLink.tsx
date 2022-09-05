@@ -8,12 +8,10 @@ type Props = {
   children: JSXElement;
 };
 
-const RouterLink: Component<Props> = (props) => {
+export const RouterLink: Component<Props> = (props) => {
   return (
     <BaseLink href={props.href} class={styles.disableAnchorStyle}>
       {props.children}
     </BaseLink>
   );
 };
-
-export default RouterLink;

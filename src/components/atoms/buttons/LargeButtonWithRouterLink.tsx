@@ -8,7 +8,7 @@ export type Props = {
   children: JSXElement;
 };
 
-const LargeButtonWithRouterLink: Component<Props> = (props) => {
+export const LargeButtonWithRouterLink: Component<Props> = (props) => {
   return (
     <RouterLink href={props.href}>
       <Button
@@ -25,5 +25,3 @@ const LargeButtonWithRouterLink: Component<Props> = (props) => {
     </RouterLink>
   );
 };
-
-export default LargeButtonWithRouterLink;

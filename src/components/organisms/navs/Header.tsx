@@ -9,7 +9,7 @@ import { Component } from "solid-js";
 import { GitHubIcon } from "~/components/atoms/icons";
 import { RouterLink } from "~/components/atoms/links";
 
-const Header: Component = () => {
+export const Header: Component = () => {
   return (
     <header>
       <Box>
@@ -33,5 +33,3 @@ const Header: Component = () => {
     </header>
   );
 };
-
-export default Header;
