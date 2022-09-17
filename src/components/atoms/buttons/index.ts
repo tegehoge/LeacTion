@@ -1,3 +1,3 @@
-export { default as LargeButtonWithRouterLink } from "./LargeButtonWithRouterLink";
-export { default as PrimaryButton } from "./PrimaryButton";
-export { default as SecondaryButton } from "./SecondaryButton";
+export { LargeButtonWithRouterLink } from "./LargeButtonWithRouterLink";
+export { PrimaryButton } from "./PrimaryButton";
+export { SecondaryButton } from "./SecondaryButton";

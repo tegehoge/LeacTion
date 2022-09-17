@@ -1,3 +1,3 @@
-export { default as LargeHeading } from "./LargeHeading";
-export { default as LargeSizeText } from "./LargeSizeText";
-export { default as MediumSizeTextParagraph } from "./MediumSizeTextParagraph";
+export { LargeHeading } from "./LargeHeading";
+export { LargeSizeText } from "./LargeSizeText";
+export { MediumSizeTextParagraph } from "./MediumSizeTextParagraph";

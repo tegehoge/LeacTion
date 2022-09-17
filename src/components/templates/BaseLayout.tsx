@@ -1,8 +1,9 @@
 import { Outlet } from "@solidjs/router";
 import { Component } from "solid-js";
+
 import { Header } from "~/components/organisms/navs";
 
-const BaseLayout: Component = () => {
+export const BaseLayout: Component = () => {
   return (
     <>
       <Header />
@@ -12,5 +13,3 @@ const BaseLayout: Component = () => {
     </>
   );
 };
-
-export default BaseLayout;

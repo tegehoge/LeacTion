@@ -7,7 +7,7 @@ export type Props = {
   color?: string;
 };
 
-const LargeSizeText: Component<Props> = (props) => {
+export const LargeSizeText: Component<Props> = (props) => {
   const theme = useTheme();
   const merged = mergeProps({ color: theme.palette.grey["700"] }, props);
 
@@ -17,5 +17,3 @@ const LargeSizeText: Component<Props> = (props) => {
     </Typography>
   );
 };
-
-export default LargeSizeText;

@@ -1,6 +1,6 @@
-import { createTheme as BaseCreateTheme } from "@suid/material/styles";
+import { createTheme } from "@suid/material/styles";
 
-export const createTheme = BaseCreateTheme({
+export const theme = createTheme({
   palette: {
     primary: {
       light: "#dbeafe",

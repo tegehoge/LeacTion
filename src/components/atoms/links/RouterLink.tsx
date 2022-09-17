@@ -1,4 +1,4 @@
-import { Link as BaseLink } from "@solidjs/router";
+import { Link } from "@solidjs/router";
 import { Component, JSXElement } from "solid-js";
 
 import styles from "./link.module.css";
@@ -8,12 +8,10 @@ type Props = {
   children: JSXElement;
 };
 
-const RouterLink: Component<Props> = (props) => {
+export const RouterLink: Component<Props> = (props) => {
   return (
-    <BaseLink href={props.href} class={styles.disableAnchorStyle}>
+    <Link href={props.href} class={styles.disableAnchorStyle}>
       {props.children}
-    </BaseLink>
+    </Link>
   );
 };
-
-export default RouterLink;

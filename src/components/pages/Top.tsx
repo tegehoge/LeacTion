@@ -12,7 +12,7 @@ import { LargeButtonWithRouterLink } from "~/components/atoms/buttons";
 import { MediumSizeTextParagraph } from "~/components/atoms/typographies";
 import { LargeSizeText } from "~/components/atoms/typographies";
 
-const Top: Component = () => {
+export const Top: Component = () => {
   const theme = useTheme();
   const { light: primaryLightColor, main: primaryMainColor } = theme.palette.primary;
   const textColor = theme.palette.grey[700];
@@ -160,5 +160,3 @@ const Top: Component = () => {
     </Container>
   );
 };
-
-export default Top;
