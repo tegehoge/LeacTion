@@ -5,8 +5,7 @@ import Grid from "@suid/material/Grid";
 import IconButton from "@suid/material/IconButton";
 import TextField from "@suid/material/TextField";
 import { red } from "@suid/material/colors";
-import { Component, createEffect } from "solid-js";
-import { eventStore } from "~/components/pages/EventNew";
+import { Component } from "solid-js";
 import { MouseDownEvent, TouchStartEvent } from "~/types/useCustomeDirective";
 
 export type Props = {
@@ -18,14 +17,10 @@ export type Props = {
   handleInputEvent: (id: number, key: "title" | "memberName", value: string) => void;
 };
 
-const EventNewMemberForm: Component<Props> = (props) => {
-  createEffect(() => {
-    console.log("event child component", eventStore.presentationList[0].memberName);
-  });
-
+export const PresentationForm: Component<Props> = (props) => {
   return (
     <Box
-      sx={{ display: "flex", alignItems: "center", gap: 1 }}
+      sx={{ display: "flex", alignItems: "center", gap: 1, border: "none" }}
       component="form"
       tabIndex={props.dragDisabled ? 0 : -1}
     >
@@ -69,5 +64,3 @@ const EventNewMemberForm: Component<Props> = (props) => {
     </Box>
   );
 };
-
-export default EventNewMemberForm;

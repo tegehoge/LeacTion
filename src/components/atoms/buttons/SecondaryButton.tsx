@@ -9,7 +9,7 @@ export type Props = {
   children: JSXElement;
 };
 
-const SecondaryButton: Component<Props> = (props) => {
+export const SecondaryButton: Component<Props> = (props) => {
   const mergedProps = mergeProps({ fullWidth: false }, props);
 
   return (
@@ -30,5 +30,3 @@ const SecondaryButton: Component<Props> = (props) => {
     </Button>
   );
 };
-
-export default SecondaryButton;

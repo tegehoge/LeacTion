@@ -1,5 +1,6 @@
 // @ts-nocheck
 import type { Accessor } from "solid-js";
+// import { JSX } from "solid-js/h/jsx-runtime";
 
 export class ConsiderEvent extends CustomEvent {
   type: "Consider";
@@ -31,6 +32,7 @@ declare module "solid-js" {
       dndzone: {
         items: () => { id: number; memberName: string; title: string }[];
         dragDisabled: Accessor<boolean>;
+        dropTargetStyle: JSX.HTMLAttributes<HTMLDivElement>;
       };
     }
     interface CustomEvents {

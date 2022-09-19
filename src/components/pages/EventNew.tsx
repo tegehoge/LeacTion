@@ -9,14 +9,15 @@ import Grid from "@suid/material/Grid";
 import TextField from "@suid/material/TextField";
 import Typography from "@suid/material/Typography";
 import { dndzone as dndZoneDirective, TRIGGERS, SOURCES } from "solid-dnd-directive";
-import { Accessor, Component, createEffect, createSignal, For, JSX } from "solid-js";
-import { createStore, produce } from "solid-js/store";
+import { Component, createEffect, createSignal, For, JSX } from "solid-js";
+import { createStore } from "solid-js/store";
 
 import { PrimaryButton, SecondaryButton } from "~/components/atoms/buttons";
 import { CautionServiceUseModal } from "~/components/atoms/modals";
 import { useModal } from "~/components/atoms/modals/useModal";
 import { LargeHeading } from "~/components/atoms/typographies";
-import { EventNewMemberForm } from "~/components/organisms/events";
+import { PresentationForm } from "~/components/organisms/events";
+
 import {
   ConsiderEvent,
   FinalizeEvent,
@@ -24,7 +25,7 @@ import {
   TouchStartEvent,
 } from "~/types/useCustomeDirective";
 
-export const [eventStore, setEventStore] = createStore({
+const [eventStore, setEventStore] = createStore({
   name: "",
   date: "",
   url: "",
@@ -48,55 +49,18 @@ export const [eventStore, setEventStore] = createStore({
   ],
 });
 
-const EventNew: Component = () => {
+export const EventNew: Component = () => {
   // @ref: https://github.com/isaacHagoel/solid-dnd-directive/issues/6
   // @ref: https://codesandbox.io/s/dnd-drag-handles-57btm?file=/src/App.jsx
   const dndzone = dndZoneDirective;
   const { isOpen, onClose } = useModal(false);
-  const [date, setDate] = createSignal("2020-08-01");
   const [dragDisabled, setDragDisabled] = createSignal(true);
 
-  // createEffect(() => {
-  //   console.log("dragDisabled", dragDisabled());
-  // });
-
-  // createEffect(() => {
-  //   console.log("eventStore title", eventStore[0].title);
-  // });
-  //
-  // createEffect(() => {
-  //   console.log("eventStore memberName", eventStore[0].memberName);
-  // });
-  // //
-  // createEffect(() => {
-  //   console.log("eventStore[0]", eventStore[0]);
-  // });
-  //
-  // createEffect(() => {
-  //   console.log("eventStore[0]", eventStore[1]);
-  // });
-  //
-  // createEffect(() => {
-  //   console.log("eventStore[0]", eventStore[2]);
-  // });
-  //
-  // const handleInputMemberNameEvent = (id: number, value: string): void => {
-  //   setEventStore(
-  //     (store) => store.id === id,
-  //     "memberName",
-  //     () => value
-  //   );
-  // };
-  //
-  // const handleInputTitleEvent = (id: number, value: string): void => {
-  //   setEventStore(
-  //     (store) => store.id === id,
-  //     "title",
-  //     () => value
-  //   );
-  // };
-
-  const handleInputEvent = (id: number, key: "title" | "memberName", value: string): void => {
+  const handleInputPresentationListItem = (
+    id: number,
+    key: "title" | "memberName",
+    value: string
+  ): void => {
     setEventStore(
       "presentationList",
       (presentationList) => presentationList.id === id,
@@ -108,16 +72,20 @@ const EventNew: Component = () => {
   const addEvent = (): void => {
     const nextId = Math.max(...eventStore.presentationList.map((event) => event.id)) + 1;
 
-    // setEventStore(eventStore.presentationList.length, { id: nextId, memberName: "", title: "" });
+    setEventStore("presentationList", (eventList) => [
+      ...eventList,
+      { id: nextId, memberName: "", title: "" },
+    ]);
   };
 
+  // ドラッグスタート
   const handleConsider = (e: ConsiderEvent) => {
     const {
       items: newItems,
       info: { source, trigger },
     } = e.detail;
 
-    setEventStore(newItems);
+    setEventStore("presentationList", newItems);
 
     // Ensure dragging is stopped on drag finish via keyboard
     if (source === SOURCES.KEYBOARD && trigger === TRIGGERS.DRAG_STOPPED) {
@@ -125,13 +93,15 @@ const EventNew: Component = () => {
     }
   };
 
+  // ドラッグエンド
   const handleFinalize = (e: FinalizeEvent) => {
     const {
       items: newItems,
       info: { source },
     } = e.detail;
 
-    setEventStore(newItems);
+    setEventStore("presentationList", newItems);
+
     // Ensure dragging is stopped on drag finish via pointer (mouse, touch)
     if (source === SOURCES.POINTER) {
       setDragDisabled(true);
@@ -159,9 +129,12 @@ const EventNew: Component = () => {
                 label="イベント名"
                 placeholder="Webナイト宮﨑 vol.1"
                 fullWidth
-                value={"test"}
                 InputLabelProps={{
                   shrink: true,
+                }}
+                value={eventStore.name}
+                onChange={(event, target) => {
+                  setEventStore("name", target);
                 }}
               />
             </Grid>
@@ -174,6 +147,9 @@ const EventNew: Component = () => {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                onChange={(event, target) => {
+                  setEventStore("date", target);
+                }}
               />
             </Grid>
 
@@ -185,6 +161,9 @@ const EventNew: Component = () => {
                 fullWidth
                 InputLabelProps={{
                   shrink: true,
+                }}
+                onChange={(event, target) => {
+                  setEventStore("url", target);
                 }}
               />
             </Grid>
@@ -201,6 +180,9 @@ const EventNew: Component = () => {
                 InputProps={{
                   startAdornment: <TagIcon fontSize="small" />,
                 }}
+                onChange={(event, target) => {
+                  setEventStore("hashTag", target);
+                }}
               />
             </Grid>
           </Grid>
@@ -215,19 +197,23 @@ const EventNew: Component = () => {
 
           <div
             style={{ display: "flex", "flex-direction": "column", gap: "16px" }}
-            use:dndzone={{ items: () => eventStore.presentationList, dragDisabled }}
+            use:dndzone={{
+              items: () => eventStore.presentationList,
+              dragDisabled,
+              dropTargetStyle: {},
+            }}
             on:consider={handleConsider}
             on:finalize={handleFinalize}
           >
             <For each={eventStore.presentationList}>
               {(event, index) => (
-                <EventNewMemberForm
+                <PresentationForm
                   title={event.title}
                   memberName={event.memberName}
                   dragDisabled={dragDisabled()}
                   startDrag={startDrag}
                   id={event.id}
-                  handleInputEvent={handleInputEvent}
+                  handleInputEvent={handleInputPresentationListItem}
                 />
               )}
             </For>
@@ -290,7 +276,7 @@ const EventNew: Component = () => {
             </Link>
             に同意して
           </Typography>
-          <PrimaryButton onClick={() => console.log("test")}>イベントを作成する</PrimaryButton>
+          <PrimaryButton onClick={() => console.log(eventStore)}>イベントを作成する</PrimaryButton>
         </Box>
       </Container>
 
@@ -298,5 +284,3 @@ const EventNew: Component = () => {
     </>
   );
 };
-
-export default EventNew;

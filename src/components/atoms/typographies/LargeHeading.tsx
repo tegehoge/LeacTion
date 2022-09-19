@@ -7,7 +7,7 @@ export type Props = {
   color?: string;
 };
 
-const LargeHeading: Component<Props> = (props) => {
+export const LargeHeading: Component<Props> = (props) => {
   const theme = useTheme();
   const merged = mergeProps({ color: theme.palette.grey["700"] }, props);
 
@@ -17,5 +17,3 @@ const LargeHeading: Component<Props> = (props) => {
     </Typography>
   );
 };
-
-export default LargeHeading;

@@ -1,1 +1,1 @@
-export { default as EventNewMemberForm } from "./EventNewMemberForm";
+export { PresentationForm } from "./PresentationForm";

@@ -8,7 +8,7 @@ export type Props = {
   children: JSXElement;
 };
 
-const PrimaryButton: Component<Props> = (props) => {
+export const PrimaryButton: Component<Props> = (props) => {
   const mergedProps = mergeProps({ fullWidth: false }, props);
 
   return (
@@ -27,5 +27,3 @@ const PrimaryButton: Component<Props> = (props) => {
     </Button>
   );
 };
-
-export default PrimaryButton;
