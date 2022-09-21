@@ -25,36 +25,35 @@ import {
   TouchStartEvent,
 } from "~/types/dndDirective";
 
-const [eventStore, setEventStore] = createStore({
-  name: "",
-  date: "",
-  url: "",
-  hashTag: "",
-  presentationList: [
-    {
-      id: 1,
-      memberName: "たなか",
-      title: "Laravelについて",
-    },
-    {
-      id: 2,
-      memberName: "すずき",
-      title: "Ruby on Railsについて",
-    },
-    {
-      id: 3,
-      memberName: "たかはし",
-      title: "Next.jsについて",
-    },
-  ],
-});
-
 export const EventNew: Component = () => {
   // @ref: https://github.com/isaacHagoel/solid-dnd-directive/issues/6
   // @ref: https://codesandbox.io/s/dnd-drag-handles-57btm?file=/src/App.jsx
   const dndzone = dndZoneDirective;
-  const { isOpen, onClose } = useModal(false);
+  const { isOpen, onClose } = useModal(true);
   const [dragDisabled, setDragDisabled] = createSignal(true);
+  const [eventStore, setEventStore] = createStore({
+    name: "",
+    date: "",
+    url: "",
+    hashTag: "",
+    presentationList: [
+      {
+        id: 1,
+        memberName: "たなか",
+        title: "Laravelについて",
+      },
+      {
+        id: 2,
+        memberName: "すずき",
+        title: "Ruby on Railsについて",
+      },
+      {
+        id: 3,
+        memberName: "たかはし",
+        title: "Next.jsについて",
+      },
+    ],
+  });
 
   const handleInputPresentationListItem = (
     id: number,
