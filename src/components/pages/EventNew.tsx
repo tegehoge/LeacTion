@@ -1,22 +1,20 @@
 import { Link } from "@solidjs/router";
 import AddCircle from "@suid/icons-material/AddCircle";
-import TagIcon from "@suid/icons-material/Tag";
 import Box from "@suid/material/Box";
 import Container from "@suid/material/Container";
 import Divider from "@suid/material/Divider";
-import FormLabel from "@suid/material/FormLabel";
 import Grid from "@suid/material/Grid";
 import TextField from "@suid/material/TextField";
 import Typography from "@suid/material/Typography";
 import { dndzone as dndZoneDirective, TRIGGERS, SOURCES } from "solid-dnd-directive";
-import { Component, createEffect, createSignal, For, JSX } from "solid-js";
+import { Component, createSignal, For } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { PrimaryButton, SecondaryButton } from "~/components/atoms/buttons";
 import { CautionServiceUseModal } from "~/components/atoms/modals";
 import { useModal } from "~/components/atoms/modals/useModal";
 import { LargeHeading } from "~/components/atoms/typographies";
-import { PresentationForm } from "~/components/organisms/events";
+import { PresentationForm, InfoForm } from "~/components/organisms/events";
 
 import {
   ConsiderEvent,
@@ -29,7 +27,7 @@ export const EventNew: Component = () => {
   // @ref: https://github.com/isaacHagoel/solid-dnd-directive/issues/6
   // @ref: https://codesandbox.io/s/dnd-drag-handles-57btm?file=/src/App.jsx
   const dndzone = dndZoneDirective;
-  const { isOpen, onClose } = useModal(true);
+  const { isOpen, onClose } = useModal(false);
   const [dragDisabled, setDragDisabled] = createSignal(true);
   const [eventStore, setEventStore] = createStore({
     name: "",
@@ -113,6 +111,10 @@ export const EventNew: Component = () => {
     setDragDisabled(false);
   };
 
+  const onChange = (key: "name" | "date" | "url" | "hashTag", value: string): void => {
+    setEventStore(key, value);
+  };
+
   return (
     <>
       <Box sx={{ textAlign: "center", margin: "20px 0" }}>
@@ -120,162 +122,106 @@ export const EventNew: Component = () => {
       </Box>
 
       <Container maxWidth="lg">
-        <Box component="form" marginBottom="24px">
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={8}>
-              <TextField
-                required
-                label="イベント名"
-                placeholder="Webナイト宮﨑 vol.1"
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                value={eventStore.name}
-                onChange={(event, target) => {
-                  setEventStore("name", target);
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                required
-                label="開催日"
-                type="date"
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onChange={(event, target) => {
-                  setEventStore("date", target);
-                }}
-              />
-            </Grid>
+        <Box component={"form"}>
+          <Box marginBottom="24px">
+            <InfoForm onChange={onChange} event={eventStore} />
+          </Box>
 
-            <Grid item xs={12} sm={8}>
-              <TextField
-                required
-                label="イベントページのURL"
-                placeholder="connpassイベントURLなど(optional)"
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onChange={(event, target) => {
-                  setEventStore("url", target);
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={4}>
-              <TextField
-                required
-                label="Twitterハッシュタグ"
-                placeholder="Webナイト宮﨑"
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                InputProps={{
-                  startAdornment: <TagIcon fontSize="small" />,
-                }}
-                onChange={(event, target) => {
-                  setEventStore("hashTag", target);
-                }}
-              />
-            </Grid>
-          </Grid>
-        </Box>
-
-        <Box component="form" marginBottom="16px">
-          <FormLabel sx={{ display: "inline-block", marginBottom: "8px" }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
+          <Box marginBottom="16px">
+            <Typography variant="subtitle2" sx={{ fontWeight: "bold", marginBottom: "8px" }}>
               イベントの発表順 (順序を変更できます)
             </Typography>
-          </FormLabel>
 
-          <div
-            style={{ display: "flex", "flex-direction": "column", gap: "16px" }}
-            use:dndzone={{
-              items: () => eventStore.presentationList,
-              dragDisabled,
-              dropTargetStyle: {},
-            }}
-            on:consider={handleConsider}
-            on:finalize={handleFinalize}
+            <Box
+              component={"div"}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "16px",
+              }}
+              use:dndzone={{
+                items: () => eventStore.presentationList,
+                dragDisabled,
+                dropTargetStyle: {},
+              }}
+              on:consider={handleConsider}
+              on:finalize={handleFinalize}
+            >
+              <For each={eventStore.presentationList}>
+                {(event, index) => (
+                  <PresentationForm
+                    title={event.title}
+                    memberName={event.memberName}
+                    dragDisabled={dragDisabled()}
+                    startDrag={startDrag}
+                    id={event.id}
+                    handleInputEvent={handleInputPresentationListItem}
+                  />
+                )}
+              </For>
+            </Box>
+          </Box>
+
+          <Box marginBottom="16px">
+            <SecondaryButton onClick={addEvent} fullWidth={true} startIcon={<AddCircle />}>
+              発表枠の追加
+            </SecondaryButton>
+          </Box>
+
+          <Box marginBottom="16px">
+            <Divider />
+          </Box>
+
+          <Typography
+            variant="h6"
+            fontWeight="bold"
+            sx={{ textAlign: "center", marginBottom: "16px" }}
           >
-            <For each={eventStore.presentationList}>
-              {(event, index) => (
-                <PresentationForm
-                  title={event.title}
-                  memberName={event.memberName}
-                  dragDisabled={dragDisabled()}
-                  startDrag={startDrag}
-                  id={event.id}
-                  handleInputEvent={handleInputPresentationListItem}
-                />
-              )}
-            </For>
-          </div>
-        </Box>
-
-        <Box marginBottom="16px">
-          <SecondaryButton onClick={addEvent} fullWidth={true} startIcon={<AddCircle />}>
-            発表枠の追加
-          </SecondaryButton>
-        </Box>
-
-        <Box marginBottom="16px">
-          <Divider />
-        </Box>
-
-        <Typography
-          variant="h6"
-          fontWeight="bold"
-          sx={{ textAlign: "center", marginBottom: "16px" }}
-        >
-          編集用パスワードの設定
-        </Typography>
-
-        <Box component="form" marginBottom="32px">
-          <Grid container spacing={2} sx={{ flexGrow: 1, justifyContent: "center" }}>
-            <Grid item xs={6} sm={4}>
-              <TextField
-                label="管理者パスワード"
-                type="password"
-                required
-                placeholder="パスワード"
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                autoComplete="off"
-              />
-            </Grid>
-            <Grid item xs={6} sm={4}>
-              <TextField
-                label="管理者パスワード (確認用)"
-                type="password"
-                required
-                placeholder="パスワード (確認用)"
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                autoComplete="off"
-              />
-            </Grid>
-          </Grid>
-        </Box>
-
-        <Box textAlign="center" marginBottom="32px">
-          <Typography>
-            <Link href="/terms" target="_blank">
-              利用規約
-            </Link>
-            に同意して
+            編集用パスワードの設定
           </Typography>
-          <PrimaryButton onClick={() => console.log(eventStore)}>イベントを作成する</PrimaryButton>
+
+          <Box component="form" marginBottom="32px">
+            <Grid container spacing={3} sx={{ flexGrow: 1, justifyContent: "center" }}>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  label="管理者パスワード"
+                  type="password"
+                  required
+                  placeholder="パスワード"
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  autoComplete="off"
+                />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  label="管理者パスワード (確認用)"
+                  type="password"
+                  required
+                  placeholder="パスワード (確認用)"
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  autoComplete="off"
+                />
+              </Grid>
+            </Grid>
+          </Box>
+
+          <Box textAlign="center" marginBottom="32px">
+            <Typography>
+              <Link href="/terms" target="_blank">
+                利用規約
+              </Link>
+              に同意して
+            </Typography>
+            <PrimaryButton onClick={() => console.log(eventStore)}>
+              イベントを作成する
+            </PrimaryButton>
+          </Box>
         </Box>
       </Container>
 
