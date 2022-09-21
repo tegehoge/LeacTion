@@ -23,7 +23,7 @@ import {
   FinalizeEvent,
   MouseDownEvent,
   TouchStartEvent,
-} from "~/types/useCustomeDirective";
+} from "~/types/dndDirective";
 
 const [eventStore, setEventStore] = createStore({
   name: "",
