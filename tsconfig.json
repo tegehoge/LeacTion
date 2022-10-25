@@ -10,6 +10,7 @@
     "jsxImportSource": "solid-js",
     "noEmit": true,
     "isolatedModules": true,
+    "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"]
@@ -18,5 +19,5 @@
     "typeRoots": ["./node_modules/@types"]
   },
   "include": ["src/**/*"],
-  "exclude": ["./node_modules", "./dist", "./src/test/**/*.test.ts"],
+  "exclude": ["./node_modules", "./dist", "./src/test/**/*.test.ts", "./src/types/dndDirective.ts"],
 }

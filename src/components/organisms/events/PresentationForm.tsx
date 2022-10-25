@@ -13,7 +13,7 @@ export type Props = {
   id: number;
   title: string;
   memberName: string;
-  dragDisabled: boolean;
+  isDragDisabled: boolean;
   startDrag: (e: MouseDownEvent | TouchStartEvent) => void;
   handleInputEvent: (id: number, key: "title" | "memberName", value: string) => void;
 };
@@ -28,7 +28,7 @@ export const PresentationForm: Component<Props> = (props) => {
         outlineColor: `rgba(255, 255, 255, .0);`,
       }}
       component="form"
-      tabIndex={props.dragDisabled ? 0 : -1}
+      tabIndex={props.isDragDisabled ? 0 : -1}
     >
       <div on:mousedown={(e) => props.startDrag(e)} on:touchstart={(e) => props.startDrag(e)}>
         <IconButton disableRipple sx={{ cursor: "grab" }}>

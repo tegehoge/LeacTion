@@ -6,71 +6,29 @@ import Divider from "@suid/material/Divider";
 import Grid from "@suid/material/Grid";
 import TextField from "@suid/material/TextField";
 import Typography from "@suid/material/Typography";
-import { dndzone as dndZoneDirective, SOURCES, TRIGGERS } from "solid-dnd-directive";
-import { Component, createSignal, For } from "solid-js";
+import { Component, For } from "solid-js";
 
 import { PrimaryButton, SecondaryButton } from "~/components/atoms/buttons";
 import { CautionServiceUseModal } from "~/components/atoms/modals";
-import { useModal } from "~/components/atoms/modals/useModal";
 import { LargeHeading } from "~/components/atoms/typographies";
 import { PresentationForm, InfoInputGroup } from "~/components/organisms/events";
-import { useEvent } from "~/hooks/useEvent";
-import {
-  ConsiderEvent,
-  FinalizeEvent,
-  MouseDownEvent,
-  TouchStartEvent,
-} from "~/types/dndDirective";
+import { useModal } from "~/hooks/atoms/useModal";
+import { useEvent } from "~/hooks/pages/useEvent";
 
 export const EventNew: Component = () => {
-  // @ref: https://github.com/isaacHagoel/solid-dnd-directive/issues/6#issuecomment-1034672267
-  // @ref: https://codesandbox.io/s/dnd-drag-handles-57btm?file=/src/App.jsx
-  const dndzone = dndZoneDirective;
-  const { isOpen, onClose } = useModal(false);
-  const [dragDisabled, setDragDisabled] = createSignal(true);
+  const { isOpen, onClose } = useModal(true);
+
   const {
     eventStore,
     onChangeEventInfo,
     onClickAddPresentationItem,
     onInputPresentationListItem,
-    setEventStore,
+    dndzone,
+    handleConsider,
+    handleFinalize,
+    startDrag,
+    isDragDisabled,
   } = useEvent();
-
-  // ドラッグスタート
-  const handleConsider = (e: ConsiderEvent) => {
-    const {
-      items: newItems,
-      info: { source, trigger },
-    } = e.detail;
-
-    setEventStore("presentationList", newItems);
-
-    // Ensure dragging is stopped on drag finish via keyboard
-    if (source === SOURCES.KEYBOARD && trigger === TRIGGERS.DRAG_STOPPED) {
-      setDragDisabled(true);
-    }
-  };
-
-  // ドラッグエンド
-  const handleFinalize = (e: FinalizeEvent) => {
-    const {
-      items: newItems,
-      info: { source },
-    } = e.detail;
-
-    setEventStore("presentationList", newItems);
-
-    // Ensure dragging is stopped on drag finish via pointer (mouse, touch)
-    if (source === SOURCES.POINTER) {
-      setDragDisabled(true);
-    }
-  };
-
-  const startDrag = (e: MouseDownEvent | TouchStartEvent) => {
-    // preventing default to prevent lag on touch devices (because of the browser checking for screen scrolling)
-    e.preventDefault();
-    setDragDisabled(false);
-  };
 
   return (
     <>
@@ -104,7 +62,7 @@ export const EventNew: Component = () => {
               }}
               use:dndzone={{
                 items: () => eventStore.presentationList,
-                dragDisabled,
+                dragDisabled: isDragDisabled,
                 dropTargetStyle: {},
               }}
               on:consider={handleConsider}
@@ -115,7 +73,7 @@ export const EventNew: Component = () => {
                   <PresentationForm
                     title={event.title}
                     memberName={event.memberName}
-                    dragDisabled={dragDisabled()}
+                    isDragDisabled={isDragDisabled()}
                     startDrag={startDrag}
                     id={event.id}
                     handleInputEvent={onInputPresentationListItem}
