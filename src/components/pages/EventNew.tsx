@@ -6,16 +6,15 @@ import Divider from "@suid/material/Divider";
 import Grid from "@suid/material/Grid";
 import TextField from "@suid/material/TextField";
 import Typography from "@suid/material/Typography";
-import { dndzone as dndZoneDirective, TRIGGERS, SOURCES } from "solid-dnd-directive";
+import { dndzone as dndZoneDirective, SOURCES, TRIGGERS } from "solid-dnd-directive";
 import { Component, createSignal, For } from "solid-js";
-import { createStore } from "solid-js/store";
 
 import { PrimaryButton, SecondaryButton } from "~/components/atoms/buttons";
 import { CautionServiceUseModal } from "~/components/atoms/modals";
 import { useModal } from "~/components/atoms/modals/useModal";
 import { LargeHeading } from "~/components/atoms/typographies";
-import { PresentationForm, InfoForm } from "~/components/organisms/events";
-
+import { PresentationForm, InfoInputGroup } from "~/components/organisms/events";
+import { useEvent } from "~/hooks/useEvent";
 import {
   ConsiderEvent,
   FinalizeEvent,
@@ -24,56 +23,18 @@ import {
 } from "~/types/dndDirective";
 
 export const EventNew: Component = () => {
-  // @ref: https://github.com/isaacHagoel/solid-dnd-directive/issues/6
+  // @ref: https://github.com/isaacHagoel/solid-dnd-directive/issues/6#issuecomment-1034672267
   // @ref: https://codesandbox.io/s/dnd-drag-handles-57btm?file=/src/App.jsx
   const dndzone = dndZoneDirective;
   const { isOpen, onClose } = useModal(false);
   const [dragDisabled, setDragDisabled] = createSignal(true);
-  const [eventStore, setEventStore] = createStore({
-    name: "",
-    date: "",
-    url: "",
-    hashTag: "",
-    presentationList: [
-      {
-        id: 1,
-        memberName: "たなか",
-        title: "Laravelについて",
-      },
-      {
-        id: 2,
-        memberName: "すずき",
-        title: "Ruby on Railsについて",
-      },
-      {
-        id: 3,
-        memberName: "たかはし",
-        title: "Next.jsについて",
-      },
-    ],
-  });
-
-  const handleInputPresentationListItem = (
-    id: number,
-    key: "title" | "memberName",
-    value: string
-  ): void => {
-    setEventStore(
-      "presentationList",
-      (presentationList) => presentationList.id === id,
-      key,
-      () => value
-    );
-  };
-
-  const addEvent = (): void => {
-    const nextId = Math.max(...eventStore.presentationList.map((event) => event.id)) + 1;
-
-    setEventStore("presentationList", (eventList) => [
-      ...eventList,
-      { id: nextId, memberName: "", title: "" },
-    ]);
-  };
+  const {
+    eventStore,
+    onChangeEventInfo,
+    onClickAddPresentationItem,
+    onInputPresentationListItem,
+    setEventStore,
+  } = useEvent();
 
   // ドラッグスタート
   const handleConsider = (e: ConsiderEvent) => {
@@ -111,10 +72,6 @@ export const EventNew: Component = () => {
     setDragDisabled(false);
   };
 
-  const onChange = (key: "name" | "date" | "url" | "hashTag", value: string): void => {
-    setEventStore(key, value);
-  };
-
   return (
     <>
       <Box sx={{ textAlign: "center", margin: "20px 0" }}>
@@ -122,9 +79,15 @@ export const EventNew: Component = () => {
       </Box>
 
       <Container maxWidth="lg">
-        <Box component={"form"}>
+        <Box component={"div"}>
           <Box marginBottom="24px">
-            <InfoForm onChange={onChange} event={eventStore} />
+            <InfoInputGroup
+              onChange={onChangeEventInfo}
+              name={eventStore.name}
+              url={eventStore.url}
+              date={eventStore.date}
+              hashTag={eventStore.hashTag}
+            />
           </Box>
 
           <Box marginBottom="16px">
@@ -132,11 +95,11 @@ export const EventNew: Component = () => {
               イベントの発表順 (順序を変更できます)
             </Typography>
 
-            <Box
-              component={"div"}
-              sx={{
+            {/*NOTE: ここはdivタグでないとドラッグ&ドロップが使用ができない*/}
+            <div
+              style={{
                 display: "flex",
-                flexDirection: "column",
+                "flex-direction": "column",
                 gap: "16px",
               }}
               use:dndzone={{
@@ -155,15 +118,19 @@ export const EventNew: Component = () => {
                     dragDisabled={dragDisabled()}
                     startDrag={startDrag}
                     id={event.id}
-                    handleInputEvent={handleInputPresentationListItem}
+                    handleInputEvent={onInputPresentationListItem}
                   />
                 )}
               </For>
-            </Box>
+            </div>
           </Box>
 
           <Box marginBottom="16px">
-            <SecondaryButton onClick={addEvent} fullWidth={true} startIcon={<AddCircle />}>
+            <SecondaryButton
+              onClick={onClickAddPresentationItem}
+              fullWidth={true}
+              startIcon={<AddCircle />}
+            >
               発表枠の追加
             </SecondaryButton>
           </Box>
