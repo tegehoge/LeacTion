@@ -6,7 +6,7 @@ import Divider from "@suid/material/Divider";
 import Grid from "@suid/material/Grid";
 import TextField from "@suid/material/TextField";
 import Typography from "@suid/material/Typography";
-import { Component, For } from "solid-js";
+import { For, VoidComponent } from "solid-js";
 
 import { PrimaryButton, SecondaryButton } from "~/components/atoms/buttons";
 import { CautionServiceUseModal } from "~/components/atoms/modals";
@@ -15,7 +15,7 @@ import { PresentationForm, InfoInputGroup } from "~/components/organisms/events"
 import { useModal } from "~/hooks/atoms/useModal";
 import { useEvent } from "~/hooks/pages/useEvent";
 
-export const EventNew: Component = () => {
+export const EventNew: VoidComponent = () => {
   const { isOpen, onClose } = useModal(true);
 
   const {

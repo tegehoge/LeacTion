@@ -122,5 +122,5 @@ export const useEvent = () => {
     handleFinalize,
     startDrag,
     isDragDisabled,
-  };
+  } as const;
 };

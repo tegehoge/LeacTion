@@ -5,7 +5,7 @@ import Grid from "@suid/material/Grid";
 import IconButton from "@suid/material/IconButton";
 import TextField from "@suid/material/TextField";
 import { red } from "@suid/material/colors";
-import { Component } from "solid-js";
+import { VoidComponent } from "solid-js";
 
 import type { MouseDownEvent, TouchStartEvent } from "~/types/dndDirective";
 
@@ -18,7 +18,7 @@ export type Props = {
   handleInputEvent: (id: number, key: "title" | "memberName", value: string) => void;
 };
 
-export const PresentationForm: Component<Props> = (props) => {
+export const PresentationForm: VoidComponent<Props> = (props) => {
   return (
     <Box
       sx={{

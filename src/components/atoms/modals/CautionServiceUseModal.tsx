@@ -10,7 +10,7 @@ import ListItemIcon from "@suid/material/ListItemIcon";
 import ListItemText from "@suid/material/ListItemText";
 import Modal from "@suid/material/Modal";
 import { orange } from "@suid/material/colors";
-import { Component } from "solid-js";
+import { VoidComponent } from "solid-js";
 
 import "./modal.css";
 import { PrimaryButton } from "~/components/atoms/buttons";
@@ -21,7 +21,7 @@ export type Props = {
   onClose: () => void;
 };
 
-const CautionServiceUseModal: Component<Props> = (props) => {
+const CautionServiceUseModal: VoidComponent<Props> = (props) => {
   const theme = useTheme();
 
   return (

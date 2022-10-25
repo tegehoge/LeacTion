@@ -1,13 +1,12 @@
 import { useTheme } from "@suid/material";
 import Typography from "@suid/material/Typography";
-import { Component, JSXElement, mergeProps } from "solid-js";
+import { ParentComponent, mergeProps } from "solid-js";
 
 export type Props = {
-  children: JSXElement;
   color?: string;
 };
 
-export const LargeHeading: Component<Props> = (props) => {
+export const LargeHeading: ParentComponent<Props> = (props) => {
   const theme = useTheme();
   const merged = mergeProps({ color: theme.palette.grey["700"] }, props);
 

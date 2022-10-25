@@ -1,14 +1,13 @@
 import Button from "@suid/material/Button";
-import { Component, JSXElement, mergeProps } from "solid-js";
+import { ParentComponent, JSXElement, mergeProps } from "solid-js";
 
 export type Props = {
   onClick: () => void;
   startIcon?: JSXElement;
   fullWidth?: boolean;
-  children: JSXElement;
 };
 
-export const PrimaryButton: Component<Props> = (props) => {
+export const PrimaryButton: ParentComponent<Props> = (props) => {
   const mergedProps = mergeProps({ fullWidth: false }, props);
 
   return (

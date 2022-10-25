@@ -1,7 +1,7 @@
 import TagIcon from "@suid/icons-material/Tag";
 import Grid from "@suid/material/Grid";
 import TextField from "@suid/material/TextField";
-import { Component } from "solid-js";
+import { VoidComponent } from "solid-js";
 
 type Props = {
   name: string;
@@ -11,7 +11,7 @@ type Props = {
   onChange: (key: "name" | "date" | "url" | "hashTag", event: string | Date) => void;
 };
 
-export const InfoInputGroup: Component<Props> = (props) => {
+export const InfoInputGroup: VoidComponent<Props> = (props) => {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} sm={8}>
