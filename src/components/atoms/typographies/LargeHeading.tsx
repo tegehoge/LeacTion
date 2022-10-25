@@ -1,18 +1,20 @@
 import { useTheme } from "@suid/material";
 import Typography from "@suid/material/Typography";
-import { ParentComponent, mergeProps } from "solid-js";
+import { TypographyProps } from "@suid/material/Typography";
+import { ParentComponent, mergeProps, splitProps } from "solid-js";
 
-export type Props = {
+export type Props = TypographyProps & {
   color?: string;
 };
 
 export const LargeHeading: ParentComponent<Props> = (props) => {
   const theme = useTheme();
   const merged = mergeProps({ color: theme.palette.grey["700"] }, props);
+  const [local, restProps] = splitProps(merged, ["children"]);
 
   return (
-    <Typography variant="h5" fontWeight="bold" color={merged.color}>
-      {merged.children}
+    <Typography {...restProps} variant="h5" fontWeight="bold">
+      {local.children}
     </Typography>
   );
 };

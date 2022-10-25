@@ -1,1 +1,1 @@
-export { default as CautionServiceUseModal } from "./CautionServiceUseModal";
+export { CautionServiceUseModal } from "./CautionServiceUseModal";

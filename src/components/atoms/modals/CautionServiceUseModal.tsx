@@ -10,9 +10,10 @@ import ListItemIcon from "@suid/material/ListItemIcon";
 import ListItemText from "@suid/material/ListItemText";
 import Modal from "@suid/material/Modal";
 import { orange } from "@suid/material/colors";
+import useMediaQuery from "@suid/material/useMediaQuery";
 import { VoidComponent } from "solid-js";
 
-import "./modal.css";
+// import "./modal.css";
 import { PrimaryButton } from "~/components/atoms/buttons";
 import { LargeHeading } from "~/components/atoms/typographies";
 
@@ -21,7 +22,7 @@ export type Props = {
   onClose: () => void;
 };
 
-const CautionServiceUseModal: VoidComponent<Props> = (props) => {
+export const CautionServiceUseModal: VoidComponent<Props> = (props) => {
   const theme = useTheme();
 
   return (
@@ -41,18 +42,20 @@ const CautionServiceUseModal: VoidComponent<Props> = (props) => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "70%",
+            maxHeight: "90%",
+            width: "80vw",
             bgcolor: theme.palette.background.paper,
             padding: "20px",
             borderRadius: 1,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            overflowY: "auto",
           }}
         >
           <ErrorOutline sx={{ fontSize: 120, color: orange[200], marginBottom: "16px" }} />
 
-          <LargeHeading>サービス利用に関する注意</LargeHeading>
+          <LargeHeading textAlign="center">サービス利用に関する注意</LargeHeading>
 
           <List>
             <ListItem>
@@ -97,5 +100,3 @@ const CautionServiceUseModal: VoidComponent<Props> = (props) => {
     </Modal>
   );
 };
-
-export default CautionServiceUseModal;
