@@ -6,7 +6,8 @@ import IconButton from "@suid/material/IconButton";
 import TextField from "@suid/material/TextField";
 import { red } from "@suid/material/colors";
 import { Component } from "solid-js";
-import { MouseDownEvent, TouchStartEvent } from "~/types/useCustomeDirective";
+
+import type { MouseDownEvent, TouchStartEvent } from "~/types/dndDirective";
 
 export type Props = {
   id: number;
@@ -20,7 +21,12 @@ export type Props = {
 export const PresentationForm: Component<Props> = (props) => {
   return (
     <Box
-      sx={{ display: "flex", alignItems: "center", gap: 1, border: "none" }}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        gap: 1,
+        outlineColor: `rgba(255, 255, 255, .0);`,
+      }}
       component="form"
       tabIndex={props.dragDisabled ? 0 : -1}
     >
