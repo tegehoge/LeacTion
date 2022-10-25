@@ -10,10 +10,8 @@ import ListItemIcon from "@suid/material/ListItemIcon";
 import ListItemText from "@suid/material/ListItemText";
 import Modal from "@suid/material/Modal";
 import { orange } from "@suid/material/colors";
-import useMediaQuery from "@suid/material/useMediaQuery";
 import { VoidComponent } from "solid-js";
 
-// import "./modal.css";
 import { PrimaryButton } from "~/components/atoms/buttons";
 import { LargeHeading } from "~/components/atoms/typographies";
 
