@@ -49,7 +49,6 @@ export const InfoInputGroup: VoidComponent<Props> = (props) => {
 
       <Grid item xs={12} sm={8}>
         <TextField
-          required
           label="イベントページのURL"
           type="text"
           placeholder="connpassイベントURLなど(optional)"
@@ -64,7 +63,6 @@ export const InfoInputGroup: VoidComponent<Props> = (props) => {
 
       <Grid item xs={12} sm={4}>
         <TextField
-          required
           label="Twitterハッシュタグ"
           type="text"
           placeholder="Webナイト宮﨑"
