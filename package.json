@@ -31,11 +31,12 @@
     "jest": "^28.1.3",
     "jest-environment-jsdom": "^28.1.3",
     "prettier": "^2.7.1",
+    "solid-devtools": "^0.20.1",
     "solid-testing-library": "^0.3.0",
     "ts-jest": "^28.0.7",
     "typescript": "^4.6.4",
-    "vite": "^2.9.9",
-    "vite-plugin-solid": "^2.2.6"
+    "vite": "^3.2.2",
+    "vite-plugin-solid": "^2.4.0"
   },
   "dependencies": {
     "@babel/preset-env": "^7.18.10",
