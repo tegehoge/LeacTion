@@ -13,7 +13,7 @@ import { LargeHeading } from "~/components/atoms/typographies";
 import { EventPresentationForm, EventInfoInputGroup } from "~/components/organisms/events";
 import { CautionServiceUseModal } from "~/components/organisms/modals";
 import { useModal } from "~/hooks/organisms/useModal";
-import { useEvent } from "~/hooks/pages/useEvent";
+import { useEventInput } from "~/hooks/pages/useEventInput";
 
 export const EventNew: VoidComponent = () => {
   const { isOpen, onClose } = useModal(true);
@@ -24,7 +24,7 @@ export const EventNew: VoidComponent = () => {
     onClickAddPresentationItem,
     onInputPresentationListItem,
     setEventStore,
-  } = useEvent();
+  } = useEventInput();
 
   return (
     <>

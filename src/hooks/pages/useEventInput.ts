@@ -13,7 +13,7 @@ export type EventStore = {
   }[];
 };
 
-export const useEvent = () => {
+export const useEventInput = () => {
   const [eventStore, setEventStore] = createStore<EventStore>({
     name: "",
     date: new Date(),
