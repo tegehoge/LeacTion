@@ -1,2 +1,2 @@
-export { InfoInputGroup } from "./InfoInputGroup";
-export { PresentationForm } from "./PresentationForm";
+export { EventInfoInputGroup } from "./EventInfoInputGroup";
+export { EventPresentationForm } from "./EventPresentationForm";

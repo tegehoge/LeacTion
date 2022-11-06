@@ -11,7 +11,7 @@ type Props = {
   onChange: (key: "name" | "date" | "url" | "hashTag", event: string | Date) => void;
 };
 
-export const InfoInputGroup: VoidComponent<Props> = (props) => {
+export const EventInfoInputGroup: VoidComponent<Props> = (props) => {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} sm={8}>

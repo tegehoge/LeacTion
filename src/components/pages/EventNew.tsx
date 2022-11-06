@@ -11,7 +11,7 @@ import { For, VoidComponent } from "solid-js";
 import { PrimaryButton, SecondaryButton } from "~/components/atoms/buttons";
 import { CautionServiceUseModal } from "~/components/atoms/modals";
 import { LargeHeading } from "~/components/atoms/typographies";
-import { PresentationForm, InfoInputGroup } from "~/components/organisms/events";
+import { EventPresentationForm, EventInfoInputGroup } from "~/components/organisms/events";
 import { useModal } from "~/hooks/atoms/useModal";
 import { useEvent } from "~/hooks/pages/useEvent";
 
@@ -35,7 +35,7 @@ export const EventNew: VoidComponent = () => {
       <Container maxWidth="lg">
         <Box component={"div"}>
           <Box marginBottom="24px">
-            <InfoInputGroup
+            <EventInfoInputGroup
               onChange={onChangeEventInfo}
               name={eventStore.name}
               url={eventStore.url}
@@ -49,7 +49,7 @@ export const EventNew: VoidComponent = () => {
               イベントの発表順 (順序を変更できます)
             </Typography>
 
-            <PresentationForm
+            <EventPresentationForm
               handleInputEvent={onInputPresentationListItem}
               presentationList={eventStore.presentationList}
               setEventStore={setEventStore}

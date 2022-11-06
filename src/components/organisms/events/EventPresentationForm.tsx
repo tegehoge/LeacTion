@@ -23,7 +23,7 @@ export type Props = {
   setEventStore: SetStoreFunction<EventStore>;
 };
 
-export const PresentationForm: VoidComponent<Props> = (props) => {
+export const EventPresentationForm: VoidComponent<Props> = (props) => {
   // @ref: https://github.com/isaacHagoel/solid-dnd-directive/issues/6#issuecomment-1034672267
   // @ref: https://codesandbox.io/s/dnd-drag-handles-57btm?file=/src/App.jsx
   const [isDragDisabled, setIsDragDisabled] = createSignal(false);
