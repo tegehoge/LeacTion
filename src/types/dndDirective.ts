@@ -31,7 +31,7 @@ declare module "solid-js" {
     interface Directives {
       dndzone: {
         items: () => { id: number; memberName: string; title: string }[];
-        dragDisabled: Accessor<boolean>;
+        dragDisabled: boolean;
         dropTargetStyle: JSX.HTMLAttributes<HTMLDivElement>;
       };
     }

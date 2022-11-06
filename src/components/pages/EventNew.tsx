@@ -16,18 +16,14 @@ import { useModal } from "~/hooks/atoms/useModal";
 import { useEvent } from "~/hooks/pages/useEvent";
 
 export const EventNew: VoidComponent = () => {
-  const { isOpen, onClose } = useModal(true);
+  const { isOpen, onClose } = useModal(false);
 
   const {
     eventStore,
     onChangeEventInfo,
     onClickAddPresentationItem,
     onInputPresentationListItem,
-    dndzone,
-    handleConsider,
-    handleFinalize,
-    startDrag,
-    isDragDisabled,
+    setEventStore,
   } = useEvent();
 
   return (
@@ -53,34 +49,11 @@ export const EventNew: VoidComponent = () => {
               イベントの発表順 (順序を変更できます)
             </Typography>
 
-            {/*NOTE: ここはdivタグでないとドラッグ&ドロップが使用ができない*/}
-            <div
-              style={{
-                display: "flex",
-                "flex-direction": "column",
-                gap: "16px",
-              }}
-              use:dndzone={{
-                items: () => eventStore.presentationList,
-                dragDisabled: isDragDisabled,
-                dropTargetStyle: {},
-              }}
-              on:consider={handleConsider}
-              on:finalize={handleFinalize}
-            >
-              <For each={eventStore.presentationList}>
-                {(event, index) => (
-                  <PresentationForm
-                    title={event.title}
-                    memberName={event.memberName}
-                    isDragDisabled={isDragDisabled()}
-                    startDrag={startDrag}
-                    id={event.id}
-                    handleInputEvent={onInputPresentationListItem}
-                  />
-                )}
-              </For>
-            </div>
+            <PresentationForm
+              handleInputEvent={onInputPresentationListItem}
+              presentationList={eventStore.presentationList}
+              setEventStore={setEventStore}
+            />
           </Box>
 
           <Box marginBottom="16px">
