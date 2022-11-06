@@ -9,14 +9,14 @@ import Typography from "@suid/material/Typography";
 import { For, VoidComponent } from "solid-js";
 
 import { PrimaryButton, SecondaryButton } from "~/components/atoms/buttons";
-import { CautionServiceUseModal } from "~/components/atoms/modals";
 import { LargeHeading } from "~/components/atoms/typographies";
 import { EventPresentationForm, EventInfoInputGroup } from "~/components/organisms/events";
-import { useModal } from "~/hooks/atoms/useModal";
+import { CautionServiceUseModal } from "~/components/organisms/modals";
+import { useModal } from "~/hooks/organisms/useModal";
 import { useEvent } from "~/hooks/pages/useEvent";
 
 export const EventNew: VoidComponent = () => {
-  const { isOpen, onClose } = useModal(false);
+  const { isOpen, onClose } = useModal(true);
 
   const {
     eventStore,
