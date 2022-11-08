@@ -20,6 +20,13 @@ export const routes = [
           import("~/components/pages/Top").then(({ Top }) => ({ default: Top }))
         ),
       },
+
+      {
+        path: "/new",
+        component: lazy(() =>
+          import("~/components/pages/EventNew").then(({ EventNew }) => ({ default: EventNew }))
+        ),
+      },
     ],
   },
 ];
