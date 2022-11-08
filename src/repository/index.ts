@@ -1,15 +1,15 @@
 import { FirebaseCommentRepository, FirebaseEventRepository } from "./firebase";
 import { CommentRepository, EventRepository } from "./interface";
 import { LocalStorageCommentRepository, LocalStorageEventRepository } from "./local_storage";
+import { firestore } from "../client/firebase";
 
-// @ts-ignore
-const isProduction = import.meta.env.PROD;
+const canUseFirestore = firestore != null;
 
-const eventRepository: EventRepository = isProduction
+const eventRepository: EventRepository = canUseFirestore
   ? new FirebaseEventRepository()
   : new LocalStorageEventRepository();
 
-const commentRepository: CommentRepository = isProduction
+const commentRepository: CommentRepository = canUseFirestore
   ? new FirebaseCommentRepository()
   : new LocalStorageCommentRepository();
 

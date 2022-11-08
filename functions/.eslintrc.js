@@ -62,6 +62,12 @@ module.exports = {
     "no-var": "warn",
     "no-void": "error",
     "prefer-const": "warn",
+    'import/no-unresolved': [
+      'error',
+      {
+        ignore: ['^firebase-admin/.+'],
+      },
+    ],
   },
   settings: {
     jsdoc: {

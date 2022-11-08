@@ -1,3 +1,77 @@
+<script setup lang="ts">
+import dayjs from "dayjs";
+import { onMounted, ref, reactive } from "vue";
+import Swal from "sweetalert2";
+import draggable from "vuedraggable";
+
+import { Event } from "../models/event";
+import { emptyTalk } from "../models/talk";
+
+interface Props {
+  initialEvent: Event;
+}
+const props = defineProps<Props>();
+
+interface Emits {
+  (e: "update-event", event: Event): void;
+}
+const emit = defineEmits<Emits>();
+
+const today = dayjs().format("YYYY-MM-DD");
+const eventInput = reactive(props.initialEvent);
+const currentTalkIds = props.initialEvent.talks
+  .filter((talk) => !talk.isEmpty())
+  .map((talk) => talk.id);
+
+const drag = ref(false);
+const dragOptions = {
+  animation: 200,
+  group: "description",
+  disabled: false,
+  ghostClass: "ghost",
+};
+
+const fillMinimalTalks = () => {
+  while ((eventInput.talks.length || 0) < 1) {
+    eventInput.talks.push(emptyTalk());
+  }
+};
+
+const addTalkInput = (index?: number) => {
+  eventInput.insertEmptyTalkAt(index);
+};
+
+const removeTalk = (talkId: string) => {
+  if (currentTalkIds.includes(talkId)) {
+    Swal.fire({
+      title: "発表枠の削除",
+      text: "既存の発表を削除するとすでに投稿されたコメントが閲覧できなくなります。削除してよろしいですか？",
+      icon: "warning",
+      confirmButtonText: "削除する",
+      showCancelButton: true,
+      cancelButtonText: "キャンセル",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        eventInput.talks = eventInput.talks.filter((talk) => talk.id != talkId);
+        fillMinimalTalks();
+      }
+    });
+  } else {
+    eventInput.talks = eventInput.talks.filter((talk) => talk.id != talkId);
+  }
+};
+
+const updateEvent = (): void => {
+  emit("update-event", eventInput);
+};
+
+onMounted(() => {
+  if (eventInput.talks.length === 0) {
+    eventInput.talks = [emptyTalk(), emptyTalk(), emptyTalk()];
+  }
+});
+</script>
+
 <template>
   <form class="max-w-5xl mx-auto px-2">
     <div class="md:flex pb-0 md:pb-3">
@@ -99,7 +173,7 @@
             class="handle text-xl px-2"
             :class="{ 'cursor-grabbing': drag, 'cursor-grab': !drag }"
           >
-            <font-awesome-icon :icon="['fas', 'grip-lines']" />
+            <FontAwesomeIcon :icon="['fas', 'grip-lines']" />
           </div>
           <div class="flex-grow md:flex md:items-center">
             <div class="w-full md:w-1/3 mb-1 md:mb-0">
@@ -139,97 +213,11 @@
         class="w-full border-2 border-green-500 text-green-500 hover:bg-green-500 hover:border-white hover:text-white text-lg p-2 rounded"
         @click="addTalkInput()"
       >
-        <font-awesome-icon :icon="['fas', 'plus-square']" class="mr-2" />発表枠の追加
+        <FontAwesomeIcon :icon="['fas', 'plus-square']" class="mr-2" />発表枠の追加
       </button>
     </div>
   </form>
 </template>
-<script lang="ts">
-import dayjs from "dayjs";
-import { defineComponent, onMounted, ref, reactive } from "vue";
-import Swal from "sweetalert2";
-import draggable from "vuedraggable";
-
-import { Event } from "../models/event";
-import { emptyTalk } from "../models/talk";
-
-export default defineComponent({
-  name: "EventInput",
-  components: { draggable },
-  props: {
-    initialEvent: {
-      type: Event,
-      required: true,
-    },
-  },
-  emits: ["update-event"],
-  setup(props, { emit }) {
-    const today = dayjs().format("YYYY-MM-DD");
-    const eventInput = reactive(props.initialEvent);
-    const currentTalkIds = props.initialEvent.talks
-      .filter((talk) => !talk.isEmpty())
-      .map((talk) => talk.id);
-
-    const drag = ref(false);
-    const dragOptions = {
-      animation: 200,
-      group: "description",
-      disabled: false,
-      ghostClass: "ghost",
-    };
-
-    const fillMinimalTalks = () => {
-      while ((eventInput.talks.length || 0) < 1) {
-        eventInput.talks.push(emptyTalk());
-      }
-    };
-
-    const addTalkInput = (index?: number) => {
-      eventInput.insertEmptyTalkAt(index);
-    };
-
-    const removeTalk = (talkId: string) => {
-      if (currentTalkIds.includes(talkId)) {
-        Swal.fire({
-          title: "発表枠の削除",
-          text: "既存の発表を削除するとすでに投稿されたコメントが閲覧できなくなります。削除してよろしいですか？",
-          icon: "warning",
-          confirmButtonText: "削除する",
-          showCancelButton: true,
-          cancelButtonText: "キャンセル",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            eventInput.talks = eventInput.talks.filter((talk) => talk.id != talkId);
-            fillMinimalTalks();
-          }
-        });
-      } else {
-        eventInput.talks = eventInput.talks.filter((talk) => talk.id != talkId);
-      }
-    };
-
-    const updateEvent = (): void => {
-      emit("update-event", eventInput);
-    };
-
-    onMounted(() => {
-      if (eventInput.talks.length === 0) {
-        eventInput.talks = [emptyTalk(), emptyTalk(), emptyTalk()];
-      }
-    });
-
-    return {
-      eventInput,
-      updateEvent,
-      addTalkInput,
-      removeTalk,
-      today,
-      drag,
-      dragOptions,
-    };
-  },
-});
-</script>
 
 <style scoped>
 .ghost {

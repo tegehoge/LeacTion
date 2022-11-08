@@ -1,15 +1,14 @@
-import firebase from "firebase/app";
-import "firebase/firestore";
+import { initializeApp } from "firebase/app";
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 
 function createFirestore() {
-  // @ts-ignore
   const isProduction = import.meta.env.PROD;
+  const isEmulator = import.meta.env.MODE == "emulator";
 
-  if (!isProduction) {
+  if (!isProduction && !isEmulator) {
     return null;
   }
 
-  // @ts-ignore
   const env = import.meta.env;
 
   const firebaseConfig = {
@@ -23,15 +22,14 @@ function createFirestore() {
     measurementId: env.VITE_MEASUREMENT_ID || "",
   };
 
-  firebase.initializeApp(firebaseConfig);
-  const firestore = firebase.firestore();
-  // @ts-ignore
-  if (import.meta.env.MODE == "emulator") {
-    firestore.useEmulator("localhost", 8080);
+  const app = initializeApp(firebaseConfig);
+  const firestore = getFirestore(app);
+  if (isEmulator) {
+    connectFirestoreEmulator(firestore, "localhost", 8080);
   }
   return firestore;
 }
 
 const firestore = createFirestore();
 
-export { firestore };
+export { firestore, createFirestore };

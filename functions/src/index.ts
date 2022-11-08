@@ -1,14 +1,13 @@
-import * as functions from "firebase-functions";
-import * as firebase from "firebase-admin";
+import { initializeApp } from "firebase-admin/app";
+import { getFirestore, WriteResult, FieldValue, QuerySnapshot } from "firebase-admin/firestore";
+import { getStorage } from "firebase-admin/storage";
+import { config, https } from "firebase-functions";
 import * as express from "express";
 import * as bcrypt from "bcrypt";
 import * as jssha256 from "js-sha256";
 import * as fs from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
-
-// import * as dayjs from "dayjs";
-import { WriteResult, QuerySnapshot } from "@google-cloud/firestore";
 
 import {
   EventRequestWithPassword,
@@ -20,11 +19,11 @@ import {
   Event, Comments
 } from "./types";
 
-const firebaseConfig = functions.config() ? functions.config().firebase : {};
+const firebaseConfig = config() ? config().firebase : {};
 
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-const firestore = firebaseApp.firestore();
-const storage = firebaseApp.storage();
+const firebaseApp = initializeApp(firebaseConfig);
+const firestore = getFirestore(firebaseApp);
+const storage = getStorage(firebaseApp);
 
 const app = express();
 const api = express.Router();
@@ -286,8 +285,8 @@ api.post("/event/:eventId/comment/:commentId/like", (req, res) => {
   const likeReq = req.body as CommentLikeRequest;
 
   const arrayUpdate = likeReq.remove
-    ? firebase.firestore.FieldValue.arrayRemove
-    : firebase.firestore.FieldValue.arrayUnion;
+    ? FieldValue.arrayRemove
+    : FieldValue.arrayUnion;
 
   return eventIsArchived(eventId).then((isArchived) => {
     if (isArchived) {
@@ -350,7 +349,7 @@ api.post("/event/:eventId/comment/:commentId/delete", (req, res) => {
 
 app.use("/api", api);
 
-exports.app = functions.https.onRequest(app);
+exports.app = https.onRequest(app);
 
 // 定期的に開催日を過ぎたイベントをアーカイブする
 /*

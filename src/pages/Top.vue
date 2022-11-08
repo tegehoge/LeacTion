@@ -1,5 +1,7 @@
+<script setup lang="ts"></script>
+
 <template>
-  <app-header></app-header>
+  <AppHeader />
   <div class="py-3 px-5 pt-8 mx-auto text-center text-gray-700 leading-7 max-w-3xl">
     <div class="p-3 mb-4 text-blue-700 text-lg font-semibold border-blue-700 border-2 rounded">
       「LeacTion!」は、勉強会やセミナーで発表者と参加者をつなぐ、<br />オンラインコメントツールです
@@ -57,17 +59,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "Top",
-  setup() {
-    return {};
-  },
-});
-</script>
 
 <style scoped>
 .about {

@@ -1,3 +1,4 @@
+<script setup lang="ts"></script>
 <template>
   <transition name="modal">
     <div class="absolute inset-0 w-full h-full flex items-center justify-center">
@@ -8,15 +9,3 @@
     </div>
   </transition>
 </template>
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "Modal",
-  props: {},
-  emits: [],
-  setup() {
-    return {};
-  },
-});
-</script>
