@@ -4,7 +4,7 @@ import Container from "@suid/material/Container";
 import Paper from "@suid/material/Paper";
 import Stack from "@suid/material/Stack";
 import Typography from "@suid/material/Typography";
-import { Component } from "solid-js";
+import { VoidComponent } from "solid-js";
 
 // @ref: https://ja.vitejs.dev/guide/assets.html#importing-asset-as-url
 import baloonUrl from "~/assets/baloon.png";
@@ -12,7 +12,7 @@ import { LargeButtonWithRouterLink } from "~/components/atoms/buttons";
 import { MediumSizeTextParagraph } from "~/components/atoms/typographies";
 import { LargeSizeText } from "~/components/atoms/typographies";
 
-export const Top: Component = () => {
+export const Top: VoidComponent = () => {
   const theme = useTheme();
   const { light: primaryLightColor, main: primaryMainColor } = theme.palette.primary;
   const textColor = theme.palette.grey[700];
