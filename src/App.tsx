@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { attachDebugger } from "solid-devtools";
 import { Component } from "solid-js";
 
+import { Toast } from "~/components/atoms/toasts";
 import { routes } from "~/routes";
 import { theme } from "~/theme";
 
@@ -19,6 +20,7 @@ const App: Component = () => {
         <CssBaseline />
         <Router>
           <Routes />
+          <Toast />
         </Router>
       </ThemeProvider>
     </QueryClientProvider>
