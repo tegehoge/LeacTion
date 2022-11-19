@@ -9,18 +9,6 @@ import type { Event } from "~/types/event";
 
 export const useEventInput = () => {
   const [isValid, setIsValid] = createSignal(false);
-  const saveEventMutation = createMutation(
-    () => saveEvent(eventStore, eventPasswordStore.password),
-    {
-      onSuccess() {
-        toast.success("イベント登録しました");
-      },
-      onError() {
-        toast.error("登録に失敗しました");
-      },
-    }
-  );
-
   const [eventStore, setEventStore] = createStore<Event>({
     id: nanoid(8),
     name: "",
@@ -38,6 +26,18 @@ export const useEventInput = () => {
     password: "",
     passwordConfirm: "",
   });
+
+  const saveEventMutation = createMutation(
+    (event: Event) => saveEvent(event, eventPasswordStore.password),
+    {
+      onSuccess() {
+        toast.success("イベント登録しました");
+      },
+      onError() {
+        toast.error("登録に失敗しました");
+      },
+    }
+  );
 
   const onChangeEvent = (
     key: "name" | "dateOfEvent" | "externalUrl" | "hashtag",
@@ -106,7 +106,11 @@ export const useEventInput = () => {
   const onSubmitSaveEvent: JSX.EventHandler<HTMLFormElement, SubmitEvent> = (event) => {
     event.preventDefault();
 
-    saveEventMutation.mutate();
+    // NOTE: talksのタイトルと発表者の両方が入力されているInputだけ対象にする
+    saveEventMutation.mutate({
+      ...eventStore,
+      talks: eventStore.talks.filter((talk) => talk.title && talk.speakerName),
+    });
   };
 
   return {
