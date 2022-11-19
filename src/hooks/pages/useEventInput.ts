@@ -1,83 +1,125 @@
-import { createStore } from "solid-js/store";
-import { produce } from "solid-js/store";
+import { createMutation } from "@tanstack/solid-query";
+import { nanoid } from "nanoid";
+import { createSignal, createEffect, createMemo, JSX } from "solid-js";
+import { createStore, produce } from "solid-js/store";
+import toast from "solid-toast";
 
-export type EventStore = {
-  name: string;
-  date: Date;
-  url: string;
-  hashTag: string;
-  presentationList: {
-    id: number;
-    memberName: string;
-    title: string;
-  }[];
-};
+import { saveEvent } from "~/repository";
+import type { Event } from "~/types/event";
 
 export const useEventInput = () => {
-  const [eventStore, setEventStore] = createStore<EventStore>({
+  const [isValid, setIsValid] = createSignal(false);
+  const saveEventMutation = createMutation(
+    () => saveEvent(eventStore, eventPasswordStore.password),
+    {
+      onSuccess() {
+        toast.success("イベント登録しました");
+      },
+      onError() {
+        toast.error("登録に失敗しました");
+      },
+    }
+  );
+
+  const [eventStore, setEventStore] = createStore<Event>({
+    id: nanoid(8),
     name: "",
-    date: new Date(),
-    url: "",
-    hashTag: "",
-    presentationList: [
-      {
-        id: 1,
-        memberName: "たなか",
-        title: "Laravelについて",
-      },
-      {
-        id: 2,
-        memberName: "すずき",
-        title: "Ruby on Railsについて",
-      },
-      {
-        id: 3,
-        memberName: "たかはし",
-        title: "Next.jsについて",
-      },
-    ],
+    dateOfEvent: "",
+    externalUrl: "",
+    hashtag: "",
+    talks: [...Array(3)].map(() => ({
+      id: nanoid(),
+      title: "",
+      speakerName: "",
+    })),
   });
 
-  const onChangeEventInfo = (
-    key: "name" | "date" | "url" | "hashTag",
-    value: string | Date
+  const [eventPasswordStore, setEventPasswordStore] = createStore({
+    password: "",
+    passwordConfirm: "",
+  });
+
+  const onChangeEvent = (
+    key: "name" | "dateOfEvent" | "externalUrl" | "hashtag",
+    value: string
   ): void => {
     setEventStore(key, value);
   };
 
-  const onClickAddPresentationItem = (): void => {
-    const nextId = Math.max(...eventStore.presentationList.map((event) => event.id)) + 1;
+  const onChangeEventPassword = (key: "password" | "passwordConfirm", value: string): void => {
+    setEventPasswordStore(key, value);
+  };
 
+  const onClickAddTalkItem = (): void => {
     setEventStore(
-      "presentationList",
+      "talks",
       produce((event) => {
         event.push({
-          id: nextId,
-          memberName: "",
+          id: nanoid(),
           title: "",
+          speakerName: "",
         });
       })
     );
   };
 
-  const onInputPresentationListItem = (
-    id: number,
-    key: "title" | "memberName",
-    value: string
-  ): void => {
+  const onInputTalkListItem = (id: string, key: "title" | "speakerName", value: string): void => {
     setEventStore(
-      "presentationList",
-      (presentationList) => presentationList.id === id,
+      "talks",
+      (talk) => talk.id === id,
       key,
       () => value
     );
   };
 
+  // Form関連
+  createEffect(() => {
+    // イベント作成ボタンのStatusを制御する
+    // イベント発表者が一つでも入力されたらバリデーション通過とする
+    const isSetPresentationList = eventStore.talks.some(
+      ({ title, speakerName }) => title && speakerName
+    );
+
+    if (
+      !eventStore.name ||
+      !eventStore.dateOfEvent ||
+      !isSetPresentationList ||
+      !eventPasswordStore.password ||
+      !eventPasswordStore.passwordConfirm ||
+      !!passwordErrorMessage()
+    ) {
+      setIsValid(true);
+      return;
+    }
+
+    setIsValid(false);
+  });
+
+  const passwordErrorMessage = createMemo(() => {
+    if (eventPasswordStore.password !== eventPasswordStore.passwordConfirm) {
+      return "パスワードが一致していません";
+    }
+
+    return undefined;
+  });
+
+  const onSubmitSaveEvent: JSX.EventHandler<HTMLFormElement, SubmitEvent> = (event) => {
+    event.preventDefault();
+
+    saveEventMutation.mutate();
+  };
+
   return {
     eventStore,
-    onChangeEventInfo,
-    onClickAddPresentationItem,
-    onInputPresentationListItem,
     setEventStore,
+    eventPasswordStore,
+    onChangeEvent,
+    onChangeEventPassword,
+    onClickAddTalkItem,
+    onInputTalkListItem,
+    isValid,
+    passwordErrorMessage,
+    onSubmitSaveEvent,
+    saveEventMutation,
   } as const;
 };
