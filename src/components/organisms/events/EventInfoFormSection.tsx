@@ -1,17 +1,16 @@
 import TagIcon from "@suid/icons-material/Tag";
-import Grid from "@suid/material/Grid";
-import TextField from "@suid/material/TextField";
+import { Grid, TextField } from "@suid/material";
 import { VoidComponent } from "solid-js";
 
 type Props = {
   name: string;
-  date: Date;
-  url: string;
-  hashTag: string;
-  onChange: (key: "name" | "date" | "url" | "hashTag", event: string | Date) => void;
+  dateOfEvent: string;
+  externalUrl: string;
+  hashtag: string;
+  onChange: (key: "name" | "dateOfEvent" | "externalUrl" | "hashtag", event: string) => void;
 };
 
-export const EventInfoInputGroup: VoidComponent<Props> = (props) => {
+export const EventInfoFormSection: VoidComponent<Props> = (props) => {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} sm={8}>
@@ -39,11 +38,8 @@ export const EventInfoInputGroup: VoidComponent<Props> = (props) => {
           InputLabelProps={{
             shrink: true,
           }}
-          value={props.date}
-          // defaultValue={props.date}
-          onChange={(_, target) => {
-            props.onChange("date", new Date(target));
-          }}
+          value={new Date(props.dateOfEvent)}
+          onChange={(_, target) => props.onChange("dateOfEvent", target)}
         />
       </Grid>
 
@@ -56,8 +52,8 @@ export const EventInfoInputGroup: VoidComponent<Props> = (props) => {
           InputLabelProps={{
             shrink: true,
           }}
-          value={props.url}
-          onChange={(_, target) => props.onChange("url", target)}
+          value={props.externalUrl}
+          onChange={(_, target) => props.onChange("externalUrl", target)}
         />
       </Grid>
 
@@ -73,8 +69,8 @@ export const EventInfoInputGroup: VoidComponent<Props> = (props) => {
           InputProps={{
             startAdornment: <TagIcon />,
           }}
-          value={props.hashTag}
-          onChange={(event, target) => props.onChange("hashTag", target)}
+          value={props.hashtag}
+          onChange={(event, target) => props.onChange("hashtag", target)}
         />
       </Grid>
     </Grid>
