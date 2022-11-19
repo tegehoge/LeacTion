@@ -21,7 +21,8 @@ export type Props = {
   handleInputEvent: (id: string, key: "title" | "speakerName", value: string) => void;
   talks: Talk[];
   setEventStore: SetStoreFunction<Event>;
-  onClick: () => void;
+  onClickAdd: () => void;
+  onClickDelete: (id: string) => void;
 };
 
 export const EventTalkFormSection: VoidComponent<Props> = (props) => {
@@ -85,7 +86,7 @@ export const EventTalkFormSection: VoidComponent<Props> = (props) => {
           on:finalize={(e) => onFinalize(e)}
         >
           <For each={props.talks}>
-            {(event, index) => (
+            {(talk) => (
               <Box
                 sx={{
                   display: "flex",
@@ -106,7 +107,7 @@ export const EventTalkFormSection: VoidComponent<Props> = (props) => {
                   <Grid item xs={12} sm={8}>
                     <TextField
                       name="speakerName"
-                      value={event.speakerName}
+                      value={talk.speakerName}
                       required
                       placeholder="発表者名"
                       fullWidth
@@ -114,25 +115,25 @@ export const EventTalkFormSection: VoidComponent<Props> = (props) => {
                         shrink: true,
                       }}
                       onChange={(e) =>
-                        props.handleInputEvent(event.id, "speakerName", e.target.value)
+                        props.handleInputEvent(talk.id, "speakerName", e.target.value)
                       }
                     />
                   </Grid>
 
                   <Grid item xs={12} sm={4}>
                     <TextField
-                      value={event.title}
+                      value={talk.title}
                       required
                       placeholder="発表タイトル"
                       fullWidth
                       InputLabelProps={{
                         shrink: true,
                       }}
-                      onChange={(e) => props.handleInputEvent(event.id, "title", e.target.value)}
+                      onChange={(e) => props.handleInputEvent(talk.id, "title", e.target.value)}
                     />
                   </Grid>
                 </Grid>
-                <IconButton>
+                <IconButton onClick={() => props.onClickDelete(talk.id)}>
                   <Delete sx={{ color: red[300] }} />
                 </IconButton>
               </Box>
@@ -140,7 +141,11 @@ export const EventTalkFormSection: VoidComponent<Props> = (props) => {
           </For>
         </div>
       </Box>
-      <SecondaryButton onClick={() => props.onClick()} fullWidth={true} startIcon={<AddCircle />}>
+      <SecondaryButton
+        onClick={() => props.onClickAdd()}
+        fullWidth={true}
+        startIcon={<AddCircle />}
+      >
         発表枠の追加
       </SecondaryButton>
     </>

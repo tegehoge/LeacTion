@@ -63,6 +63,17 @@ export const useEventInput = () => {
     );
   };
 
+  const onClickDeleteEvent = (id: string): void => {
+    setEventStore(
+      "talks",
+      produce((talks) => {
+        const index = talks.findIndex((talk) => talk.id === id);
+
+        return talks.splice(index, 1);
+      })
+    );
+  };
+
   const onInputTalkListItem = (id: string, key: "title" | "speakerName", value: string): void => {
     setEventStore(
       "talks",
@@ -125,5 +136,6 @@ export const useEventInput = () => {
     passwordErrorMessage,
     onSubmitSaveEvent,
     saveEventMutation,
+    onClickDeleteEvent,
   } as const;
 };

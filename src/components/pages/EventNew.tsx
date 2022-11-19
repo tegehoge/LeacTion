@@ -28,6 +28,7 @@ export const EventNew: VoidComponent = () => {
     passwordErrorMessage,
     onSubmitSaveEvent,
     saveEventMutation,
+    onClickDeleteEvent,
   } = useEventInput();
 
   return (
@@ -53,7 +54,8 @@ export const EventNew: VoidComponent = () => {
               handleInputEvent={onInputTalkListItem}
               talks={eventStore.talks}
               setEventStore={setEventStore}
-              onClick={onClickAddTalkItem}
+              onClickAdd={onClickAddTalkItem}
+              onClickDelete={onClickDeleteEvent}
             />
           </Box>
 
