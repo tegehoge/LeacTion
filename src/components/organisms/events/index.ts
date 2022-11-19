@@ -1,2 +1,3 @@
-export { EventInfoInputGroup } from "./EventInfoInputGroup";
-export { EventPresentationForm } from "./EventPresentationForm";
+export { EventInfoFormSection } from "./EventInfoFormSection";
+export { EventPasswordFormSection } from "./EventPasswordFormSection";
+export { EventTalkFormSection } from "./EventTalkFormSection";
