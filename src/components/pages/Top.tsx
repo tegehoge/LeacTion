@@ -8,7 +8,7 @@ import { VoidComponent } from "solid-js";
 
 // @ref: https://ja.vitejs.dev/guide/assets.html#importing-asset-as-url
 import baloonUrl from "~/assets/baloon.png";
-import { LargeButtonWithRouterLink } from "~/components/atoms/buttons";
+import { LoginButton } from "~/components/atoms/buttons";
 import { MediumSizeTextParagraph } from "~/components/atoms/typographies";
 import { LargeSizeText } from "~/components/atoms/typographies";
 
@@ -43,7 +43,7 @@ export const Top: VoidComponent = () => {
       </Box>
 
       <Box marginBottom="40px">
-        <LargeButtonWithRouterLink href="/new">イベントを登録する</LargeButtonWithRouterLink>
+        <LoginButton redirectPath="/mypage">Googleアカウントでログインする</LoginButton>
       </Box>
 
       <Box marginBottom="80px">
@@ -108,12 +108,12 @@ export const Top: VoidComponent = () => {
                   textDecoration: "underline",
                 }}
               >
-                参加者も管理者もログイン不要！
+                参加者はログイン不要！
               </Typography>
               <MediumSizeTextParagraph>
-                参加者は、イベントページを開くだけですぐにコメントや質問を投稿できます。
+                ログインが必要なのはイベント管理者だけ。
                 <br />
-                管理者も、面倒な会員登録やログインは不要。イベントにパスワードを設定するだけで、後から編集も可能です。
+                イベントの参加者はイベントページを開くだけですぐにコメントや質問を投稿できます。
               </MediumSizeTextParagraph>
             </Box>
             <Box>
@@ -155,7 +155,7 @@ export const Top: VoidComponent = () => {
       </Box>
 
       <Box marginBottom="8px">
-        <LargeButtonWithRouterLink href="/new">イベントを登録する</LargeButtonWithRouterLink>
+        <LoginButton redirectPath="/mypage">Googleアカウントでログインする</LoginButton>
       </Box>
     </Container>
   );

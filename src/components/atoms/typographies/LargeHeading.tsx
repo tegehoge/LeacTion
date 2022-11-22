@@ -5,6 +5,7 @@ import { ParentComponent, mergeProps, splitProps } from "solid-js";
 
 export type Props = TypographyProps & {
   color?: string;
+  gutterBottom?: boolean;
 };
 
 export const LargeHeading: ParentComponent<Props> = (props) => {
@@ -13,7 +14,7 @@ export const LargeHeading: ParentComponent<Props> = (props) => {
   const [local, restProps] = splitProps(merged, ["children"]);
 
   return (
-    <Typography {...restProps} variant="h5" fontWeight="bold">
+    <Typography {...restProps} variant="h5" fontWeight="bold" gutterBottom={props.gutterBottom}>
       {local.children}
     </Typography>
   );

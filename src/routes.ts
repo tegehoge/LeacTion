@@ -22,6 +22,13 @@ export const routes = [
       },
 
       {
+        path: "/mypage",
+        component: lazy(() =>
+          import("~/components/pages/MyPage").then(({ MyPage }) => ({ default: MyPage }))
+        ),
+      },
+
+      {
         path: "/new",
         component: lazy(() =>
           import("~/components/pages/EventNew").then(({ EventNew }) => ({ default: EventNew }))
