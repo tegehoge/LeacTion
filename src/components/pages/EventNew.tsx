@@ -15,7 +15,7 @@ import { CautionServiceUseModal } from "~/components/organisms/modals";
 import { useModal } from "~/hooks/organisms/useModal";
 import { useEventInput } from "~/hooks/pages/useEventInput";
 
-export const EventNew: VoidComponent = () => {
+const EventNew: VoidComponent = () => {
   const { isOpen, onClose } = useModal(true);
 
   const {
@@ -127,3 +127,5 @@ export const EventNew: VoidComponent = () => {
     </>
   );
 };
+
+export default EventNew;

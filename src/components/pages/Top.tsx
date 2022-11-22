@@ -12,7 +12,7 @@ import { LoginButton } from "~/components/atoms/buttons";
 import { MediumSizeTextParagraph } from "~/components/atoms/typographies";
 import { LargeSizeText } from "~/components/atoms/typographies";
 
-export const Top: VoidComponent = () => {
+const Top: VoidComponent = () => {
   const theme = useTheme();
   const { light: primaryLightColor, main: primaryMainColor } = theme.palette.primary;
   const textColor = theme.palette.grey[700];
@@ -160,3 +160,5 @@ export const Top: VoidComponent = () => {
     </Container>
   );
 };
+
+export default Top;

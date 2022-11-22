@@ -8,31 +8,19 @@ import { lazy } from "solid-js";
 export const routes = [
   {
     path: "/",
-    component: lazy(() =>
-      import("~/components/templates/BaseLayout").then(({ BaseLayout }) => ({
-        default: BaseLayout,
-      }))
-    ),
+    component: lazy(() => import("~/components/templates/BaseLayout")),
     children: [
       {
         path: "/",
-        component: lazy(() =>
-          import("~/components/pages/Top").then(({ Top }) => ({ default: Top }))
-        ),
+        component: lazy(() => import("~/components/pages/Top")),
       },
-
       {
         path: "/mypage",
-        component: lazy(() =>
-          import("~/components/pages/MyPage").then(({ MyPage }) => ({ default: MyPage }))
-        ),
+        component: lazy(() => import("~/components/pages/MyPage")),
       },
-
       {
         path: "/new",
-        component: lazy(() =>
-          import("~/components/pages/EventNew").then(({ EventNew }) => ({ default: EventNew }))
-        ),
+        component: lazy(() => import("~/components/pages/EventNew")),
       },
     ],
   },

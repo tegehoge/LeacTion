@@ -9,7 +9,7 @@ import { LargeHeading } from "~/components/atoms/typographies";
 import { EventList } from "~/components/organisms/events/EventList";
 import { useFirebaseApp } from "~/firebase/FirebaseProvider";
 
-export const MyPage: VoidComponent = () => {
+const MyPage: VoidComponent = () => {
   const navigate = useNavigate();
   const app = useFirebaseApp();
   const auth = getAuth(app);
@@ -42,3 +42,5 @@ export const MyPage: VoidComponent = () => {
     </Switch>
   );
 };
+
+export default MyPage;

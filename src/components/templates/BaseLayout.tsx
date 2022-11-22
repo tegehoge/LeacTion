@@ -3,7 +3,7 @@ import { Component } from "solid-js";
 
 import { Header } from "~/components/organisms/navs";
 
-export const BaseLayout: Component = () => {
+const BaseLayout: Component = () => {
   return (
     <>
       <Header />
@@ -13,3 +13,5 @@ export const BaseLayout: Component = () => {
     </>
   );
 };
+
+export default BaseLayout;
