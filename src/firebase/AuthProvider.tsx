@@ -1,5 +1,4 @@
 import {
-  Auth,
   getAuth,
   GoogleAuthProvider,
   signInAnonymously,
@@ -11,11 +10,11 @@ import {
 import { getDoc, getFirestore, setDoc } from "firebase/firestore";
 import { useAuth } from "solid-firebase";
 import { Component, createContext, createEffect, JSX, useContext } from "solid-js";
-import { createStore, produce, reconcile } from "solid-js/store";
+import { createStore, produce } from "solid-js/store";
 import { useFirebaseApp } from "./FirebaseProvider";
 import { Account, accountDoc } from "~/models/Account";
 
-type AuthStateContext = {
+type AuthContextStore = {
   loading: boolean;
   uid: string | null; // 匿名アカウントでも uid は発行される
   account: Account | null; // Googleアカウントがある場合にセットされる
@@ -24,17 +23,13 @@ type AuthStateContext = {
   signOut: () => Promise<void>;
 };
 
-const AuthContext = createContext<AuthStateContext>();
+const AuthContext = createContext<AuthContextStore>();
 
 export const useAuthContext = () => {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error("useFirebaseApp must be used within a <AuthProvider />");
   return ctx;
 };
-
-interface Props {
-  children: JSX.Element;
-}
 
 const isSignedInWithGoogleProvider = (user: User): boolean => {
   return user.providerData.some(
@@ -69,11 +64,15 @@ const fetchAccount = (user: User): Promise<Account> => {
     });
 };
 
+interface Props {
+  children: JSX.Element;
+}
+
 export const AuthProvider: Component<Props> = (props) => {
   const auth = getAuth(useFirebaseApp());
   const authState = useAuth(auth);
 
-  const [context, setContext] = createStore<AuthStateContext>({
+  const [context, setContext] = createStore<AuthContextStore>({
     loading: authState.loading,
     uid: authState.data?.uid || null,
     account: null,
