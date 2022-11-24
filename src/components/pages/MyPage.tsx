@@ -1,17 +1,14 @@
 import { useNavigate } from "@solidjs/router";
 import Box from "@suid/material/Box";
 import Container from "@suid/material/Container";
-import { getAuth, GoogleAuthProvider, User } from "firebase/auth";
-import { getDoc, getFirestore, setDoc } from "firebase/firestore";
-import { useAuth } from "solid-firebase";
+import { getFirestore } from "firebase/firestore";
 import { createEffect, createSignal, Match, Switch, VoidComponent } from "solid-js";
 import { Loading } from "../organisms/Loading";
 import { LargeButtonWithRouterLink } from "~/components/atoms/buttons";
 import { LargeHeading } from "~/components/atoms/typographies";
 import { EventList } from "~/components/organisms/events/EventList";
-import { signedInWithGoogleProvider, useAuthState } from "~/firebase/Auth";
+import { checkSignedInWithGoogle, useAuthState } from "~/firebase/Auth";
 import { useFirebaseApp } from "~/firebase/FirebaseProvider";
-import { accountDoc } from "~/models/Account";
 
 const MyPage: VoidComponent = () => {
   const navigate = useNavigate();
@@ -21,24 +18,15 @@ const MyPage: VoidComponent = () => {
   const [displayName, setDisplayName] = createSignal<string>("");
 
   createEffect(() => {
-    if (!signedInWithGoogleProvider(authState)) {
-      navigate("/");
-    }
-    if (authState.data) {
-      const user = authState.data;
-      const authDisplayName = user.displayName || "";
-      const accountDocRef = accountDoc(firestore, user.uid);
-      getDoc(accountDocRef).then((snapshot) => {
-        if (!snapshot.exists()) {
-          setDoc(accountDocRef, {
-            uid: user.uid,
-            displayName: authDisplayName,
-          });
-          setDisplayName(authDisplayName);
-        } else {
-          setDisplayName(snapshot.data().displayName);
-        }
-      });
+    if (!authState.loading) {
+      checkSignedInWithGoogle(authState, firestore)
+        .then((account) => {
+          setDisplayName(account.displayName);
+        })
+        .catch((e) => {
+          console.log(e);
+          navigate("/");
+        });
     }
   });
 
