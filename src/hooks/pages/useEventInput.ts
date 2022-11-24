@@ -1,5 +1,6 @@
 import { createStore } from "solid-js/store";
 import { produce } from "solid-js/store";
+import { Account } from "~/models/Account";
 
 export type EventStore = {
   name: string;
@@ -11,6 +12,7 @@ export type EventStore = {
     memberName: string;
     title: string;
   }[];
+  administrators: Account[];
 };
 
 export const useEventInput = () => {
@@ -36,6 +38,7 @@ export const useEventInput = () => {
         title: "Next.jsについて",
       },
     ],
+    administrators: [],
   });
 
   const onChangeEventInfo = (
