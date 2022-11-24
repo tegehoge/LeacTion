@@ -4,18 +4,21 @@ import Container from "@suid/material/Container";
 import Paper from "@suid/material/Paper";
 import Stack from "@suid/material/Stack";
 import Typography from "@suid/material/Typography";
-import { VoidComponent } from "solid-js";
+import { Match, Switch, VoidComponent } from "solid-js";
 
 // @ref: https://ja.vitejs.dev/guide/assets.html#importing-asset-as-url
 import baloonUrl from "~/assets/baloon.png";
-import { LoginButton } from "~/components/atoms/buttons";
+import { LargeButtonWithRouterLink, LoginButton } from "~/components/atoms/buttons";
 import { MediumSizeTextParagraph } from "~/components/atoms/typographies";
 import { LargeSizeText } from "~/components/atoms/typographies";
+import { useAuthContext } from "~/firebase/AuthProvider";
 
 const Top: VoidComponent = () => {
   const theme = useTheme();
   const { light: primaryLightColor, main: primaryMainColor } = theme.palette.primary;
   const textColor = theme.palette.grey[700];
+
+  const auth = useAuthContext();
 
   return (
     <Container
@@ -43,7 +46,14 @@ const Top: VoidComponent = () => {
       </Box>
 
       <Box marginBottom="40px">
-        <LoginButton redirectPath="/mypage">Googleアカウントでログインする</LoginButton>
+        <Switch>
+          <Match when={!auth.account}>
+            <LoginButton redirectPath="/mypage">Googleアカウントでログインする</LoginButton>
+          </Match>
+          <Match when={auth.account}>
+            <LargeButtonWithRouterLink href="/mypage">マイページへ</LargeButtonWithRouterLink>
+          </Match>
+        </Switch>
       </Box>
 
       <Box marginBottom="80px">
@@ -155,7 +165,14 @@ const Top: VoidComponent = () => {
       </Box>
 
       <Box marginBottom="8px">
-        <LoginButton redirectPath="/mypage">Googleアカウントでログインする</LoginButton>
+        <Switch>
+          <Match when={!auth.account}>
+            <LoginButton redirectPath="/mypage">Googleアカウントでログインする</LoginButton>
+          </Match>
+          <Match when={auth.account}>
+            <LargeButtonWithRouterLink href="/mypage">マイページへ</LargeButtonWithRouterLink>
+          </Match>
+        </Switch>
       </Box>
     </Container>
   );

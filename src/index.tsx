@@ -2,6 +2,7 @@
 import { render } from "solid-js/web";
 
 import App from "./App";
+import { AuthProvider } from "./firebase/AuthProvider";
 import { FirebaseProvider } from "~/firebase/FirebaseProvider";
 
 const firebaseConfig = {
@@ -18,7 +19,9 @@ const firebaseConfig = {
 render(
   () => (
     <FirebaseProvider config={firebaseConfig}>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </FirebaseProvider>
   ),
   document.getElementById("root") as HTMLElement
