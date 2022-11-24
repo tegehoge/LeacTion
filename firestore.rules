@@ -10,5 +10,9 @@ service cloud.firestore {
     match /{collection}/{document=**} {
       allow read: if collection.matches('comments-.*') == true
     }
+    match /accounts/{accountId} {
+      allow read;
+      allow write: if request.auth != null && request.auth.uid == accountId;
+    }
   }
 }
