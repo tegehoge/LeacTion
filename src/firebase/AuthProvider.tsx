@@ -6,12 +6,6 @@ import { createStore, produce, reconcile } from "solid-js/store";
 import { useFirebaseApp } from "./FirebaseProvider";
 import { Account, accountDoc } from "~/models/Account";
 
-type AuthState = {
-  loading: boolean;
-  data: User | null;
-  error: Error | null;
-};
-
 type AuthStateContext = {
   loading: boolean;
   uid: string | null; // 匿名アカウントでも uid は発行される
