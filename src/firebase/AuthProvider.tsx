@@ -1,4 +1,13 @@
-import { Auth, getAuth, GoogleAuthProvider, signInWithPopup, signOut, User } from "firebase/auth";
+import {
+  Auth,
+  getAuth,
+  GoogleAuthProvider,
+  signInAnonymously,
+  signInWithPopup,
+  signOut,
+  User,
+  UserCredential,
+} from "firebase/auth";
 import { getDoc, getFirestore, setDoc } from "firebase/firestore";
 import { useAuth } from "solid-firebase";
 import { Component, createContext, createEffect, JSX, useContext } from "solid-js";
@@ -10,6 +19,8 @@ type AuthStateContext = {
   loading: boolean;
   uid: string | null; // 匿名アカウントでも uid は発行される
   account: Account | null; // Googleアカウントがある場合にセットされる
+  signInWithPopup: () => Promise<UserCredential>;
+  signInAnonymously: () => Promise<UserCredential>;
   signOut: () => Promise<void>;
 };
 
@@ -66,6 +77,8 @@ export const AuthProvider: Component<Props> = (props) => {
     loading: authState.loading,
     uid: authState.data?.uid || null,
     account: null,
+    signInWithPopup: () => signInWithPopup(auth, new GoogleAuthProvider()),
+    signInAnonymously: () => signInAnonymously(auth),
     signOut: () => signOut(auth),
   });
 
