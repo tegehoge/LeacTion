@@ -11,7 +11,7 @@ import baloonUrl from "~/assets/baloon.png";
 import { LargeButtonWithRouterLink, LoginButton } from "~/components/atoms/buttons";
 import { MediumSizeTextParagraph } from "~/components/atoms/typographies";
 import { LargeSizeText } from "~/components/atoms/typographies";
-import { useAuthContext } from "~/firebase/AuthProvider";
+import { useAuthContext } from "~/providers/AuthProvider";
 
 const Top: VoidComponent = () => {
   const theme = useTheme();

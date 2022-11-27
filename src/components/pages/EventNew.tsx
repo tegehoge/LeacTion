@@ -14,9 +14,9 @@ import { PrimaryButton, SecondaryButton } from "~/components/atoms/buttons";
 import { LargeHeading } from "~/components/atoms/typographies";
 import { EventPresentationForm, EventInfoInputGroup } from "~/components/organisms/events";
 import { CautionServiceUseModal } from "~/components/organisms/modals";
-import { useAuthContext } from "~/firebase/AuthProvider";
 import { useModal } from "~/hooks/organisms/useModal";
 import { useEventInput } from "~/hooks/pages/useEventInput";
+import { useAuthContext } from "~/providers/AuthProvider";
 
 const EventNew: VoidComponent = () => {
   const { isOpen, onClose } = useModal(true);

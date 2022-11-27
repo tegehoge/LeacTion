@@ -7,7 +7,7 @@ import { Loading } from "../organisms/Loading";
 import { LargeButtonWithRouterLink } from "~/components/atoms/buttons";
 import { LargeHeading } from "~/components/atoms/typographies";
 import { EventList } from "~/components/organisms/events/EventList";
-import { useAuthContext } from "~/firebase/AuthProvider";
+import { useAuthContext } from "~/providers/AuthProvider";
 
 const MyPage: VoidComponent = () => {
   const navigate = useNavigate();

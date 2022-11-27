@@ -15,7 +15,7 @@ import Typography from "@suid/material/Typography";
 import { collection, DocumentData, getFirestore, orderBy, query, where } from "firebase/firestore";
 import { useFirestore } from "solid-firebase";
 import { Component, For, Show } from "solid-js";
-import { useFirebaseApp } from "~/firebase/FirebaseProvider";
+import { useFirebaseApp } from "~/providers/FirebaseProvider";
 
 type EventListProps = {
   uid: string;

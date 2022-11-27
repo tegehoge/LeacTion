@@ -1,7 +1,7 @@
 import { useNavigate } from "@solidjs/router";
 import Button from "@suid/material/Button";
 import { ParentComponent } from "solid-js";
-import { useAuthContext } from "~/firebase/AuthProvider";
+import { useAuthContext } from "~/providers/AuthProvider";
 
 type Props = {
   redirectPath: string;
