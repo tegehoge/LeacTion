@@ -47,14 +47,14 @@ const fetchAccount = (user: User): Promise<Account> => {
   const authDisplayName = user.displayName || "";
   const firestore = getFirestore(useFirebaseApp());
   console.debug("Loading account...");
-  return getAccount(user.uid)
+  return getAccount(firestore, user.uid)
     .then((account) => {
       if (!account) {
         const initialAccount = {
           uid: user.uid,
           displayName: authDisplayName,
         };
-        createAccount(initialAccount);
+        createAccount(firestore, initialAccount);
         return initialAccount;
       } else {
         return account;
