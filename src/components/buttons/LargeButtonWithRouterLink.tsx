@@ -2,7 +2,7 @@ import Box from "@suid/material/Box";
 import Button from "@suid/material/Button";
 import { ParentComponent } from "solid-js";
 
-import { RouterLink } from "~/components/atoms/links";
+import { RouterLink } from "~/components/links";
 
 type Props = {
   href: string;

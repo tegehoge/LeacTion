@@ -7,12 +7,14 @@ import {
   User,
   UserCredential,
 } from "firebase/auth";
-import { getDoc, getFirestore, setDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 import { useAuth } from "solid-firebase";
 import { Component, createContext, createEffect, JSX, useContext } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import { useFirebaseApp } from "./FirebaseProvider";
-import { Account, accountDoc } from "~/models/Account";
+import { createAccount } from "~/features/account/api/createAccount";
+import { getAccount } from "~/features/account/api/getAccount";
+import { Account } from "~/features/account/hooks/useAccount";
 
 type AuthContextStore = {
   loading: boolean;
@@ -44,19 +46,18 @@ const fetchAccount = (user: User): Promise<Account> => {
   }
   const authDisplayName = user.displayName || "";
   const firestore = getFirestore(useFirebaseApp());
-  const accountDocRef = accountDoc(firestore, user.uid);
   console.debug("Loading account...");
-  return getDoc(accountDocRef)
-    .then((snapshot) => {
-      if (!snapshot.exists()) {
+  return getAccount(user.uid)
+    .then((account) => {
+      if (!account) {
         const initialAccount = {
           uid: user.uid,
           displayName: authDisplayName,
         };
-        setDoc(accountDocRef, initialAccount);
+        createAccount(initialAccount);
         return initialAccount;
       } else {
-        return snapshot.data();
+        return account;
       }
     })
     .catch((e) => {

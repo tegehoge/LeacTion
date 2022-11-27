@@ -9,7 +9,7 @@ import { dndzone as dndZoneDirective, SOURCES, TRIGGERS } from "solid-dnd-direct
 import { VoidComponent, For, createSignal } from "solid-js";
 import type { SetStoreFunction } from "solid-js/store";
 
-import type { EventStore } from "~/hooks/pages/useEventInput";
+import type { EventStore } from "~/features/event/hooks/useEventInput";
 import type {
   MouseDownEvent,
   TouchStartEvent,

@@ -12,8 +12,8 @@ import Modal from "@suid/material/Modal";
 import { orange } from "@suid/material/colors";
 import { VoidComponent } from "solid-js";
 
-import { PrimaryButton } from "~/components/atoms/buttons";
-import { LargeHeading } from "~/components/atoms/typographies";
+import { PrimaryButton } from "~/components/buttons";
+import { LargeHeading } from "~/components/typographies";
 
 export type Props = {
   open: boolean;

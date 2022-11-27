@@ -1,6 +1,6 @@
 import { createStore } from "solid-js/store";
 import { produce } from "solid-js/store";
-import { Account } from "~/models/Account";
+import { Account } from "~/features/account/hooks/useAccount";
 
 export type EventStore = {
   name: string;

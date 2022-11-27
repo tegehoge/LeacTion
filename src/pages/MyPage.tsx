@@ -3,10 +3,10 @@ import Box from "@suid/material/Box";
 import Button from "@suid/material/Button";
 import Container from "@suid/material/Container";
 import { createEffect, createSignal, Match, Switch, VoidComponent } from "solid-js";
-import { Loading } from "../organisms/Loading";
-import { LargeButtonWithRouterLink } from "~/components/atoms/buttons";
-import { LargeHeading } from "~/components/atoms/typographies";
-import { EventList } from "~/components/organisms/events/EventList";
+import { Loading } from "../components/organisms/Loading";
+import { LargeButtonWithRouterLink } from "~/components/buttons";
+import { LargeHeading } from "~/components/typographies";
+import { EventList } from "~/features/event/components/EventList";
 import { useAuthContext } from "~/providers/AuthProvider";
 
 const MyPage: VoidComponent = () => {

@@ -10,12 +10,12 @@ import Skeleton from "@suid/material/Skeleton";
 import Typography from "@suid/material/Typography";
 import { createEffect, For, Match, Switch, VoidComponent } from "solid-js";
 
-import { PrimaryButton, SecondaryButton } from "~/components/atoms/buttons";
-import { LargeHeading } from "~/components/atoms/typographies";
-import { EventPresentationForm, EventInfoInputGroup } from "~/components/organisms/events";
-import { CautionServiceUseModal } from "~/components/organisms/modals";
+import { PrimaryButton, SecondaryButton } from "~/components/buttons";
+import { CautionServiceUseModal } from "~/components/modals";
+import { LargeHeading } from "~/components/typographies";
+import { EventPresentationForm, EventInfoInputGroup } from "~/features/event/components";
+import { useEventInput } from "~/features/event/hooks/useEventInput";
 import { useModal } from "~/hooks/organisms/useModal";
-import { useEventInput } from "~/hooks/pages/useEventInput";
 import { useAuthContext } from "~/providers/AuthProvider";
 
 const EventNew: VoidComponent = () => {
