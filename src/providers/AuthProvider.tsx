@@ -55,9 +55,8 @@ const fetchAccount = (user: User): Promise<Account> => {
         };
         createAccount(firestore, initialAccount);
         return initialAccount;
-      } else {
-        return account;
       }
+      return account;
     })
     .catch((e) => {
       return Promise.reject(e);
