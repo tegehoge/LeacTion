@@ -8,9 +8,10 @@ import { Match, Switch, VoidComponent } from "solid-js";
 
 // @ref: https://ja.vitejs.dev/guide/assets.html#importing-asset-as-url
 import baloonUrl from "~/assets/baloon.png";
-import { LargeButtonWithRouterLink, LoginButton } from "~/components/buttons";
+import { LargeButtonWithRouterLink } from "~/components/buttons";
 import { MediumSizeTextParagraph } from "~/components/typographies";
 import { LargeSizeText } from "~/components/typographies";
+import { LoginButton } from "~/features/account/components/LoginButton";
 import { useAuthContext } from "~/providers/AuthProvider";
 
 const Top: VoidComponent = () => {
