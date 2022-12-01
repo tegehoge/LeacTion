@@ -7,7 +7,7 @@ import {
   SnapshotOptions,
   WithFieldValue,
 } from "firebase/firestore";
-import { Account } from "../hooks/useAccount";
+import { Account } from "../types/Account";
 
 /**
  * Account を参照する Firestore の DocumentReference.
@@ -22,7 +22,7 @@ export const accountDoc = (firestore: Firestore, uid: string) =>
 /**
  * Firestore上のデータと相互変換するためのコンバーター
  */
-export const AccountFirestoreConverter: FirestoreDataConverter<Account> = {
+const AccountFirestoreConverter: FirestoreDataConverter<Account> = {
   toFirestore(modelObject: WithFieldValue<Account>): DocumentData {
     return {
       uid: modelObject.uid,

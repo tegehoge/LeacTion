@@ -12,9 +12,8 @@ import { useAuth } from "solid-firebase";
 import { Component, createContext, createEffect, JSX, useContext } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import { useFirebaseApp } from "./FirebaseProvider";
-import { createAccount } from "~/features/account/api/createAccount";
-import { getAccount } from "~/features/account/api/getAccount";
-import { Account } from "~/features/account/hooks/useAccount";
+import { createAccount, getAccount } from "~/features/account/api";
+import { Account } from "~/features/account/types/Account";
 
 type AuthContextStore = {
   loading: boolean;

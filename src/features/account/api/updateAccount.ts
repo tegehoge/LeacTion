@@ -1,5 +1,5 @@
 import { Firestore, setDoc } from "firebase/firestore";
-import { Account } from "../hooks/useAccount";
+import { Account } from "../types/Account";
 import { accountDoc } from "./firestore";
 
 export const updateAccount = (firestore: Firestore, account: Account): Promise<void> => {
