@@ -1,9 +1,9 @@
 import { useNavigate } from "@solidjs/router";
 import Box from "@suid/material/Box";
 import Button from "@suid/material/Button";
+import CircularProgress from "@suid/material/CircularProgress";
 import Container from "@suid/material/Container";
 import { createEffect, createSignal, Match, Switch, VoidComponent } from "solid-js";
-import { Loading } from "../components/organisms/Loading";
 import { LargeButtonWithRouterLink } from "~/components/buttons";
 import { LargeHeading } from "~/components/typographies";
 import { EventList } from "~/features/event/components/EventList";
@@ -31,7 +31,9 @@ const MyPage: VoidComponent = () => {
   return (
     <Switch>
       <Match when={auth.loading}>
-        <Loading />
+        <Box textAlign="center" margin="5em auto">
+          <CircularProgress />
+        </Box>
       </Match>
       <Match when={auth.account}>
         <Container maxWidth="lg">
