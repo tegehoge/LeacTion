@@ -4,22 +4,18 @@ import Container from "@suid/material/Container";
 import Paper from "@suid/material/Paper";
 import Stack from "@suid/material/Stack";
 import Typography from "@suid/material/Typography";
-import { Match, Switch, VoidComponent } from "solid-js";
+import { VoidComponent } from "solid-js";
 
 // @ref: https://ja.vitejs.dev/guide/assets.html#importing-asset-as-url
 import baloonUrl from "~/assets/baloon.png";
-import { LargeButtonWithRouterLink } from "~/components/buttons";
 import { MediumSizeTextParagraph } from "~/components/typographies";
 import { LargeSizeText } from "~/components/typographies";
 import { LoginButton } from "~/features/account/components/LoginButton";
-import { useAuthContext } from "~/providers/AuthProvider";
 
 const Top: VoidComponent = () => {
   const theme = useTheme();
   const { light: primaryLightColor, main: primaryMainColor } = theme.palette.primary;
   const textColor = theme.palette.grey[700];
-
-  const auth = useAuthContext();
 
   return (
     <Container
@@ -47,14 +43,7 @@ const Top: VoidComponent = () => {
       </Box>
 
       <Box marginBottom="40px">
-        <Switch>
-          <Match when={!auth.account}>
-            <LoginButton redirectPath="/mypage">Googleアカウントでログインする</LoginButton>
-          </Match>
-          <Match when={auth.account}>
-            <LargeButtonWithRouterLink href="/mypage">マイページへ</LargeButtonWithRouterLink>
-          </Match>
-        </Switch>
+        <LoginButton redirectPath="/mypage" />
       </Box>
 
       <Box marginBottom="80px">
@@ -166,14 +155,7 @@ const Top: VoidComponent = () => {
       </Box>
 
       <Box marginBottom="8px">
-        <Switch>
-          <Match when={!auth.account}>
-            <LoginButton redirectPath="/mypage">Googleアカウントでログインする</LoginButton>
-          </Match>
-          <Match when={auth.account}>
-            <LargeButtonWithRouterLink href="/mypage">マイページへ</LargeButtonWithRouterLink>
-          </Match>
-        </Switch>
+        <LoginButton redirectPath="/mypage" />
       </Box>
     </Container>
   );
