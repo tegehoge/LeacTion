@@ -10,9 +10,10 @@
     "watch": "vite build --watch",
     "test": "jest",
     "format": "eslint -c .eslintrc.json --fix src/**/*.{ts,tsx}",
-    "emulate": "yarn build_function_for_emulator && yarn build_for_emulator && firebase emulators:start & yarn watch",
-    "build_for_emulator": "tsc --noEmit && vite build --mode emulator",
-    "build_function_for_emulator": "(cd functions/ && npm run build)",
+    "firebase:emulators:start": "firebase emulators:start --import=.emulator --export-on-exit",
+    "build:emulators": "vite build --mode emulator",
+    "build:emulators:watch": "vite build --mode emulator --watch",
+    "build:functions": "(cd functions/ && npm run build)",
     "deploy": "firebase deploy"
   },
   "license": "MIT",
