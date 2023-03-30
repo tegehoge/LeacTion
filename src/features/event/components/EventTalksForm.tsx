@@ -19,11 +19,11 @@ import type {
 
 export type Props = {
   handleInputEvent: (id: number, key: "title" | "memberName", value: string) => void;
-  presentationList: EventStore["presentationList"];
+  talks: EventStore["talks"];
   setEventStore: SetStoreFunction<EventStore>;
 };
 
-export const EventPresentationForm: VoidComponent<Props> = (props) => {
+export const EventTalksForm: VoidComponent<Props> = (props) => {
   // @ref: https://github.com/isaacHagoel/solid-dnd-directive/issues/6#issuecomment-1034672267
   // @ref: https://codesandbox.io/s/dnd-drag-handles-57btm?file=/src/App.jsx
   const [isDragDisabled, setIsDragDisabled] = createSignal(false);
@@ -35,7 +35,7 @@ export const EventPresentationForm: VoidComponent<Props> = (props) => {
       info: { source, trigger },
     } = e.detail;
 
-    props.setEventStore("presentationList", newItems);
+    props.setEventStore("talks", newItems);
 
     // Ensure dragging is stopped on drag finish via keyboard
     if (source === SOURCES.KEYBOARD && trigger === TRIGGERS.DRAG_STOPPED) {
@@ -49,7 +49,7 @@ export const EventPresentationForm: VoidComponent<Props> = (props) => {
       info: { source },
     } = e.detail;
 
-    props.setEventStore("presentationList", newItems);
+    props.setEventStore("talks", newItems);
 
     // Ensure dragging is stopped on drag finish via pointer (mouse, touch)
     if (source === SOURCES.POINTER) {
@@ -71,14 +71,14 @@ export const EventPresentationForm: VoidComponent<Props> = (props) => {
         gap: "16px",
       }}
       use:dndzone={{
-        items: () => props.presentationList,
+        items: () => props.talks,
         dragDisabled: isDragDisabled(),
         dropTargetStyle: {},
       }}
       on:consider={(e) => onConsider(e)}
       on:finalize={(e) => onFinalize(e)}
     >
-      <For each={props.presentationList}>
+      <For each={props.talks}>
         {(event, index) => (
           <Box
             sx={{
@@ -87,7 +87,6 @@ export const EventPresentationForm: VoidComponent<Props> = (props) => {
               gap: 1,
               outlineColor: `rgba(255, 255, 255, .0);`,
             }}
-            component="form"
             tabIndex={isDragDisabled() ? 0 : -1}
           >
             <div on:mousedown={(e) => startDrag(e)} on:touchstart={(e) => startDrag(e)}>

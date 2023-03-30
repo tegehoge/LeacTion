@@ -13,7 +13,7 @@ import { createEffect, For, Match, Switch, VoidComponent } from "solid-js";
 import { PrimaryButton, SecondaryButton } from "~/components/buttons";
 import { CautionServiceUseModal } from "~/components/modals";
 import { LargeHeading } from "~/components/typographies";
-import { EventPresentationForm, EventInfoInputGroup } from "~/features/event/components";
+import { EventTalksForm, EventInfoInputGroup } from "~/features/event/components";
 import { useEventInput } from "~/features/event/hooks/useEventInput";
 import { useModal } from "~/hooks/organisms/useModal";
 import { useAuthContext } from "~/providers/AuthProvider";
@@ -21,13 +21,8 @@ import { useAuthContext } from "~/providers/AuthProvider";
 const EventNew: VoidComponent = () => {
   const { isOpen, onClose } = useModal(true);
 
-  const {
-    eventStore,
-    onChangeEventInfo,
-    onClickAddPresentationItem,
-    onInputPresentationListItem,
-    setEventStore,
-  } = useEventInput();
+  const { eventStore, onChangeEventInfo, appendEmptyTalk, onInputTalks, setEventStore } =
+    useEventInput();
 
   const navigate = useNavigate();
   const auth = useAuthContext();
@@ -65,19 +60,15 @@ const EventNew: VoidComponent = () => {
               イベントの発表順 (順序を変更できます)
             </Typography>
 
-            <EventPresentationForm
-              handleInputEvent={onInputPresentationListItem}
-              presentationList={eventStore.presentationList}
+            <EventTalksForm
+              handleInputEvent={onInputTalks}
+              talks={eventStore.talks}
               setEventStore={setEventStore}
             />
           </Box>
 
           <Box marginBottom="16px">
-            <SecondaryButton
-              onClick={onClickAddPresentationItem}
-              fullWidth={true}
-              startIcon={<AddCircle />}
-            >
+            <SecondaryButton onClick={appendEmptyTalk} fullWidth={true} startIcon={<AddCircle />}>
               発表枠の追加
             </SecondaryButton>
           </Box>

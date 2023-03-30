@@ -7,7 +7,7 @@ export type EventStore = {
   date: Date;
   url: string;
   hashTag: string;
-  presentationList: {
+  talks: {
     id: number;
     memberName: string;
     title: string;
@@ -21,7 +21,7 @@ export const useEventInput = () => {
     date: new Date(),
     url: "",
     hashTag: "",
-    presentationList: [
+    talks: [
       {
         id: 1,
         memberName: "たなか",
@@ -48,11 +48,11 @@ export const useEventInput = () => {
     setEventStore(key, value);
   };
 
-  const onClickAddPresentationItem = (): void => {
-    const nextId = Math.max(...eventStore.presentationList.map((event) => event.id)) + 1;
+  const appendEmptyTalk = (): void => {
+    const nextId = Math.max(...eventStore.talks.map((event) => event.id)) + 1;
 
     setEventStore(
-      "presentationList",
+      "talks",
       produce((event) => {
         event.push({
           id: nextId,
@@ -63,14 +63,10 @@ export const useEventInput = () => {
     );
   };
 
-  const onInputPresentationListItem = (
-    id: number,
-    key: "title" | "memberName",
-    value: string
-  ): void => {
+  const onInputTalks = (id: number, key: "title" | "memberName", value: string): void => {
     setEventStore(
-      "presentationList",
-      (presentationList) => presentationList.id === id,
+      "talks",
+      (talk) => talk.id === id,
       key,
       () => value
     );
@@ -79,8 +75,8 @@ export const useEventInput = () => {
   return {
     eventStore,
     onChangeEventInfo,
-    onClickAddPresentationItem,
-    onInputPresentationListItem,
+    appendEmptyTalk,
+    onInputTalks,
     setEventStore,
   } as const;
 };
