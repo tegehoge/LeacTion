@@ -1,12 +1,19 @@
-node_modules
+## macOS
 .DS_Store
-dist
+
+## env
 *.local
 .env
 .env.*
+!.env.template
+
+## yarn
+node_modules
 
 ## firebase
-
 .firebase
 *-debug.log
 .emulator/
+
+## artifacts
+dist
