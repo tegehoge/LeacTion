@@ -1,8 +1,8 @@
 # Contribution Guide
 
-以下の技術要素を使っています。
+LeacTion では以下の技術要素を使っています。
 
-- [Vue 3.x](https://github.com/vuejs/vue-next)
+- [SolidJS 1.x](https://www.solidjs.com/)
 - TypeScript 4.x
 - [TailwindCSS](https://tailwindcss.com/)
 - Firebase
@@ -13,28 +13,11 @@
 $ yarn install
 ```
 
-## Vite でローカル起動して動作確認する
-
-[Vite](https://github.com/vitejs/vite) でビルドしています。
-
-```
-$ yarn dev
-```
-
 ## Firebase Local Emulators (beta) を使った動作確認
 
-[Local Emulator Suite のインストール、構成、統合](https://firebase.google.com/docs/emulator-suite/install_and_configure?hl=ja) に記載された内容とほぼ同様ですが、
-一部 TypeScript のコンパイルが必要なため手順を書いておきます。
+`.env.emulator` を準備します。設定する値についてはFirebaseの設定を確認するか、開発者に問い合わせてください。
 
-まず、 `firebase-tools` をインストールします。
-
-```
-$ npm install -g firebase-tools
-```
-
-続いて、 `.env`, `.env.emulator` を準備します。設定する値についてはFirebaseの設定を確認するか、開発者に問い合わせてください。
-
-```.env
+```.env.emulator
 VITE_API_KEY=
 VITE_APP_ID=
 VITE_AUTH_DOMAIN=
@@ -43,43 +26,44 @@ VITE_MESSAGING_SENDER_ID=
 VITE_MEASUREMENT_ID=
 VITE_PROJECT_ID=
 VITE_STORAGE_BUCKET=
-```
-
-```.env.emulator
 NODE_ENV=production
 ```
 
-次に、 `functions/` ディレクトリに移動し、 TypeScript のコードをコンパイルします。
+次に、 `functions/` のコードをコンパイルします。
 
 ```
-$ cd functions/
-$ npm install
-$ npm run build
+$ yarn build:functions
 ```
 
-プロジェクトのルートディレクトリに戻り、 `emulator` モードでVue アプリケーションのビルドを実行します。
+プロジェクトのルートディレクトリに戻り、 `emulator` モードで Solid アプリケーションのビルドを実行します。
 
 ```
-$ cd ../
-$ yarn build --mode emulator
+$ yarn build:emulators
 ```
 
 エミュレーターを起動します。
 
 ```
-$ firebase emulators:start
+$ yarn firebase:emulators:start
 ```
 
-起動したら、 `http://localhost:5000` へアクセスして動作確認を行います。
+起動したら、 `http://localhost:5500/` へアクセスして動作確認を行います。
 
 ### ソースコードの更新時
 
-Vue アプリケーションの更新時は `yarn build --mode emulator` を、 `functions` の更新時は `npm run build` を実行すると反映されます。
-エミュレーターの再起動は不要です。（停止するとエミュレーター内の firestore のデータが消えます。）
+Solid アプリケーションの更新時は `yarn build:emulators` を、 `functions` の更新時は `yarn build:functions` を実行すると反映されます。
+エミュレーターの再起動は不要です。
+
+積極的に開発するタイミングでは以下のコマンドでファイルの変更を監視しながらビルドを行うのが便利です。
+
+```
+$ yarn build:emulators:watch
+```
 
 ## Firebase へのデプロイ
 
-TBD. Github Actions で行う予定。
+`main` ブランチにマージされると Github Actions で自動的にビルド＆デプロイが実行されます。
+原則として手動では行わない予定です。
 
 ## issue の追加
 
