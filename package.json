@@ -11,8 +11,8 @@
     "test": "jest",
     "format": "eslint -c .eslintrc.json --fix src/**/*.{ts,tsx}",
     "firebase:emulators:start": "firebase emulators:start --import=.emulator --export-on-exit",
-    "build:emulators": "vite build --mode emulator",
-    "build:emulators:watch": "vite build --mode emulator --watch",
+    "build:emulators": "vite build --mode emulator --sourcemap",
+    "build:emulators:watch": "vite build --mode emulator --sourcemap --watch",
     "build:functions": "(cd functions/ && npm run build)",
     "deploy": "firebase deploy"
   },
