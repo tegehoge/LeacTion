@@ -18,9 +18,10 @@ import type {
 } from "~/types/dndDirective";
 
 export type Props = {
-  handleInputEvent: (id: number, key: "title" | "memberName", value: string) => void;
   talks: EventStore["talks"];
   setEventStore: SetStoreFunction<EventStore>;
+  handleInputEvent: (id: string, key: "title" | "speakerName", value: string) => void;
+  removeTalkEvent: (id: string) => void;
 };
 
 export const EventTalksForm: VoidComponent<Props> = (props) => {
@@ -79,7 +80,7 @@ export const EventTalksForm: VoidComponent<Props> = (props) => {
       on:finalize={(e) => onFinalize(e)}
     >
       <For each={props.talks}>
-        {(event, index) => (
+        {(talk, index) => (
           <Box
             sx={{
               display: "flex",
@@ -98,32 +99,32 @@ export const EventTalksForm: VoidComponent<Props> = (props) => {
             <Grid container spacing={1}>
               <Grid item xs={12} sm={8}>
                 <TextField
-                  name="memberName"
-                  value={event.memberName}
+                  name="speakerName"
+                  value={talk.speakerName}
                   required
                   placeholder="発表者名"
                   fullWidth
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  onChange={(e) => props.handleInputEvent(event.id, "memberName", e.target.value)}
+                  onChange={(e) => props.handleInputEvent(talk.id, "speakerName", e.target.value)}
                 />
               </Grid>
 
               <Grid item xs={12} sm={4}>
                 <TextField
-                  value={event.title}
+                  value={talk.title}
                   required
                   placeholder="発表タイトル"
                   fullWidth
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  onChange={(e) => props.handleInputEvent(event.id, "title", e.target.value)}
+                  onChange={(e) => props.handleInputEvent(talk.id, "title", e.target.value)}
                 />
               </Grid>
             </Grid>
-            <IconButton>
+            <IconButton onClick={() => props.removeTalkEvent(talk.id)}>
               <Delete sx={{ color: red[300] }} />
             </IconButton>
           </Box>

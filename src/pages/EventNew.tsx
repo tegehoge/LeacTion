@@ -21,8 +21,14 @@ import { useAuthContext } from "~/providers/AuthProvider";
 const EventNew: VoidComponent = () => {
   const { isOpen, onClose } = useModal(true);
 
-  const { eventStore, onChangeEventInfo, appendEmptyTalk, onInputTalks, setEventStore } =
-    useEventInput();
+  const {
+    eventStore,
+    onChangeEventInfo,
+    onInputTalks,
+    appendEmptyTalk,
+    removeTalk,
+    setEventStore,
+  } = useEventInput();
 
   const navigate = useNavigate();
   const auth = useAuthContext();
@@ -61,9 +67,10 @@ const EventNew: VoidComponent = () => {
             </Typography>
 
             <EventTalksForm
-              handleInputEvent={onInputTalks}
               talks={eventStore.talks}
               setEventStore={setEventStore}
+              handleInputEvent={onInputTalks}
+              removeTalkEvent={removeTalk}
             />
           </Box>
 

@@ -1,43 +1,40 @@
+import { nanoid } from "nanoid";
 import { createStore } from "solid-js/store";
 import { produce } from "solid-js/store";
 import { Account } from "~/features/account/types/Account";
 
+type Talk = {
+  id: string;
+  speakerName: string;
+  title: string;
+};
+
+const createEmptyTalk = (): Talk => {
+  return {
+    id: nanoid(),
+    speakerName: "",
+    title: "",
+  };
+};
+
 export type EventStore = {
+  id: string;
   name: string;
   date: Date;
   url: string;
   hashTag: string;
-  talks: {
-    id: number;
-    memberName: string;
-    title: string;
-  }[];
+  talks: Talk[];
   administrators: Account[];
 };
 
 export const useEventInput = () => {
   const [eventStore, setEventStore] = createStore<EventStore>({
+    id: nanoid(8),
     name: "",
     date: new Date(),
     url: "",
     hashTag: "",
-    talks: [
-      {
-        id: 1,
-        memberName: "たなか",
-        title: "Laravelについて",
-      },
-      {
-        id: 2,
-        memberName: "すずき",
-        title: "Ruby on Railsについて",
-      },
-      {
-        id: 3,
-        memberName: "たかはし",
-        title: "Next.jsについて",
-      },
-    ],
+    talks: [createEmptyTalk(), createEmptyTalk(), createEmptyTalk()],
     administrators: [],
   });
 
@@ -49,21 +46,22 @@ export const useEventInput = () => {
   };
 
   const appendEmptyTalk = (): void => {
-    const nextId = Math.max(...eventStore.talks.map((event) => event.id)) + 1;
-
     setEventStore(
       "talks",
-      produce((event) => {
-        event.push({
-          id: nextId,
-          memberName: "",
-          title: "",
-        });
+      produce((currentTalks) => {
+        currentTalks.push(createEmptyTalk());
       })
     );
   };
 
-  const onInputTalks = (id: number, key: "title" | "memberName", value: string): void => {
+  const removeTalk = (id: string): void => {
+    setEventStore(
+      "talks",
+      eventStore.talks.filter((talk) => talk.id !== id)
+    );
+  };
+
+  const onInputTalks = (id: string, key: "title" | "speakerName", value: string): void => {
     setEventStore(
       "talks",
       (talk) => talk.id === id,
@@ -75,8 +73,9 @@ export const useEventInput = () => {
   return {
     eventStore,
     onChangeEventInfo,
-    appendEmptyTalk,
     onInputTalks,
+    appendEmptyTalk,
+    removeTalk,
     setEventStore,
   } as const;
 };
