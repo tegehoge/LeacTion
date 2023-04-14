@@ -14,7 +14,7 @@ import { PrimaryButton, SecondaryButton } from "~/components/buttons";
 import { CautionServiceUseModal } from "~/components/modals";
 import { LargeHeading } from "~/components/typographies";
 import { EventTalksForm, EventInfoInputGroup } from "~/features/event/components";
-import { useEventInput } from "~/features/event/hooks/useEventInput";
+import { createEmptyEvent, useEventInput } from "~/features/event/hooks/useEventInput";
 import { useModal } from "~/hooks/organisms/useModal";
 import { useAuthContext } from "~/providers/AuthProvider";
 
@@ -28,7 +28,7 @@ const EventNew: VoidComponent = () => {
     appendEmptyTalk,
     removeTalk,
     setEventStore,
-  } = useEventInput();
+  } = useEventInput(createEmptyEvent());
 
   const navigate = useNavigate();
   const auth = useAuthContext();
@@ -36,7 +36,7 @@ const EventNew: VoidComponent = () => {
   createEffect(() => {
     if (!auth.loading) {
       if (auth.account) {
-        setEventStore("administrators", [auth.account]);
+        setEventStore("administrator", auth.account.uid);
       } else {
         navigate("/");
       }
@@ -101,17 +101,7 @@ const EventNew: VoidComponent = () => {
                 </ListItem>
               </List>
             </Match>
-            <Match when={auth.account}>
-              <List>
-                <For each={eventStore.administrators}>
-                  {(administrator, _) => (
-                    <ListItem>
-                      <ListItemText>{administrator.displayName}</ListItemText>
-                    </ListItem>
-                  )}
-                </For>
-              </List>
-            </Match>
+            <Match when={auth.account}>{eventStore.administrator}</Match>
           </Switch>
 
           <Box textAlign="center" marginBottom="32px">

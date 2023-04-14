@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
 import { createStore } from "solid-js/store";
 import { produce } from "solid-js/store";
+import { LeactionEvent } from "../types/LeactionEvent";
 import { Account } from "~/features/account/types/Account";
 
 type Talk = {
@@ -24,18 +25,29 @@ export type EventStore = {
   url: string;
   hashTag: string;
   talks: Talk[];
-  administrators: Account[];
+  administrator: string;
 };
 
-export const useEventInput = () => {
-  const [eventStore, setEventStore] = createStore<EventStore>({
+export const createEmptyEvent = (): LeactionEvent => {
+  return {
     id: nanoid(8),
     name: "",
     date: new Date(),
-    url: "",
-    hashTag: "",
     talks: [createEmptyTalk(), createEmptyTalk(), createEmptyTalk()],
-    administrators: [],
+    administrator: "",
+    collaborators: [],
+  };
+};
+
+export const useEventInput = (event: LeactionEvent) => {
+  const [eventStore, setEventStore] = createStore<EventStore>({
+    id: event.id,
+    name: event.name,
+    date: event.date,
+    url: event.url || "",
+    hashTag: event.hashTag || "",
+    talks: event.talks,
+    administrator: event.administrator,
   });
 
   const onChangeEventInfo = (
