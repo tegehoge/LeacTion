@@ -1,21 +1,11 @@
-import { nanoid } from "nanoid";
 import { createStore } from "solid-js/store";
 import { produce } from "solid-js/store";
-import { LeactionEvent } from "../types/LeactionEvent";
-import { Account } from "~/features/account/types/Account";
+import { LeactionEvent, createEmptyEvent, createEmptyTalk } from "../types/LeactionEvent";
 
 type Talk = {
   id: string;
   speakerName: string;
   title: string;
-};
-
-const createEmptyTalk = (): Talk => {
-  return {
-    id: nanoid(),
-    speakerName: "",
-    title: "",
-  };
 };
 
 export type EventStore = {
@@ -28,18 +18,7 @@ export type EventStore = {
   administrator: string;
 };
 
-export const createEmptyEvent = (): LeactionEvent => {
-  return {
-    id: nanoid(8),
-    name: "",
-    date: new Date(),
-    talks: [createEmptyTalk(), createEmptyTalk(), createEmptyTalk()],
-    administrator: "",
-    collaborators: [],
-  };
-};
-
-export const useEventInput = (event: LeactionEvent) => {
+export const useEventInput = (event: LeactionEvent = createEmptyEvent()) => {
   const [eventStore, setEventStore] = createStore<EventStore>({
     id: event.id,
     name: event.name,
@@ -82,6 +61,23 @@ export const useEventInput = (event: LeactionEvent) => {
     );
   };
 
+  const getLeactionEvent = (): LeactionEvent => {
+    return {
+      id: eventStore.id,
+      name: eventStore.name.trim(),
+      date: eventStore.date,
+      url: eventStore.url.trim() || undefined,
+      hashTag: eventStore.hashTag.trim() || undefined,
+      talks: eventStore.talks
+        .map((talk) => {
+          return { id: talk.id, speakerName: talk.speakerName.trim(), title: talk.title.trim() };
+        })
+        .filter((talk) => !(talk.speakerName == "" && talk.title == "")),
+      administrator: eventStore.administrator,
+      collaborators: [],
+    };
+  };
+
   return {
     eventStore,
     onChangeEventInfo,
@@ -89,5 +85,6 @@ export const useEventInput = (event: LeactionEvent) => {
     appendEmptyTalk,
     removeTalk,
     setEventStore,
+    getLeactionEvent,
   } as const;
 };

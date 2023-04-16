@@ -6,6 +6,7 @@ import {
   FirestoreDataConverter,
   QueryDocumentSnapshot,
   SnapshotOptions,
+  serverTimestamp,
 } from "firebase/firestore";
 import { LeactionEvent } from "../types/LeactionEvent";
 
@@ -34,12 +35,13 @@ const EventFirestoreConverter: FirestoreDataConverter<LeactionEvent> = {
     return {
       id: event.id,
       name: event.name,
-      date: event.date.toLocaleDateString(),
-      url: event.url,
-      hashTag: event.hashTag,
+      date: event.date.toISOString().slice(0, 10), // ex. "2023-04-16"
+      url: event.url || null,
+      hashTag: event.hashTag || null,
       talks: event.talks,
       administrator: event.administrator,
       collaborators: event.collaborators,
+      createdAt: event.createdAt || serverTimestamp(),
     };
   },
   fromFirestore(
@@ -51,11 +53,12 @@ const EventFirestoreConverter: FirestoreDataConverter<LeactionEvent> = {
       id: eventData.id,
       name: eventData.name,
       date: new Date(eventData.date),
-      url: eventData.url,
-      hashTag: eventData.hashTag,
+      url: eventData.url || undefined,
+      hashTag: eventData.hashTag || undefined,
       talks: eventData.talks,
       administrator: eventData.administrator,
       collaborators: eventData.collaborators,
+      createdAt: eventData.createdAt,
     };
   },
 };

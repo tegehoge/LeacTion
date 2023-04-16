@@ -3,20 +3,20 @@ import AddCircle from "@suid/icons-material/AddCircle";
 import Box from "@suid/material/Box";
 import Container from "@suid/material/Container";
 import Divider from "@suid/material/Divider";
-import List from "@suid/material/List";
-import ListItem from "@suid/material/ListItem";
-import ListItemText from "@suid/material/ListItemText";
 import Skeleton from "@suid/material/Skeleton";
 import Typography from "@suid/material/Typography";
+import { getFirestore } from "firebase/firestore";
 import { createEffect, For, Match, Switch, VoidComponent } from "solid-js";
 
 import { PrimaryButton, SecondaryButton } from "~/components/buttons";
 import { CautionServiceUseModal } from "~/components/modals";
 import { LargeHeading } from "~/components/typographies";
+import { createEvent } from "~/features/event/api";
 import { EventTalksForm, EventInfoInputGroup } from "~/features/event/components";
-import { createEmptyEvent, useEventInput } from "~/features/event/hooks/useEventInput";
+import { useEventInput } from "~/features/event/hooks/useEventInput";
 import { useModal } from "~/hooks/organisms/useModal";
 import { useAuthContext } from "~/providers/AuthProvider";
+import { useFirebaseApp } from "~/providers/FirebaseProvider";
 
 const EventNew: VoidComponent = () => {
   const { isOpen, onClose } = useModal(true);
@@ -28,10 +28,13 @@ const EventNew: VoidComponent = () => {
     appendEmptyTalk,
     removeTalk,
     setEventStore,
-  } = useEventInput(createEmptyEvent());
+    getLeactionEvent,
+  } = useEventInput();
 
   const navigate = useNavigate();
   const auth = useAuthContext();
+
+  const firestore = getFirestore(useFirebaseApp());
 
   createEffect(() => {
     if (!auth.loading) {
@@ -89,17 +92,11 @@ const EventNew: VoidComponent = () => {
             fontWeight="bold"
             sx={{ textAlign: "center", marginBottom: "16px" }}
           >
-            イベント管理者
+            管理者
           </Typography>
           <Switch>
             <Match when={auth.loading}>
-              <List>
-                <ListItem>
-                  <ListItemText>
-                    <Skeleton variant="text" />
-                  </ListItemText>
-                </ListItem>
-              </List>
+              <Skeleton variant="text" />
             </Match>
             <Match when={auth.account}>{eventStore.administrator}</Match>
           </Switch>
@@ -111,7 +108,7 @@ const EventNew: VoidComponent = () => {
               </Link>
               に同意して
             </Typography>
-            <PrimaryButton onClick={() => console.log(eventStore)}>
+            <PrimaryButton onClick={() => createEvent(firestore, getLeactionEvent())}>
               イベントを作成する
             </PrimaryButton>
           </Box>
