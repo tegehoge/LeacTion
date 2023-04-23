@@ -4,11 +4,17 @@ service cloud.firestore {
     match /{document=**} {
       allow read, write: if false;
     }
-    match /events/{document=**} {
-      allow read;
-    }
-    match /{collection}/{document=**} {
-      allow read: if collection.matches('comments-.*') == true
+    match /events/{eventId} {
+      allow get: if request.auth != null;
+      allow list, create: if request.auth != null && request.auth.token.firebase.sign_in_provider != "anonymous";
+      allow update, delete: if request.auth != null && request.auth.uid == resource.data.administrator;
+      match /comments/{commentId} {
+        allow read: if request.auth != null;
+        allow create: if request.auth != null;
+        allow update: if request.auth != null && (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likedBy']));
+        // ref: https://firebase.google.com/docs/firestore/security/rules-fields#allowing_only_certain_fields_to_be_changed
+        allow delete: if request.auth != null && request.auth.uid == resource.data.postedBy;
+      }
     }
     match /accounts/{accountId} {
       allow read;

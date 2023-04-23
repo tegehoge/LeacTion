@@ -44,7 +44,7 @@ const MyPage: VoidComponent = () => {
               イベントを新規登録する
             </LargeButtonWithRouterLink>
           </Box>
-          <EventList uid={auth.account!.uid} />
+          <EventList account={auth.account} />
         </Container>
       </Match>
     </Switch>
