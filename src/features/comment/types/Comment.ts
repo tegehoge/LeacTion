@@ -1,4 +1,4 @@
-export type LeactionComment = {
+export type Comment = {
   id: string;
   content: string;
   postedBy: string; // account ID

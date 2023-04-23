@@ -3,12 +3,12 @@ import Paper from "@suid/material/Paper/Paper";
 import Stack from "@suid/material/Stack/Stack";
 import { Firestore } from "firebase/firestore";
 import { For, VoidComponent } from "solid-js";
-import { LeactionComment } from "../types/LeactionComment";
+import { Comment } from "../types/Comment";
 import { SingleComment } from "./SingleComment";
 
 type Props = {
   firestore: Firestore;
-  comments: LeactionComment[];
+  comments: Comment[];
 };
 
 export const CommentList: VoidComponent<Props> = (props: Props) => {

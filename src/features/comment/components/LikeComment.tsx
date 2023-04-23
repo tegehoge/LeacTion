@@ -1,10 +1,10 @@
 import { Firestore } from "firebase/firestore";
 import { VoidComponent } from "solid-js";
-import { LeactionComment } from "../types/LeactionComment";
+import { Comment } from "../types/Comment";
 
 type LikeCommentProps = {
   firestore: Firestore;
-  comment: LeactionComment;
+  comment: Comment;
 };
 
 export const LikeComment: VoidComponent<LikeCommentProps> = (props) => {

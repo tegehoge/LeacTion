@@ -1,6 +1,6 @@
 import { createStore } from "solid-js/store";
 import { produce } from "solid-js/store";
-import { LeactionEvent, createEmptyEvent, createEmptyTalk } from "../types/LeactionEvent";
+import { Event, createEmptyEvent, createEmptyTalk } from "../types/Event";
 
 type Talk = {
   id: string;
@@ -18,7 +18,7 @@ export type EventStore = {
   administrator: string;
 };
 
-export const useEventInput = (event: LeactionEvent = createEmptyEvent()) => {
+export const useEventInput = (event: Event = createEmptyEvent()) => {
   const [eventStore, setEventStore] = createStore<EventStore>({
     id: event.id,
     name: event.name,
@@ -61,7 +61,7 @@ export const useEventInput = (event: LeactionEvent = createEmptyEvent()) => {
     );
   };
 
-  const getLeactionEvent = (): LeactionEvent => {
+  const getEvent = (): Event => {
     return {
       id: eventStore.id,
       name: eventStore.name.trim(),
@@ -85,6 +85,6 @@ export const useEventInput = (event: LeactionEvent = createEmptyEvent()) => {
     appendEmptyTalk,
     removeTalk,
     setEventStore,
-    getLeactionEvent,
+    getEvent,
   } as const;
 };

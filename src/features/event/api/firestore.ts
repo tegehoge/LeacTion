@@ -8,7 +8,7 @@ import {
   SnapshotOptions,
   serverTimestamp,
 } from "firebase/firestore";
-import { LeactionEvent } from "../types/LeactionEvent";
+import { Event } from "../types/Event";
 
 /**
  * イベントIDでドキュメントを指定
@@ -30,8 +30,8 @@ export const eventCollection = (firestore: Firestore) =>
 /**
  * Firestore上のデータと相互変換するためのコンバーター
  */
-const EventFirestoreConverter: FirestoreDataConverter<LeactionEvent> = {
-  toFirestore(event: LeactionEvent): DocumentData {
+const EventFirestoreConverter: FirestoreDataConverter<Event> = {
+  toFirestore(event: Event): DocumentData {
     return {
       id: event.id,
       name: event.name,
@@ -47,7 +47,7 @@ const EventFirestoreConverter: FirestoreDataConverter<LeactionEvent> = {
   fromFirestore(
     snapshot: QueryDocumentSnapshot<DocumentData>,
     options?: SnapshotOptions | undefined
-  ): LeactionEvent {
+  ): Event {
     const eventData = snapshot.data(options);
     return {
       id: eventData.id,

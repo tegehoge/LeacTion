@@ -2,17 +2,14 @@ import {
   DocumentData,
   Firestore,
   FirestoreDataConverter,
-  PartialWithFieldValue,
   QueryDocumentSnapshot,
-  SetOptions,
   SnapshotOptions,
-  Timestamp,
   WithFieldValue,
   collection,
   doc,
   serverTimestamp,
 } from "firebase/firestore";
-import { LeactionComment } from "../types/LeactionComment";
+import { Comment } from "../types/Comment";
 
 /**
  * イベントIDとコメントIDでドキュメントを指定
@@ -36,8 +33,8 @@ export const commentCollection = (firestore: Firestore, eventId: string) =>
 /**
  * Firestore上のデータと相互変換するためのコンバーター
  */
-const CommentFirestoreConverter: FirestoreDataConverter<LeactionComment> = {
-  toFirestore(comment: WithFieldValue<LeactionComment>): DocumentData {
+const CommentFirestoreConverter: FirestoreDataConverter<Comment> = {
+  toFirestore(comment: WithFieldValue<Comment>): DocumentData {
     // only for create
     return {
       content: comment.content,
@@ -51,7 +48,7 @@ const CommentFirestoreConverter: FirestoreDataConverter<LeactionComment> = {
   fromFirestore(
     snapshot: QueryDocumentSnapshot<DocumentData>,
     options?: SnapshotOptions | undefined
-  ): LeactionComment {
+  ): Comment {
     const commentData = snapshot.data(options);
     return {
       id: snapshot.id,

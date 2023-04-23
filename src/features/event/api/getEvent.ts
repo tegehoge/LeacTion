@@ -1,5 +1,5 @@
 import { Firestore, getDoc, getDocs, query, where } from "firebase/firestore";
-import { LeactionEvent } from "../types/LeactionEvent";
+import { Event } from "../types/Event";
 import { eventCollection, eventDoc } from "./firestore";
 import { Account } from "~/features/account/types/Account";
 
@@ -9,7 +9,7 @@ import { Account } from "~/features/account/types/Account";
  * @param id イベントID
  * @returns イベント情報(存在しない場合はundefined)
  */
-export const getEvent = (firestore: Firestore, id: string): Promise<LeactionEvent | undefined> => {
+export const getEvent = (firestore: Firestore, id: string): Promise<Event | undefined> => {
   const eventRef = eventDoc(firestore, id);
   return getDoc(eventRef).then((eventData) => {
     return eventData.data();
@@ -25,7 +25,7 @@ export const getEvent = (firestore: Firestore, id: string): Promise<LeactionEven
 export const getEventsForAccount = (
   firestore: Firestore,
   account: Account
-): Promise<LeactionEvent[]> => {
+): Promise<Event[]> => {
   const eventQuery = query(
     eventCollection(firestore),
     where("administrator", "==", account.uid)

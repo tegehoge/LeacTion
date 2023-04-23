@@ -25,7 +25,7 @@ export const createEmptyTalk = (): Talk => {
  *
  * Event型がビルトインの型として存在するため名称を変更した。
  */
-export type LeactionEvent = {
+export type Event = {
   id: string;
   name: string;
   date: Date;
@@ -39,7 +39,7 @@ export type LeactionEvent = {
 
 export const generateEventId = () => nanoid(8);
 
-export const createEmptyEvent = (): LeactionEvent => {
+export const createEmptyEvent = (): Event => {
   return {
     id: generateEventId(),
     name: "",

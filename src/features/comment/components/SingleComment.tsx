@@ -1,10 +1,10 @@
 import { Paper } from "@suid/material";
 import { VoidComponent } from "solid-js";
 
-import { LeactionComment } from "../types/LeactionComment";
+import { Comment } from "../types/Comment";
 
 type SingleCommentProps = {
-  comment: LeactionComment;
+  comment: Comment;
 };
 
 export const SingleComment: VoidComponent<SingleCommentProps> = (props) => {

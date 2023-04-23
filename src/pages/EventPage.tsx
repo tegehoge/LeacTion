@@ -28,7 +28,7 @@ import {
 } from "solid-js";
 import { commentCollection } from "~/features/comment/api/firestoreConversion";
 import { CommentList, CreateComment } from "~/features/comment/components";
-import { LeactionComment } from "~/features/comment/types/LeactionComment";
+import { Comment } from "~/features/comment/types/Comment";
 import { getEvent } from "~/features/event/api";
 import { useAuthContext } from "~/providers/AuthProvider";
 import { useFirebaseApp } from "~/providers/FirebaseProvider";
@@ -54,7 +54,7 @@ const EventPage: VoidComponent = () => {
   });
 
   const [event] = createResource(() => getEvent(firestore, params.id));
-  const [comments, setComments] = createSignal<LeactionComment[]>([]);
+  const [comments, setComments] = createSignal<Comment[]>([]);
 
   // Firestore Realtime Update
   onSnapshot(commentCollection(firestore, params.id), (snapshot) => {
