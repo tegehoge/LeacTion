@@ -8,7 +8,7 @@ import {
   SnapshotOptions,
   serverTimestamp,
 } from "firebase/firestore";
-import { Event } from "../types/Event";
+import { Event } from "../types";
 
 /**
  * イベントIDでドキュメントを指定

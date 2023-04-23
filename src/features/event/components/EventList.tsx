@@ -14,7 +14,7 @@ import Typography from "@suid/material/Typography";
 import { getFirestore } from "firebase/firestore";
 import { Component, createResource, For, Show } from "solid-js";
 import { getEventsForAccount } from "../api";
-import { Account } from "~/features/account/types/Account";
+import { Account } from "~/features/account/types";
 import { useFirebaseApp } from "~/providers/FirebaseProvider";
 
 type EventListProps = {

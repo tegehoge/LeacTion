@@ -28,7 +28,7 @@ import {
 } from "solid-js";
 import { commentCollection } from "~/features/comment/api/firestoreConversion";
 import { CommentList, CreateComment } from "~/features/comment/components";
-import { Comment } from "~/features/comment/types/Comment";
+import { Comment } from "~/features/comment/types";
 import { getEvent } from "~/features/event/api";
 import { useAuthContext } from "~/providers/AuthProvider";
 import { useFirebaseApp } from "~/providers/FirebaseProvider";

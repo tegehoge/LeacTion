@@ -1,6 +1,6 @@
 import { Firestore, getDoc, setDoc } from "firebase/firestore";
 import { eventDoc } from "./firestore";
-import { Event, generateEventId } from "~/features/event/types/Event";
+import { Event, generateEventId } from "~/features/event/types";
 
 export const createEvent = (firestore: Firestore, event: Event) => {
   const generatedId = regenerateId(firestore, event.id);

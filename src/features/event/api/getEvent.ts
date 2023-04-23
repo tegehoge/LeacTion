@@ -1,7 +1,7 @@
 import { Firestore, getDoc, getDocs, query, where } from "firebase/firestore";
-import { Event } from "../types/Event";
+import { Event } from "../types";
 import { eventCollection, eventDoc } from "./firestore";
-import { Account } from "~/features/account/types/Account";
+import { Account } from "~/features/account/types";
 
 /**
  * イベント情報を取得する
@@ -22,10 +22,7 @@ export const getEvent = (firestore: Firestore, id: string): Promise<Event | unde
  * @param account 対象のアカウント
  * @returns イベント情報の配列
  */
-export const getEventsForAccount = (
-  firestore: Firestore,
-  account: Account
-): Promise<Event[]> => {
+export const getEventsForAccount = (firestore: Firestore, account: Account): Promise<Event[]> => {
   const eventQuery = query(
     eventCollection(firestore),
     where("administrator", "==", account.uid)

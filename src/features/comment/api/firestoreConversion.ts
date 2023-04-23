@@ -9,7 +9,7 @@ import {
   doc,
   serverTimestamp,
 } from "firebase/firestore";
-import { Comment } from "../types/Comment";
+import { Comment } from "../types";
 
 /**
  * イベントIDとコメントIDでドキュメントを指定

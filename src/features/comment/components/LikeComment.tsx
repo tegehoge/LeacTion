@@ -1,6 +1,6 @@
 import { Firestore } from "firebase/firestore";
 import { VoidComponent } from "solid-js";
-import { Comment } from "../types/Comment";
+import { Comment } from "../types";
 
 type LikeCommentProps = {
   firestore: Firestore;

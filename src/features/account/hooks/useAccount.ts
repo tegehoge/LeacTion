@@ -1,5 +1,5 @@
 import { createMemo, createSignal } from "solid-js";
-import { Account } from "../types/Account";
+import { Account } from "../types";
 
 /**
  * 現在のアカウント情報とdisplayNameを更新する関数を提供するフック

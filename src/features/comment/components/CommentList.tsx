@@ -1,9 +1,8 @@
-import { Box, Container } from "@suid/material";
-import Paper from "@suid/material/Paper/Paper";
+import { Container } from "@suid/material";
 import Stack from "@suid/material/Stack/Stack";
 import { Firestore } from "firebase/firestore";
 import { For, VoidComponent } from "solid-js";
-import { Comment } from "../types/Comment";
+import { Comment } from "../types";
 import { SingleComment } from "./SingleComment";
 
 type Props = {

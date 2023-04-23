@@ -1,5 +1,4 @@
 import { nanoid } from "nanoid";
-import { Account } from "~/features/account/types/Account";
 
 /**
  * トーク：発表枠

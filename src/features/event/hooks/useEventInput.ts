@@ -1,6 +1,6 @@
 import { createStore } from "solid-js/store";
 import { produce } from "solid-js/store";
-import { Event, createEmptyEvent, createEmptyTalk } from "../types/Event";
+import { Event, createEmptyEvent, createEmptyTalk } from "../types";
 
 type Talk = {
   id: string;

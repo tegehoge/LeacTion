@@ -1,4 +1,4 @@
-import { Firestore, arrayRemove, arrayUnion, getDoc, updateDoc } from "firebase/firestore";
+import { Firestore, arrayRemove, arrayUnion, updateDoc } from "firebase/firestore";
 import { commentDoc } from "./firestoreConversion";
 
 export const likeComment = (
