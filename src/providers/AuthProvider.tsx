@@ -13,7 +13,7 @@ import { Component, createContext, createEffect, JSX, useContext } from "solid-j
 import { createStore, produce } from "solid-js/store";
 import { useFirebaseApp } from "./FirebaseProvider";
 import { createAccount, getAccount } from "~/features/account/api";
-import { Account } from "~/features/account/types/Account";
+import { Account } from "~/features/account/types";
 
 type AuthContextStore = {
   loading: boolean;
@@ -100,20 +100,21 @@ export const AuthProvider: Component<Props> = (props) => {
       setContext("loading", true);
       const user = authState.data;
       // 匿名アカウント
-      if (!isSignedInWithGoogleProvider(user)) {
+      if (user.isAnonymous) {
         console.debug("Signed in anonymously");
         return setSignInContext(user.uid);
       }
       // Googleアカウント
-      return fetchAccount(user).then((account) => {
-        console.debug("Signed in with Google");
-        return setSignInContext(account.uid, account);
-      });
-    } else {
-      // ログアウト
-      console.debug("Signed out");
-      return setSignInContext();
+      if (isSignedInWithGoogleProvider(user)) {
+        return fetchAccount(user).then((account) => {
+          console.debug("Signed in with Google");
+          return setSignInContext(account.uid, account);
+        });
+      }
     }
+    // 未ログイン
+    console.debug("No credential");
+    return setSignInContext();
   });
 
   return <AuthContext.Provider value={context}>{props.children}</AuthContext.Provider>;
