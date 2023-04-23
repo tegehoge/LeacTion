@@ -18,7 +18,7 @@ export const CreateComment: VoidComponent<CreateCommentProps> = (props) => {
     <Box>
       <Grid container alignItems="center">
         <Grid item xs={10}>
-          <FormControl fullWidth>
+          <FormControl fullWidth size="small">
             <TextField
               value={content()}
               multiline

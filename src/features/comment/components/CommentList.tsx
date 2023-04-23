@@ -8,13 +8,22 @@ import { SingleComment } from "./SingleComment";
 type Props = {
   firestore: Firestore;
   comments: Comment[];
+  currentUid: string;
 };
 
 export const CommentList: VoidComponent<Props> = (props: Props) => {
   return (
     <Container>
       <Stack spacing={1}>
-        <For each={props.comments}>{(comment) => <SingleComment comment={comment} />}</For>
+        <For each={props.comments}>
+          {(comment) => (
+            <SingleComment
+              firestore={props.firestore}
+              comment={comment}
+              currentUid={props.currentUid}
+            />
+          )}
+        </For>
       </Stack>
     </Container>
   );

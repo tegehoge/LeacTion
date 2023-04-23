@@ -45,6 +45,7 @@ const EventPage: VoidComponent = () => {
   const params = useParams<{ id: string }>();
   const firestore = getFirestore(useFirebaseApp());
   const auth = useAuthContext();
+  const currentUid = () => auth.uid || "";
 
   createEffect(() => {
     // uid がない場合は匿名認証で uid を獲得する
@@ -119,12 +120,16 @@ const EventPage: VoidComponent = () => {
               overflow="auto"
               sx={{ paddingTop: "1rem", paddingBottom: "1rem" }}
             >
-              <CommentList firestore={firestore} comments={selectedTalkComments()} />
+              <CommentList
+                firestore={firestore}
+                comments={selectedTalkComments()}
+                currentUid={currentUid()}
+              />
             </Box>
             <Box>
               <Container>
                 <Box sx={{ marginTop: "1rem", marginBottom: "1rem" }}>
-                  <FormControl fullWidth>
+                  <FormControl fullWidth size="small">
                     <InputLabel>発表</InputLabel>
                     <Select value={talkId()} onChange={(e) => setTalkId(e.target.value)}>
                       <For each={event()?.talks}>
