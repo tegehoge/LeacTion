@@ -1,13 +1,17 @@
-import { Link, useParams } from "@solidjs/router";
-import { Menu } from "@suid/icons-material";
+import { Link, useNavigate, useParams } from "@solidjs/router";
+import { AddCircle, Edit, Menu as MenuIcon, Share } from "@suid/icons-material";
 import {
   AppBar,
   Box,
   CircularProgress,
   Container,
+  Divider,
   FormControl,
   IconButton,
   InputLabel,
+  ListItemIcon,
+  ListItemText,
+  Menu,
   MenuItem,
   Select,
   Skeleton,
@@ -26,6 +30,7 @@ import {
   createResource,
   createSignal,
 } from "solid-js";
+import { createStore, reconcile } from "solid-js/store";
 import { commentCollection } from "~/features/comment/api/firestoreConversion";
 import { CommentList, CreateComment } from "~/features/comment/components";
 import { Comment } from "~/features/comment/types";
@@ -55,25 +60,11 @@ const EventPage: VoidComponent = () => {
   });
 
   const [event] = createResource(() => getEvent(firestore, params.id));
-  const [comments, setComments] = createSignal<Comment[]>([]);
+  const [comments, setComments] = createStore<Comment[]>([]);
 
   // Firestore Realtime Update
   onSnapshot(commentCollection(firestore, params.id), (snapshot) => {
-    snapshot.docChanges().forEach((change) => {
-      const commentData = change.doc.data();
-      // console.log(commentData);
-      switch (change.type) {
-        case "added":
-          setComments((prev) => prev.concat([commentData]));
-          break;
-        case "removed":
-          setComments((prev) => prev.filter((c) => c.id != commentData.id));
-          break;
-        case "modified":
-          setComments((prev) => prev.map((c) => (c.id == commentData.id ? commentData : c)));
-          break;
-      }
-    });
+    setComments(reconcile(snapshot.docs.map((doc) => doc.data())));
   });
 
   const [talkId, setTalkId] = createSignal("");
@@ -84,10 +75,17 @@ const EventPage: VoidComponent = () => {
   });
 
   const selectedTalkComments = () => {
-    return comments()
+    return comments
       .filter((c) => c.talkId == talkId())
       .sort((a, b) => compareAsc(a.postedAt, b.postedAt));
   };
+
+  const [anchorEl, setAnchorEl] = createSignal<HTMLElement | null>(null);
+  const menuOpen = () => !!anchorEl();
+  const navigate = useNavigate();
+  const canEdit = () =>
+    event()?.administrator == auth.account?.uid ||
+    event()?.collaborators.includes(auth.account?.uid || "");
 
   return (
     <Box height={"100dvh"} sx={{ display: "flex", flexDirection: "column" }}>
@@ -98,9 +96,60 @@ const EventPage: VoidComponent = () => {
               <Typography variant="h4" sx={{ flexGrow: 1 }}>
                 {event()?.name}
               </Typography>
-              <IconButton>
-                <Menu fontSize="large" sx={{ color: "white" }} />
+              <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
+                <MenuIcon fontSize="large" sx={{ color: "white" }} />
               </IconButton>
+              <Menu open={menuOpen()} anchorEl={anchorEl()} onClose={() => setAnchorEl(null)}>
+                <MenuItem>
+                  <ListItemIcon>
+                    <Share fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>シェアする</ListItemText>
+                </MenuItem>
+                <Divider />
+                <Switch>
+                  <Match when={!auth.account}>
+                    <MenuItem>
+                      <ListItemIcon>
+                        <Edit fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText>ログインしてイベント編集権限をリクエスト</ListItemText>
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem onClick={() => navigate("/")}>LeacTion! トップページ</MenuItem>
+                  </Match>
+                  <Match when={auth.account && !canEdit()}>
+                    <MenuItem>
+                      <ListItemIcon>
+                        <Edit fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText>イベント編集権限をリクエスト</ListItemText>
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem onClick={() => navigate("/new")}>
+                      <ListItemIcon>
+                        <AddCircle fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText>新しいイベントを作る</ListItemText>
+                    </MenuItem>
+                  </Match>
+                  <Match when={canEdit()}>
+                    <MenuItem>
+                      <ListItemIcon>
+                        <Edit fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText>イベントを編集する</ListItemText>
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem onClick={() => navigate("/new")}>
+                      <ListItemIcon>
+                        <AddCircle fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText>新しいイベントを作る</ListItemText>
+                    </MenuItem>
+                  </Match>
+                </Switch>
+              </Menu>
             </Suspense>
           </Toolbar>
         </AppBar>
@@ -114,12 +163,7 @@ const EventPage: VoidComponent = () => {
             </Box>
           </Match>
           <Match when={event()}>
-            <Box
-              backgroundColor="#c1e4e9"
-              flexGrow={1}
-              overflow="auto"
-              sx={{ paddingTop: "1rem", paddingBottom: "1rem" }}
-            >
+            <Box backgroundColor="#c1e4e9" flexGrow={1} overflow="auto">
               <CommentList
                 firestore={firestore}
                 comments={selectedTalkComments()}

@@ -13,7 +13,7 @@ type Props = {
 
 export const CommentList: VoidComponent<Props> = (props: Props) => {
   return (
-    <Container>
+    <Container sx={{ paddingTop: "1rem", paddingBottom: "1rem" }}>
       <Stack spacing={1}>
         <For each={props.comments}>
           {(comment) => (

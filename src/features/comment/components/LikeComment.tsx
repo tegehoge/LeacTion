@@ -21,25 +21,23 @@ export const LikeComment: VoidComponent<LikeCommentProps> = (props) => {
   };
 
   return (
-    <>
-      <IconButton
-        size="small"
-        title="いいね！"
-        disabled={isMyComment()}
-        onClick={() =>
-          likeComment(
-            props.firestore,
-            props.comment.eventId,
-            props.comment.id,
-            props.currentUid,
-            !isLikedByMe()
-          )
-        }
-      >
-        <Badge badgeContent={props.comment.likedBy.length}>
-          <ThumbUp color={iconColor()} />
-        </Badge>
-      </IconButton>
-    </>
+    <IconButton
+      size="small"
+      title="いいね！"
+      disabled={isMyComment()}
+      onClick={() =>
+        likeComment(
+          props.firestore,
+          props.comment.eventId,
+          props.comment.id,
+          props.currentUid,
+          !isLikedByMe()
+        )
+      }
+    >
+      <Badge badgeContent={props.comment.likedBy.length}>
+        <ThumbUp color={iconColor()} />
+      </Badge>
+    </IconButton>
   );
 };

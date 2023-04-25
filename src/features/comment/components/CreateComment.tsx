@@ -16,16 +16,16 @@ export const CreateComment: VoidComponent<CreateCommentProps> = (props) => {
   const { content, setContent, sendComment, canSendComment } = useCreateComment(props);
   return (
     <Box>
-      <Grid container alignItems="center">
+      <Grid container alignItems="center" spacing={2}>
         <Grid item xs={10}>
-          <FormControl fullWidth size="small">
-            <TextField
-              value={content()}
-              multiline
-              variant="outlined"
-              onChange={(e) => setContent(e.target.value)}
-            />
-          </FormControl>
+          <TextField
+            value={content()}
+            multiline
+            fullWidth
+            size="small"
+            variant="outlined"
+            onChange={(e) => setContent(e.target.value)}
+          />
         </Grid>
         <Grid item xs={2}>
           <FormControl fullWidth>
