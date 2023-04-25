@@ -1,3 +1,4 @@
+import { formatISO, parseISO } from "date-fns";
 import {
   collection,
   doc,
@@ -35,7 +36,7 @@ const EventFirestoreConverter: FirestoreDataConverter<Event> = {
     return {
       id: event.id,
       name: event.name,
-      date: event.date.toISOString().slice(0, 10), // ex. "2023-04-16"
+      date: formatISO(event.date, { representation: "date" }), // ex. "2023-04-16"
       url: event.url || null,
       hashTag: event.hashTag || null,
       talks: event.talks,
@@ -52,7 +53,7 @@ const EventFirestoreConverter: FirestoreDataConverter<Event> = {
     return {
       id: eventData.id,
       name: eventData.name,
-      date: new Date(eventData.date),
+      date: parseISO(eventData.date),
       url: eventData.url || undefined,
       hashTag: eventData.hashTag || undefined,
       talks: eventData.talks,
