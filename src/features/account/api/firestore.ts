@@ -1,4 +1,5 @@
 import {
+  collection,
   doc,
   DocumentData,
   Firestore,
@@ -17,7 +18,10 @@ import { Account } from "../types";
  * @returns DocumentReference
  */
 export const accountDoc = (firestore: Firestore, uid: string) =>
-  doc(firestore, `accounts/${uid}`).withConverter(AccountFirestoreConverter);
+  doc(firestore, "accounts", uid).withConverter(AccountFirestoreConverter);
+
+export const accountCollection = (firestore: Firestore) =>
+  collection(firestore, "accounts").withConverter(AccountFirestoreConverter);
 
 /**
  * Firestore上のデータと相互変換するためのコンバーター
