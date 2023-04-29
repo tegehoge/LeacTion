@@ -4,7 +4,7 @@ on: [pull_request]
 
 jobs:
   build:
-    environment: Production Deploy
+    environment: Build For Preview
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -35,7 +35,7 @@ jobs:
           envkey_VITE_STORAGE_BUCKET: ${{ secrets.STORAGE_BUCKET }}
       - run: yarn build
   build_functions:
-    environment: Production Deploy
+    environment: Build For Preview
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -54,7 +54,7 @@ jobs:
         working-directory: ./functions
         run: npm run build
   deploy_for_preview:
-    environment: Production Deploy
+    environment: Build For Preview
     runs-on: ubuntu-latest
     needs: [build, build_functions]
     steps:

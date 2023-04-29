@@ -6,7 +6,7 @@ import Divider from "@suid/material/Divider";
 import Skeleton from "@suid/material/Skeleton";
 import Typography from "@suid/material/Typography";
 import { getFirestore } from "firebase/firestore";
-import { createEffect, For, Match, Switch, VoidComponent } from "solid-js";
+import { createEffect, Match, Switch, VoidComponent } from "solid-js";
 
 import { PrimaryButton, SecondaryButton } from "~/components/buttons";
 import { CautionServiceUseModal } from "~/components/modals";
@@ -28,7 +28,7 @@ const EventNew: VoidComponent = () => {
     appendEmptyTalk,
     removeTalk,
     setEventStore,
-    getLeactionEvent,
+    getEvent,
   } = useEventInput();
 
   const navigate = useNavigate();
@@ -108,7 +108,7 @@ const EventNew: VoidComponent = () => {
               </Link>
               に同意して
             </Typography>
-            <PrimaryButton onClick={() => createEvent(firestore, getLeactionEvent())}>
+            <PrimaryButton onClick={() => createEvent(firestore, getEvent())}>
               イベントを作成する
             </PrimaryButton>
           </Box>

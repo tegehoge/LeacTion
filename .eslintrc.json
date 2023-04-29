@@ -3,7 +3,9 @@
     "eslint:recommended",
     "plugin:solid/typescript",
     "plugin:prettier/recommended",
-    "plugin:import/errors"
+    "plugin:import/errors",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
   ],
   "plugins": ["solid", "prettier", "import"],
   "parser": "@typescript-eslint/parser",

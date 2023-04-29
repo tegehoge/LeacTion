@@ -24,4 +24,8 @@ export const routes = [
       },
     ],
   },
+  {
+    path: "/event/:id",
+    component: lazy(() => import("~/pages/EventPage")),
+  },
 ];

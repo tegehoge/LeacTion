@@ -1,8 +1,8 @@
 import { Firestore, updateDoc } from "firebase/firestore";
 import { eventDoc } from "./firestore";
-import { LeactionEvent } from "~/features/event/types/LeactionEvent";
+import { Event } from "~/features/event/types";
 
-export const updateEvent = (firestore: Firestore, event: LeactionEvent) => {
+export const updateEvent = (firestore: Firestore, event: Event) => {
   const eventRef = eventDoc(firestore, event.id);
   return updateDoc(eventRef, event);
 };

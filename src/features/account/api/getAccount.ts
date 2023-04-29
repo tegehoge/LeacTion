@@ -1,5 +1,5 @@
 import { Firestore, getDoc } from "firebase/firestore";
-import { Account } from "../types/Account";
+import { Account } from "../types";
 import { accountDoc } from "./firestore";
 
 /**

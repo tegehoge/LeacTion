@@ -7,7 +7,7 @@ import {
   SnapshotOptions,
   WithFieldValue,
 } from "firebase/firestore";
-import { Account } from "../types/Account";
+import { Account } from "../types";
 
 /**
  * Account を参照する Firestore の DocumentReference.
