@@ -1,44 +1,32 @@
 import { createStore } from "solid-js/store";
 import { produce } from "solid-js/store";
-import { Account } from "~/features/account/types/Account";
+import { LeactionEvent, createEmptyEvent, createEmptyTalk } from "../types/LeactionEvent";
+
+type Talk = {
+  id: string;
+  speakerName: string;
+  title: string;
+};
 
 export type EventStore = {
+  id: string;
   name: string;
   date: Date;
   url: string;
   hashTag: string;
-  presentationList: {
-    id: number;
-    memberName: string;
-    title: string;
-  }[];
-  administrators: Account[];
+  talks: Talk[];
+  administrator: string;
 };
 
-export const useEventInput = () => {
+export const useEventInput = (event: LeactionEvent = createEmptyEvent()) => {
   const [eventStore, setEventStore] = createStore<EventStore>({
-    name: "",
-    date: new Date(),
-    url: "",
-    hashTag: "",
-    presentationList: [
-      {
-        id: 1,
-        memberName: "たなか",
-        title: "Laravelについて",
-      },
-      {
-        id: 2,
-        memberName: "すずき",
-        title: "Ruby on Railsについて",
-      },
-      {
-        id: 3,
-        memberName: "たかはし",
-        title: "Next.jsについて",
-      },
-    ],
-    administrators: [],
+    id: event.id,
+    name: event.name,
+    date: event.date,
+    url: event.url || "",
+    hashTag: event.hashTag || "",
+    talks: event.talks,
+    administrator: event.administrator,
   });
 
   const onChangeEventInfo = (
@@ -48,39 +36,55 @@ export const useEventInput = () => {
     setEventStore(key, value);
   };
 
-  const onClickAddPresentationItem = (): void => {
-    const nextId = Math.max(...eventStore.presentationList.map((event) => event.id)) + 1;
-
+  const appendEmptyTalk = (): void => {
     setEventStore(
-      "presentationList",
-      produce((event) => {
-        event.push({
-          id: nextId,
-          memberName: "",
-          title: "",
-        });
+      "talks",
+      produce((currentTalks) => {
+        currentTalks.push(createEmptyTalk());
       })
     );
   };
 
-  const onInputPresentationListItem = (
-    id: number,
-    key: "title" | "memberName",
-    value: string
-  ): void => {
+  const removeTalk = (id: string): void => {
     setEventStore(
-      "presentationList",
-      (presentationList) => presentationList.id === id,
+      "talks",
+      eventStore.talks.filter((talk) => talk.id !== id)
+    );
+  };
+
+  const onInputTalks = (id: string, key: "title" | "speakerName", value: string): void => {
+    setEventStore(
+      "talks",
+      (talk) => talk.id === id,
       key,
       () => value
     );
   };
 
+  const getLeactionEvent = (): LeactionEvent => {
+    return {
+      id: eventStore.id,
+      name: eventStore.name.trim(),
+      date: eventStore.date,
+      url: eventStore.url.trim() || undefined,
+      hashTag: eventStore.hashTag.trim() || undefined,
+      talks: eventStore.talks
+        .map((talk) => {
+          return { id: talk.id, speakerName: talk.speakerName.trim(), title: talk.title.trim() };
+        })
+        .filter((talk) => !(talk.speakerName == "" && talk.title == "")),
+      administrator: eventStore.administrator,
+      collaborators: [],
+    };
+  };
+
   return {
     eventStore,
     onChangeEventInfo,
-    onClickAddPresentationItem,
-    onInputPresentationListItem,
+    onInputTalks,
+    appendEmptyTalk,
+    removeTalk,
     setEventStore,
+    getLeactionEvent,
   } as const;
 };
