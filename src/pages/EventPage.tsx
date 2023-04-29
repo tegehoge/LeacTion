@@ -1,21 +1,12 @@
-import { Link, useNavigate, useParams } from "@solidjs/router";
-import { AddCircle, Edit, Menu as MenuIcon, Share } from "@suid/icons-material";
+import { Link, useParams } from "@solidjs/router";
 import {
-  AppBar,
   Box,
   CircularProgress,
   Container,
-  Divider,
   FormControl,
-  IconButton,
   InputLabel,
-  ListItemIcon,
-  ListItemText,
-  Menu,
   MenuItem,
   Select,
-  Skeleton,
-  Toolbar,
   Typography,
 } from "@suid/material";
 import { compareAsc } from "date-fns";
@@ -36,12 +27,13 @@ import { commentCollection } from "~/features/comment/api/firestoreConversion";
 import { CommentList, CreateComment } from "~/features/comment/components";
 import { Comment } from "~/features/comment/types";
 import { getEvent } from "~/features/event/api";
+import { EventHeader } from "~/features/event/components";
 import { useAuthContext } from "~/providers/AuthProvider";
 import { useFirebaseApp } from "~/providers/FirebaseProvider";
 
 const LoadingEvent: VoidComponent = () => {
   return (
-    <Box textAlign="center">
+    <Box textAlign="center" sx={{ marginTop: "2em" }}>
       <CircularProgress />
     </Box>
   );
@@ -76,85 +68,25 @@ const EventPage: VoidComponent = () => {
     }
   });
 
-  const selectedTalkComments = () => {
+  const commentsForSelectedTalk = () => {
     return comments
       .filter((c) => c.talkId == talkId())
       .sort((a, b) => compareAsc(a.postedAt, b.postedAt));
   };
 
-  const [anchorEl, setAnchorEl] = createSignal<HTMLElement | null>(null);
-  const menuOpen = () => !!anchorEl();
-  const navigate = useNavigate();
-  const canEdit = () =>
-    event()?.administrator == auth.account?.uid ||
-    event()?.collaborators.includes(auth.account?.uid || "");
+  const isEditable = () => {
+    if (auth.loading || !auth.account) return false;
+    return (
+      event()?.administrator == auth.account.uid ||
+      event()?.collaborators.includes(auth.account.uid || "") ||
+      false
+    );
+  };
 
   return (
     <Box height={"100dvh"} sx={{ display: "flex", flexDirection: "column" }}>
       <Box>
-        <AppBar position="static">
-          <Toolbar>
-            <Suspense fallback={<Skeleton variant="text" />}>
-              <Typography variant="h4" sx={{ flexGrow: 1 }}>
-                {event()?.name}
-              </Typography>
-              <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
-                <MenuIcon fontSize="large" sx={{ color: "white" }} />
-              </IconButton>
-              <Menu open={menuOpen()} anchorEl={anchorEl()} onClose={() => setAnchorEl(null)}>
-                <MenuItem>
-                  <ListItemIcon>
-                    <Share fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText>シェアする</ListItemText>
-                </MenuItem>
-                <Divider />
-                <Switch>
-                  <Match when={!auth.account}>
-                    <MenuItem>
-                      <ListItemIcon>
-                        <Edit fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText>ログインしてイベント編集権限をリクエスト</ListItemText>
-                    </MenuItem>
-                    <Divider />
-                    <MenuItem onClick={() => navigate("/")}>LeacTion! トップページ</MenuItem>
-                  </Match>
-                  <Match when={auth.account && !canEdit()}>
-                    <MenuItem>
-                      <ListItemIcon>
-                        <Edit fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText>イベント編集権限をリクエスト</ListItemText>
-                    </MenuItem>
-                    <Divider />
-                    <MenuItem onClick={() => navigate("/new")}>
-                      <ListItemIcon>
-                        <AddCircle fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText>新しいイベントを作る</ListItemText>
-                    </MenuItem>
-                  </Match>
-                  <Match when={canEdit()}>
-                    <MenuItem>
-                      <ListItemIcon>
-                        <Edit fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText>イベントを編集する</ListItemText>
-                    </MenuItem>
-                    <Divider />
-                    <MenuItem onClick={() => navigate("/new")}>
-                      <ListItemIcon>
-                        <AddCircle fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText>新しいイベントを作る</ListItemText>
-                    </MenuItem>
-                  </Match>
-                </Switch>
-              </Menu>
-            </Suspense>
-          </Toolbar>
-        </AppBar>
+        <EventHeader eventId={event()?.id} eventName={event()?.name} isEditable={isEditable()} />
       </Box>
       <Suspense fallback={<LoadingEvent />}>
         <Switch>
@@ -168,7 +100,7 @@ const EventPage: VoidComponent = () => {
             <Box backgroundColor="#c1e4e9" flexGrow={1} overflow="auto">
               <CommentList
                 firestore={firestore}
-                comments={selectedTalkComments()}
+                comments={commentsForSelectedTalk()}
                 currentUid={currentUid()}
               />
             </Box>
