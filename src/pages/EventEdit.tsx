@@ -14,7 +14,7 @@ const EventEdit: VoidComponent = () => {
   const auth = useAuthContext();
   const [event] = createResource(() => getEvent(firestore, eventId));
 
-  const canEdit = () =>
+  const isEditable = () =>
     auth.account &&
     event() &&
     (event()?.administrator == auth.account?.uid ||
@@ -22,7 +22,7 @@ const EventEdit: VoidComponent = () => {
 
   createEffect(() => {
     if (!event.loading && !auth.loading) {
-      if (!canEdit()) {
+      if (!isEditable()) {
         navigate("/");
       }
     }
@@ -35,7 +35,7 @@ const EventEdit: VoidComponent = () => {
           イベントの編集
         </Typography>
       </Box>
-      {canEdit() && <UpdateEvent firestore={firestore} currentEvent={event()!} />}
+      {isEditable() && <UpdateEvent firestore={firestore} currentEvent={event()!} />}
     </Box>
   );
 };
