@@ -34,7 +34,7 @@ export const useCreateComment = (props: UseCreateCommentProps) => {
   const [content, setContent] = createSignal<string>("");
 
   const sendComment = () => {
-    if (content().trim().length == 0) return Promise.reject();
+    if (!canSendComment()) return Promise.reject();
     return createComment(
       props.firestore,
       props.config.eventId,
@@ -50,7 +50,7 @@ export const useCreateComment = (props: UseCreateCommentProps) => {
       });
   };
 
-  const canSendComment = () => content().trim().length != 0;
+  const canSendComment = () => content().trim().length !== 0;
 
   return { content, setContent, sendComment, canSendComment };
 };
