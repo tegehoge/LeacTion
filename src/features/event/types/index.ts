@@ -19,6 +19,10 @@ export const createEmptyTalk = (): Talk => {
   };
 };
 
+export const nonEmptyTalk = (talk: Talk) => {
+  return !(talk.speakerName.length === 0 && talk.title.length === 0);
+};
+
 /**
  * イベント：開催するイベント情報
  *
@@ -46,5 +50,22 @@ export const createEmptyEvent = (): Event => {
     talks: [createEmptyTalk(), createEmptyTalk(), createEmptyTalk()],
     administrator: "",
     collaborators: [],
+  };
+};
+
+export const trimEvent = (event: Event): Event => {
+  return {
+    id: event.id,
+    name: event.name.trim(),
+    date: event.date,
+    url: event.url?.trim() || undefined,
+    hashTag: event.hashTag?.trim() || undefined,
+    talks: event.talks
+      .map((talk) => {
+        return { id: talk.id, speakerName: talk.speakerName.trim(), title: talk.title.trim() };
+      })
+      .filter(nonEmptyTalk),
+    administrator: event.administrator,
+    collaborators: event.collaborators,
   };
 };

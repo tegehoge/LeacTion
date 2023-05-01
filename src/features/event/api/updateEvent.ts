@@ -1,8 +1,24 @@
-import { Firestore, updateDoc } from "firebase/firestore";
+import { Firestore, setDoc } from "firebase/firestore";
+import { createStore } from "solid-js/store";
 import { eventDoc } from "./firestore";
-import { Event } from "~/features/event/types";
+import { Event, trimEvent } from "~/features/event/types";
 
-export const updateEvent = (firestore: Firestore, event: Event) => {
+const updateEvent = (firestore: Firestore, event: Event) => {
   const eventRef = eventDoc(firestore, event.id);
-  return updateDoc(eventRef, event);
+  return setDoc(eventRef, event);
+};
+
+export const useUpdateEvent = (firestore: Firestore, currentEvent: Event) => {
+  const [event, setEvent] = createStore(currentEvent);
+
+  const sendEventUpdate = () => {
+    // TODO: validations
+    return updateEvent(firestore, trimEvent(event));
+  };
+
+  return {
+    event,
+    setEvent,
+    sendEventUpdate,
+  } as const;
 };

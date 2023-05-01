@@ -1,3 +1,3 @@
 export { createEvent } from "./createEvent";
-export { updateEvent } from "./updateEvent";
+export { useUpdateEvent } from "./updateEvent";
 export { getEvent, getEventsForAccount } from "./getEvent";

@@ -22,6 +22,10 @@ export const routes = [
         path: "/new",
         component: lazy(() => import("~/pages/EventNew")),
       },
+      {
+        path: "/event/:eventId/edit",
+        component: lazy(() => import("~/pages/EventEdit")),
+      },
     ],
   },
   {

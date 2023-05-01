@@ -29,6 +29,7 @@ import {
   createEffect,
   createResource,
   createSignal,
+  onCleanup,
 } from "solid-js";
 import { createStore, reconcile } from "solid-js/store";
 import { commentCollection } from "~/features/comment/api/firestoreConversion";
@@ -63,9 +64,10 @@ const EventPage: VoidComponent = () => {
   const [comments, setComments] = createStore<Comment[]>([]);
 
   // Firestore Realtime Update
-  onSnapshot(commentCollection(firestore, params.id), (snapshot) => {
+  const unsubscribeComments = onSnapshot(commentCollection(firestore, params.id), (snapshot) => {
     setComments(reconcile(snapshot.docs.map((doc) => doc.data())));
   });
+  onCleanup(unsubscribeComments);
 
   const [talkId, setTalkId] = createSignal("");
   createEffect(() => {
