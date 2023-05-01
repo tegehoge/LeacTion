@@ -25,10 +25,10 @@ export const getEvent = (firestore: Firestore, id: string): Promise<Event | unde
 export const getEventsForAccount = (firestore: Firestore, account: Account): Promise<Event[]> => {
   const eventQuery = query(
     eventCollection(firestore),
-    where("administrator", "==", account.uid)
+    where("createdBy", "==", account.uid)
     /* こうなる予定
     or(
-      where("administrator", "==", account.uid),
+      where("createdBy", "==", account.uid),
       where("collabolators", "array-contains", account.uid)
     )*/
   );

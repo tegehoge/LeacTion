@@ -17,8 +17,8 @@ const EventEdit: VoidComponent = () => {
   const isEditable = () =>
     auth.account &&
     event() &&
-    (event()?.administrator == auth.account?.uid ||
-      event()?.collaborators.includes(auth.account?.uid));
+    (event()?.createdBy == auth.account?.uid ||
+      event()?.managers.includes(auth.account?.uid));
 
   createEffect(() => {
     if (!event.loading && !auth.loading) {

@@ -78,8 +78,8 @@ const EventPage: VoidComponent = () => {
   const isEditable = () => {
     if (auth.loading || !auth.account) return false;
     return (
-      event()?.administrator == auth.account.uid ||
-      event()?.collaborators.includes(auth.account.uid || "") ||
+      event()?.createdBy == auth.account.uid ||
+      event()?.managers.includes(auth.account.uid || "") ||
       false
     );
   };

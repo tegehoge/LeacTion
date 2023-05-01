@@ -19,7 +19,7 @@ export const UpdateEvent: VoidComponent<UpdateEventProps> = (props) => {
   // eslint-disable-next-line solid/reactivity
   const { event, setEvent, sendEventUpdate } = useUpdateEvent(props.firestore, props.currentEvent);
 
-  const editorUids = [event.administrator].concat(event.collaborators);
+  const editorUids = [event.createdBy].concat(event.managers);
   const [accounts] = createResource(editorUids, (uids) => getAccountsByUid(props.firestore, uids));
 
   // 削除前に確認が必要な発表枠のID
@@ -92,9 +92,9 @@ export const UpdateEvent: VoidComponent<UpdateEventProps> = (props) => {
         <Suspense>
           <Chip
             icon={<Star />}
-            label={accounts()?.find((account) => event.administrator)?.displayName}
+            label={accounts()?.find((account) => event.createdBy)?.displayName}
           />
-          <For each={event.collaborators}>
+          <For each={event.managers}>
             {(uid) => <Chip label={accounts()?.find((account) => account.uid)?.displayName} />}
           </For>
         </Suspense>

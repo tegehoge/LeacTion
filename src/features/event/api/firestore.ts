@@ -40,8 +40,8 @@ const EventFirestoreConverter: FirestoreDataConverter<Event> = {
       url: event.url || null,
       hashTag: event.hashTag || null,
       talks: event.talks,
-      administrator: event.administrator,
-      collaborators: event.collaborators,
+      createdBy: event.createdBy,
+      managers: event.managers,
       createdAt: event.createdAt || serverTimestamp(),
     };
   },
@@ -57,8 +57,8 @@ const EventFirestoreConverter: FirestoreDataConverter<Event> = {
       url: eventData.url || undefined,
       hashTag: eventData.hashTag || undefined,
       talks: eventData.talks,
-      administrator: eventData.administrator,
-      collaborators: eventData.collaborators,
+      createdBy: eventData.createdBy,
+      managers: eventData.managers,
       createdAt: eventData.createdAt,
     };
   },
