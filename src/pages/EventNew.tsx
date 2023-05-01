@@ -5,25 +5,11 @@ import { getFirestore } from "firebase/firestore";
 import { createEffect, Show, VoidComponent } from "solid-js";
 
 import { LargeHeading } from "~/components/typographies";
-import { CreateEvent } from "~/features/event/components/CreateEvent";
-import { useEventInput } from "~/features/event/hooks/useEventInput";
-import { useModal } from "~/hooks/organisms/useModal";
+import { CreateEvent } from "~/features/event/components";
 import { useAuthContext } from "~/providers/AuthProvider";
 import { useFirebaseApp } from "~/providers/FirebaseProvider";
 
 const EventNew: VoidComponent = () => {
-  const { isOpen, onClose } = useModal(true);
-
-  const {
-    eventStore,
-    onChangeEventInfo,
-    onInputTalks,
-    appendEmptyTalk,
-    removeTalk,
-    setEventStore,
-    getEvent,
-  } = useEventInput();
-
   const navigate = useNavigate();
   const auth = useAuthContext();
 
@@ -31,9 +17,7 @@ const EventNew: VoidComponent = () => {
 
   createEffect(() => {
     if (!auth.loading) {
-      if (auth.account) {
-        setEventStore("administrator", auth.account.uid);
-      } else {
+      if (!auth.account) {
         navigate("/");
       }
     }
