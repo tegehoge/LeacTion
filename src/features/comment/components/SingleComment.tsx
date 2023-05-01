@@ -26,9 +26,17 @@ export const SingleComment: VoidComponent<SingleCommentProps> = (props) => {
   const [linkUrl, setLinkUrl] = createSignal<string | null>(null);
   const closeDialog = () => setLinkUrl(null);
   const open = () => !!linkUrl();
+  const openLinkInNewTab = () => {
+    const url = linkUrl();
+    if (url) {
+      window.open(url, "_blank");
+      closeDialog();
+    }
+  };
 
   const plainTextToHtml = (content: string): JSX.Element[] => {
-    const [first, ...rest] = content.split("\n").map((s) => <span>{s}</span>);
+    const target = untrack(() => content);
+    const [first, ...rest] = target.split("\n").map((s) => <span>{s}</span>);
     return rest.reduce<JSX.Element[]>((prev, curr) => prev.concat(<br />, curr), [first]);
   };
 
@@ -38,7 +46,6 @@ export const SingleComment: VoidComponent<SingleCommentProps> = (props) => {
     const result: JSX.Element[] = [];
     let cursor = 0;
     for (const match of matches) {
-      console.log(match, cursor, match.index);
       if (match.index !== undefined) {
         if (cursor !== match.index) {
           result.push(...plainTextToHtml(target.slice(cursor, match.index)));
@@ -55,6 +62,7 @@ export const SingleComment: VoidComponent<SingleCommentProps> = (props) => {
     result.push(...plainTextToHtml(target.slice(cursor)));
     return result;
   };
+
   return (
     <Paper
       sx={{ display: "flex", padding: ["0.3rem", "0.5rem"], alignItems: "flex-start" }}
@@ -86,14 +94,7 @@ export const SingleComment: VoidComponent<SingleCommentProps> = (props) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={closeDialog}>キャンセル</Button>
-          <Button
-            variant="outlined"
-            color="warning"
-            component="a"
-            href={linkUrl()}
-            target="_blank"
-            onClick={closeDialog}
-          >
+          <Button variant="outlined" color="warning" onClick={openLinkInNewTab}>
             リンクを開く
           </Button>
         </DialogActions>

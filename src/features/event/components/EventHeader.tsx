@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from "@solidjs/router";
+import { useNavigate } from "@solidjs/router";
 import { AddCircle, Close, ContentCopy, Edit, Menu as MenuIcon, Share } from "@suid/icons-material";
 import {
   AppBar,
@@ -35,16 +35,20 @@ export const EventHeader: VoidComponent<EventHeaderProps> = (props) => {
   const [shareDialogOpen, setShareDialogOpen] = createSignal(false);
   const navigate = useNavigate();
 
-  const qrcodeUrl = new URL("https://api.qrserver.com/v1/create-qr-code/");
-  qrcodeUrl.searchParams.append("data", location.href);
-  qrcodeUrl.searchParams.append("size", "300x3000");
+  const qrcodeUrl = () => {
+    const u = new URL("https://api.qrserver.com/v1/create-qr-code/");
+    u.searchParams.append("data", location.href);
+    u.searchParams.append("size", "300x300");
+    return u.toString();
+  };
 
-  const twitterIntentURL = () => {
+  const shareOnTwitter = () => {
     const u = new URL("https://twitter.com/intent/tweet");
     u.searchParams.append("text", `LeacTion!で「${props.eventName}」にリアクションしよう！`);
     u.searchParams.append("url", location.href);
-    return u;
+    window.open(u, "_blank");
   };
+
   const copyToClipboard = () => {
     navigator.clipboard.writeText(location.href);
   };
@@ -118,12 +122,15 @@ export const EventHeader: VoidComponent<EventHeaderProps> = (props) => {
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <Box sx={{ textAlign: "center" }}>
-            <img
-              src={qrcodeUrl.toString()}
-              alt="イベントページのQRコード"
-              style={{ padding: "2em", border: "2px solid gray", "border-radius": "5%" }}
-            />
+          <Box
+            sx={{
+              textAlign: "center",
+              padding: "2em",
+              border: "2px solid gray",
+              borderRadius: "5%",
+            }}
+          >
+            <img src={qrcodeUrl()} alt="イベントページのQRコード" width={300} height={300} />
           </Box>
         </DialogContent>
         <DialogActions>
@@ -140,13 +147,10 @@ export const EventHeader: VoidComponent<EventHeaderProps> = (props) => {
             </Box>
             <Box>
               <Button
-                component="a"
                 variant="contained"
                 fullWidth
                 startIcon={<TwitterIcon />}
-                href={twitterIntentURL().toString()}
-                target="_blank"
-                sx={{ textTransform: "none" }}
+                onClick={shareOnTwitter}
               >
                 Twitterでツイートする
               </Button>
