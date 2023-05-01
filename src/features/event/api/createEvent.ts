@@ -1,10 +1,12 @@
 import { Firestore, getDoc, setDoc } from "firebase/firestore";
+import { createStore } from "solid-js/store";
 import { eventDoc } from "./firestore";
-import { Event, generateEventId } from "~/features/event/types";
+import { Account } from "~/features/account/types";
+import { Event, createEmptyEvent, generateEventId, trimEvent } from "~/features/event/types";
 
 export const createEvent = (firestore: Firestore, event: Event) => {
   const generatedId = regenerateId(firestore, event.id);
-  generatedId.then((id) => {
+  return generatedId.then((id) => {
     const eventRef = eventDoc(firestore, id);
     event.id = id;
     return setDoc(eventRef, event);
@@ -26,4 +28,15 @@ const regenerateId = (firestore: Firestore, id: string): Promise<string> => {
     }
     return id;
   });
+};
+
+export const useCreateEvent = (props: { firestore: Firestore; account: Account }) => {
+  const [event, setEvent] = createStore(createEmptyEvent());
+  setEvent("administrator", props.account.uid);
+
+  const sendEventCreate = () => {
+    return createEvent(props.firestore, trimEvent(event));
+  };
+
+  return { event, setEvent, sendEventCreate };
 };

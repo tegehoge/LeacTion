@@ -1,18 +1,11 @@
-import { Link, useNavigate } from "@solidjs/router";
-import AddCircle from "@suid/icons-material/AddCircle";
-import Box from "@suid/material/Box";
-import Container from "@suid/material/Container";
-import Divider from "@suid/material/Divider";
-import Skeleton from "@suid/material/Skeleton";
-import Typography from "@suid/material/Typography";
+import { useNavigate } from "@solidjs/router";
+import { CheckBox } from "@suid/icons-material";
+import { Box, Container, Link, List, ListItem, ListItemIcon, ListItemText } from "@suid/material";
 import { getFirestore } from "firebase/firestore";
-import { createEffect, Match, Switch, VoidComponent } from "solid-js";
+import { createEffect, Show, VoidComponent } from "solid-js";
 
-import { PrimaryButton, SecondaryButton } from "~/components/buttons";
-import { CautionServiceUseModal } from "~/components/modals";
 import { LargeHeading } from "~/components/typographies";
-import { createEvent } from "~/features/event/api";
-import { EventTalksForm, EventInfoInputGroup } from "~/features/event/components";
+import { CreateEvent } from "~/features/event/components/CreateEvent";
 import { useEventInput } from "~/features/event/hooks/useEventInput";
 import { useModal } from "~/hooks/organisms/useModal";
 import { useAuthContext } from "~/providers/AuthProvider";
@@ -51,71 +44,50 @@ const EventNew: VoidComponent = () => {
       <Box sx={{ textAlign: "center", margin: "20px 0" }}>
         <LargeHeading>新規イベントを登録する</LargeHeading>
       </Box>
-
-      <Container maxWidth="lg">
-        <Box component={"div"}>
-          <Box marginBottom="24px">
-            <EventInfoInputGroup
-              onChange={onChangeEventInfo}
-              name={eventStore.name}
-              url={eventStore.url}
-              date={eventStore.date}
-              hashTag={eventStore.hashTag}
-            />
-          </Box>
-
-          <Box marginBottom="16px">
-            <Typography variant="subtitle2" sx={{ fontWeight: "bold", marginBottom: "8px" }}>
-              イベントの発表順 (順序を変更できます)
-            </Typography>
-
-            <EventTalksForm
-              talks={eventStore.talks}
-              setEventStore={setEventStore}
-              handleInputEvent={onInputTalks}
-              removeTalkEvent={removeTalk}
-            />
-          </Box>
-
-          <Box marginBottom="16px">
-            <SecondaryButton onClick={appendEmptyTalk} fullWidth={true} startIcon={<AddCircle />}>
-              発表枠の追加
-            </SecondaryButton>
-          </Box>
-
-          <Box marginBottom="16px">
-            <Divider />
-          </Box>
-
-          <Typography
-            variant="h6"
-            fontWeight="bold"
-            sx={{ textAlign: "center", marginBottom: "16px" }}
-          >
-            管理者
-          </Typography>
-          <Switch>
-            <Match when={auth.loading}>
-              <Skeleton variant="text" />
-            </Match>
-            <Match when={auth.account}>{eventStore.administrator}</Match>
-          </Switch>
-
-          <Box textAlign="center" marginBottom="32px">
-            <Typography>
-              <Link href="/terms" target="_blank">
-                利用規約
-              </Link>
-              に同意して
-            </Typography>
-            <PrimaryButton onClick={() => createEvent(firestore, getEvent())}>
-              イベントを作成する
-            </PrimaryButton>
-          </Box>
+      <Container sx={{ marginBottom: "20px" }}>
+        <Box sx={{ padding: "1em", backgroundColor: "lightgray" }}>
+          以下のことに注意してLeacTion!をご利用ください。
+          <List dense>
+            <ListItem>
+              <ListItemIcon>
+                <CheckBox />
+              </ListItemIcon>
+              <ListItemText>
+                本サービスへ投稿されたイベント名やコメントは全て一般公開されます。
+                <br />
+                他の利用者を不快にさせるコメントや公開してはならない情報は書き込まないようにイベント参加者へ注意喚起をお願いします。
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <CheckBox />
+              </ListItemIcon>
+              <ListItemText>
+                個別のサポートは行っておりません。不具合報告・要望などは
+                <Link
+                  underline="none"
+                  href="https://github.com/tegehoge/LeacTion/issues/new"
+                  target="_blank"
+                >
+                  Githubのissues
+                </Link>
+                へ投稿してください。
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <CheckBox />
+              </ListItemIcon>
+              <ListItemText>
+                予告なくサービスの変更や停止を行う場合があります。予めご了承ください。
+              </ListItemText>
+            </ListItem>
+          </List>
         </Box>
       </Container>
-
-      <CautionServiceUseModal open={isOpen()} onClose={() => onClose()} />
+      <Show when={auth.account}>
+        <CreateEvent firestore={firestore} account={auth.account!} />
+      </Show>
     </>
   );
 };
