@@ -37,6 +37,7 @@ export type Event = {
   talks: Talk[];
   createdBy: string; // IDのみにして、画面上はAccountを別で取得して表示名を与える方針で行きたい
   managers: string[];
+  managerRequests: string[];
   createdAt?: Date;
 };
 
@@ -50,6 +51,7 @@ export const createEmptyEvent = (): Event => {
     talks: [createEmptyTalk(), createEmptyTalk(), createEmptyTalk()],
     createdBy: "",
     managers: [],
+    managerRequests: [],
   };
 };
 
@@ -67,5 +69,6 @@ export const trimEvent = (event: Event): Event => {
       .filter(nonEmptyTalk),
     createdBy: event.createdBy,
     managers: event.managers,
+    managerRequests: event.managerRequests,
   };
 };

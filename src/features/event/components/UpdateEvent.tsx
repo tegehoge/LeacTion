@@ -1,17 +1,38 @@
 import { useNavigate } from "@solidjs/router";
-import { AddCircle, Star } from "@suid/icons-material";
-import { Box, Button, Chip, Container, Divider, Grid, TextField, Typography } from "@suid/material";
+import { AddCircle, Person } from "@suid/icons-material";
+import {
+  Box,
+  Button,
+  Chip,
+  Container,
+  Divider,
+  Grid,
+  Stack,
+  TextField,
+  Typography,
+} from "@suid/material";
 import { formatISO, parseISO } from "date-fns";
 import { Firestore } from "firebase/firestore";
-import { For, Suspense, VoidComponent, createResource, untrack } from "solid-js";
+import {
+  For,
+  Match,
+  Show,
+  Suspense,
+  Switch,
+  VoidComponent,
+  createResource,
+  untrack,
+} from "solid-js";
 import { useUpdateEvent } from "../api";
 import { Event, createEmptyTalk, nonEmptyTalk } from "../types";
 import { SortableTalkList } from "./SortableTalkList";
 import { getAccountsByUid } from "~/features/account/api";
+import { Account } from "~/features/account/types";
 
 type UpdateEventProps = {
   firestore: Firestore;
   currentEvent: Event;
+  account: Account;
 };
 
 export const UpdateEvent: VoidComponent<UpdateEventProps> = (props) => {
@@ -19,14 +40,37 @@ export const UpdateEvent: VoidComponent<UpdateEventProps> = (props) => {
   // eslint-disable-next-line solid/reactivity
   const { event, setEvent, sendEventUpdate } = useUpdateEvent(props.firestore, props.currentEvent);
 
-  const editorUids = [event.createdBy].concat(event.managers);
-  const [accounts] = createResource(editorUids, (uids) => getAccountsByUid(props.firestore, uids));
+  const uidsToBeFetched = [event.createdBy].concat(event.managers, event.managerRequests);
+  const [accounts] = createResource(uidsToBeFetched, (uids) =>
+    getAccountsByUid(props.firestore, uids)
+  );
+  // 削除できないID(安全のため作成者を削除しない)
+  const protectedUids = () => [event.createdBy, props.account.uid];
 
   // 削除前に確認が必要な発表枠のID
   const currentTalkIds = untrack(() => event.talks.filter(nonEmptyTalk).map((t) => t.id));
 
   const appendTalk = () => {
     setEvent("talks", (talks) => [...talks, createEmptyTalk()]);
+  };
+
+  const deleteManager = (uid: string) => {
+    return () => {
+      setEvent("managers", (prev) => prev.filter((x) => x !== uid));
+    };
+  };
+
+  const acceptRequest = (uid: string) => {
+    return () => {
+      setEvent("managers", (prev) => prev.concat(uid));
+      setEvent("managerRequests", (prev) => prev.filter((x) => x !== uid));
+    };
+  };
+
+  const deleteRequest = (uid: string) => {
+    return () => {
+      setEvent("managerRequests", (prev) => prev.filter((x) => x !== uid));
+    };
   };
 
   return (
@@ -88,16 +132,70 @@ export const UpdateEvent: VoidComponent<UpdateEventProps> = (props) => {
       <Divider />
 
       <Box sx={{ marginTop: "1em", marginBottom: "1em" }}>
-        イベント管理者 :
-        <Suspense>
-          <Chip
-            icon={<Star />}
-            label={accounts()?.find((account) => event.createdBy)?.displayName}
-          />
-          <For each={event.managers}>
-            {(uid) => <Chip label={accounts()?.find((account) => account.uid)?.displayName} />}
-          </For>
-        </Suspense>
+        <Box sx={{ marginBottom: "1em" }}>
+          イベント作成者
+          <Suspense>
+            <Chip
+              label={accounts()?.find((account) => account.uid === event.createdBy)?.displayName}
+              icon={<Person />}
+            />
+          </Suspense>
+        </Box>
+        <Box sx={{ marginBottom: "1em" }}>
+          イベント管理者
+          <Suspense>
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{ border: "1px solid gray", borderRadius: "10px", padding: "5px" }}
+            >
+              <For each={event.managers}>
+                {(uid) => (
+                  <Switch>
+                    <Match when={protectedUids().includes(uid)}>
+                      <Chip
+                        label={accounts()?.find((account) => account.uid === uid)?.displayName}
+                        icon={<Person />}
+                      />
+                    </Match>
+                    <Match when={!protectedUids().includes(uid)}>
+                      <Chip
+                        label={accounts()?.find((account) => account.uid === uid)?.displayName}
+                        icon={<Person />}
+                        onDelete={deleteManager(uid)}
+                      />
+                    </Match>
+                  </Switch>
+                )}
+              </For>
+            </Stack>
+          </Suspense>
+        </Box>
+        <Box sx={{ marginBottom: "1em" }}>
+          管理者リクエスト
+          <Suspense>
+            <Show when={event.managerRequests.length > 0} fallback={"なし"}>
+              （クリックで承認・削除ができます。）
+              <Stack
+                direction="row"
+                spacing={1}
+                sx={{ border: "1px solid gray", borderRadius: "10px", padding: "5px" }}
+              >
+                <For each={event.managerRequests}>
+                  {(uid) => (
+                    <Chip
+                      label={accounts()?.find((account) => account.uid === uid)?.displayName}
+                      icon={<AddCircle />}
+                      sx={{ cursor: "copy" }}
+                      onClick={acceptRequest(uid)}
+                      onDelete={deleteRequest(uid)}
+                    />
+                  )}
+                </For>
+              </Stack>
+            </Show>
+          </Suspense>
+        </Box>
       </Box>
       <Box textAlign="center">
         <Button

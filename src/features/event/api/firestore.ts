@@ -42,6 +42,7 @@ const EventFirestoreConverter: FirestoreDataConverter<Event> = {
       talks: event.talks,
       createdBy: event.createdBy,
       managers: event.managers,
+      managerRequests: event.managerRequests,
       createdAt: event.createdAt || serverTimestamp(),
     };
   },
@@ -59,6 +60,7 @@ const EventFirestoreConverter: FirestoreDataConverter<Event> = {
       talks: eventData.talks,
       createdBy: eventData.createdBy,
       managers: eventData.managers,
+      managerRequests: eventData.managerRequests,
       createdAt: eventData.createdAt,
     };
   },

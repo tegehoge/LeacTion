@@ -14,11 +14,7 @@ const EventEdit: VoidComponent = () => {
   const auth = useAuthContext();
   const [event] = createResource(() => getEvent(firestore, eventId));
 
-  const isEditable = () =>
-    auth.account &&
-    event() &&
-    (event()?.createdBy == auth.account?.uid ||
-      event()?.managers.includes(auth.account?.uid));
+  const isEditable = () => auth.account && event() && event()?.managers.includes(auth.account?.uid);
 
   createEffect(() => {
     if (!event.loading && !auth.loading) {
@@ -35,7 +31,9 @@ const EventEdit: VoidComponent = () => {
           イベントの編集
         </Typography>
       </Box>
-      {isEditable() && <UpdateEvent firestore={firestore} currentEvent={event()!} />}
+      {isEditable() && (
+        <UpdateEvent firestore={firestore} currentEvent={event()!} account={auth.account!} />
+      )}
     </Box>
   );
 };
