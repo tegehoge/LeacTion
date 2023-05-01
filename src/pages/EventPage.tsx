@@ -23,6 +23,7 @@ import {
   onCleanup,
 } from "solid-js";
 import { createStore, reconcile } from "solid-js/store";
+import { Toaster } from "solid-toast";
 import { commentCollection } from "~/features/comment/api/firestoreConversion";
 import { CommentList, CreateComment } from "~/features/comment/components";
 import { Comment } from "~/features/comment/types";
@@ -131,6 +132,7 @@ const EventPage: VoidComponent = () => {
           </Match>
         </Switch>
       </Suspense>
+      <Toaster position="bottom-right" />
     </Box>
   );
 };

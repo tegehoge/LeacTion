@@ -1,6 +1,7 @@
 import { Box, Button, FormControl, Grid, TextField } from "@suid/material";
 import { Firestore } from "firebase/firestore";
 import { VoidComponent } from "solid-js";
+import toast from "solid-toast";
 import { useCreateComment } from "../api";
 
 type CreateCommentProps = {
@@ -15,10 +16,18 @@ type CreateCommentProps = {
 export const CreateComment: VoidComponent<CreateCommentProps> = (props) => {
   const { content, setContent, sendComment, canSendComment } = useCreateComment(props);
 
+  const handleSendComment = () => {
+    if (canSendComment()) {
+      sendComment().then(() => {
+        toast.success("コメントを追加しました！");
+      });
+    }
+  };
+
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.shiftKey && event.key === "Enter") {
       event.preventDefault();
-      if (canSendComment()) sendComment();
+      handleSendComment();
     }
   };
 
@@ -42,7 +51,7 @@ export const CreateComment: VoidComponent<CreateCommentProps> = (props) => {
               color="primary"
               variant="contained"
               disabled={!canSendComment()}
-              onClick={sendComment}
+              onClick={handleSendComment}
             >
               送信する(Shift+Enter)
             </Button>
