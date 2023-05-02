@@ -85,7 +85,7 @@ export const EventHeader: VoidComponent<EventHeaderProps> = (props) => {
             <Divider />
             <Switch>
               <Match when={!props.isEditable}>
-                <MenuItem>
+                <MenuItem onClick={() => navigate(`/event/${props.eventId}/manager-request`)}>
                   <ListItemIcon>
                     <Edit fontSize="small" />
                   </ListItemIcon>

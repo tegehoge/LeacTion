@@ -8,6 +8,7 @@ service cloud.firestore {
       allow get: if request.auth != null;
       allow list, create: if request.auth != null && request.auth.token.firebase.sign_in_provider != "anonymous";
       allow update, delete: if request.auth != null && request.auth.uid in resource.data.managers;
+      allow update: if request.auth != null && (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['managerRequests']));
       match /comments/{commentId} {
         allow read: if request.auth != null;
         allow create: if request.auth != null;
