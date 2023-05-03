@@ -1,4 +1,5 @@
-import { useTheme } from "@suid/material";
+import { useNavigate } from "@solidjs/router";
+import { Button, useTheme } from "@suid/material";
 import Box from "@suid/material/Box";
 import Container from "@suid/material/Container";
 import Paper from "@suid/material/Paper";
@@ -10,9 +11,9 @@ import { VoidComponent } from "solid-js";
 import baloonUrl from "~/assets/baloon.png";
 import { MediumSizeTextParagraph } from "~/components/typographies";
 import { LargeSizeText } from "~/components/typographies";
-import { LoginButton } from "~/features/account/components/LoginButton";
 
 const Top: VoidComponent = () => {
+  const navigate = useNavigate();
   const theme = useTheme();
   const { light: primaryLightColor, main: primaryMainColor } = theme.palette.primary;
   const textColor = theme.palette.grey[700];
@@ -43,7 +44,9 @@ const Top: VoidComponent = () => {
       </Box>
 
       <Box marginBottom="40px">
-        <LoginButton redirectPath="/mypage" />
+        <Button variant="contained" fullWidth onClick={() => navigate("/new")}>
+          イベントを作成する
+        </Button>
       </Box>
 
       <Box marginBottom="80px">
@@ -155,7 +158,9 @@ const Top: VoidComponent = () => {
       </Box>
 
       <Box marginBottom="8px">
-        <LoginButton redirectPath="/mypage" />
+        <Button variant="contained" fullWidth onClick={() => navigate("/new")}>
+          イベントを作成する
+        </Button>
       </Box>
     </Container>
   );
