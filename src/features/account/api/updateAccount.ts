@@ -1,8 +1,12 @@
-import { Firestore, setDoc } from "firebase/firestore";
+import { Firestore, updateDoc } from "firebase/firestore";
 import { Account } from "../types";
 import { accountDoc } from "./firestore";
 
-export const updateAccount = (firestore: Firestore, account: Account): Promise<void> => {
+export const updateAccountDisplayName = (
+  firestore: Firestore,
+  account: Account,
+  displayName: string
+): Promise<void> => {
   const accountDocRef = accountDoc(firestore, account.uid);
-  return setDoc(accountDocRef, account);
+  return updateDoc(accountDocRef, { displayName: displayName });
 };
