@@ -1,7 +1,7 @@
-import { ThumbUp } from "@suid/icons-material";
+import { ThumbUp, ThumbUpOutlined } from "@suid/icons-material";
 import { Badge, IconButton } from "@suid/material";
 import { Firestore } from "firebase/firestore";
-import { VoidComponent } from "solid-js";
+import { Match, Switch, VoidComponent } from "solid-js";
 import { likeComment } from "../api";
 import { Comment } from "../types";
 
@@ -14,11 +14,6 @@ type LikeCommentProps = {
 export const LikeComment: VoidComponent<LikeCommentProps> = (props) => {
   const isMyComment = () => props.comment.postedBy == props.currentUid;
   const isLikedByMe = () => props.comment.likedBy.includes(props.currentUid);
-  const iconColor = () => {
-    if (isMyComment()) return "disabled";
-    if (isLikedByMe()) return "success";
-    return "inherit";
-  };
 
   return (
     <IconButton
@@ -36,7 +31,17 @@ export const LikeComment: VoidComponent<LikeCommentProps> = (props) => {
       }
     >
       <Badge badgeContent={props.comment.likedBy.length}>
-        <ThumbUp color={iconColor()} />
+        <Switch>
+          <Match when={isMyComment()}>
+            <ThumbUp color="disabled" />
+          </Match>
+          <Match when={isLikedByMe()}>
+            <ThumbUp color="success" />
+          </Match>
+          <Match when={!isLikedByMe()}>
+            <ThumbUpOutlined />
+          </Match>
+        </Switch>
       </Badge>
     </IconButton>
   );
