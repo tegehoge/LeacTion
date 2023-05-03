@@ -25,12 +25,7 @@ export const getEvent = (firestore: Firestore, id: string): Promise<Event | unde
 export const getEventsForAccount = (firestore: Firestore, account: Account): Promise<Event[]> => {
   const eventQuery = query(
     eventCollection(firestore),
-    where("createdBy", "==", account.uid)
-    /* こうなる予定
-    or(
-      where("createdBy", "==", account.uid),
-      where("collabolators", "array-contains", account.uid)
-    )*/
+    where("managers", "array-contains", account.uid)
   );
   return getDocs(eventQuery).then((eventsSnapshot) => {
     return eventsSnapshot.docs.map((snapshot) => snapshot.data());
