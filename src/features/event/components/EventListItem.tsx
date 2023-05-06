@@ -1,5 +1,5 @@
 import { NavLink } from "@solidjs/router";
-import { ChatBubble, Edit, InsertLink } from "@suid/icons-material";
+import { ChatBubble, Edit, Forum, InsertLink } from "@suid/icons-material";
 import {
   Box,
   Button,
@@ -98,7 +98,9 @@ const EventListItem: VoidComponent<EventListItemProps> = (props) => {
         </CardContent>
         <CardActions>
           <NavLink href={`/event/${props.event.id}`}>
-            <Button variant="outlined">イベントページを開く</Button>
+            <Button variant="outlined" startIcon={<Forum />}>
+              イベントページ
+            </Button>
           </NavLink>
         </CardActions>
       </Card>
