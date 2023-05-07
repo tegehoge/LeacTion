@@ -1,17 +1,16 @@
 import { NavLink, useNavigate, useParams } from "@solidjs/router";
 import { Box, Button, CircularProgress, Typography } from "@suid/material";
-import { getFirestore } from "firebase/firestore";
 import { Match, Show, Switch, VoidComponent, createEffect, createResource } from "solid-js";
 import { getEvent } from "~/features/event/api";
 import { createEventManagerRequests } from "~/features/event/api/createEventManagerRequest";
 import { useAuthContext } from "~/providers/AuthProvider";
-import { useFirebaseApp } from "~/providers/FirebaseProvider";
+import { useFirestore } from "~/providers/FirebaseProvider";
 
 const EventManagerRequest: VoidComponent = () => {
   const { eventId } = useParams<{ eventId: string }>();
   const navigate = useNavigate();
   const auth = useAuthContext();
-  const firestore = getFirestore(useFirebaseApp());
+  const firestore = useFirestore();
   const [event, { refetch }] = createResource(eventId, (id) => getEvent(firestore, id));
 
   const sendRequest = () => {

@@ -1,17 +1,16 @@
 import Grid from "@suid/material/Grid";
-import { getFirestore } from "firebase/firestore";
 import { Component, createResource, For } from "solid-js";
 import { getEventsForAccount } from "../api";
 import EventListItem from "./EventListItem";
 import { Account } from "~/features/account/types";
-import { useFirebaseApp } from "~/providers/FirebaseProvider";
+import { useFirestore } from "~/providers/FirebaseProvider";
 
 type EventListProps = {
   account: Account | null;
 };
 
 export const EventList: Component<EventListProps> = (props) => {
-  const firestore = getFirestore(useFirebaseApp());
+  const firestore = useFirestore();
   const [events] = createResource(() =>
     props.account ? getEventsForAccount(firestore, props.account) : Promise.resolve([])
   );

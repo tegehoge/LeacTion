@@ -20,6 +20,13 @@ export const useFirebaseApp = () => {
   return ctx;
 };
 
+export const useFirestore = () => {
+  const ctx = useContext(FirebaseContext);
+
+  if (!ctx) throw new Error("useFirebaseApp must be used within a <FirebaseProvider />");
+
+  return getFirestore(ctx);
+};
 /**
  * オリジナルのFirebaseProviderをベースにエミュレーターにアクセスする分岐を追加したもの
  * @param props

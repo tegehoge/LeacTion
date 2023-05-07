@@ -5,18 +5,15 @@ import Box from "@suid/material/Box";
 import Button from "@suid/material/Button";
 import CircularProgress from "@suid/material/CircularProgress";
 import Container from "@suid/material/Container";
-import { getFirestore } from "firebase/firestore";
 import { createEffect, Show, VoidComponent } from "solid-js";
 import { Toaster } from "solid-toast";
 import { AccountMenu } from "~/features/account/components";
 import { EventList } from "~/features/event/components/EventList";
 import { useAuthContext } from "~/providers/AuthProvider";
-import { useFirebaseApp } from "~/providers/FirebaseProvider";
 
 const MyPage: VoidComponent = () => {
   const navigate = useNavigate();
   const auth = useAuthContext();
-  const firestore = getFirestore(useFirebaseApp());
 
   createEffect(() => {
     if (!auth.loading) {
@@ -39,7 +36,7 @@ const MyPage: VoidComponent = () => {
             マイページ
           </Typography>
           <Box>
-            <AccountMenu firestore={firestore} account={auth.account!} signOut={auth.signOut} />
+            <AccountMenu account={auth.account!} signOut={auth.signOut} />
           </Box>
         </Box>
 

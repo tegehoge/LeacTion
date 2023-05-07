@@ -13,19 +13,20 @@ import {
   Typography,
   DialogContentText,
 } from "@suid/material";
-import { Firestore } from "firebase/firestore";
 import { VoidComponent, createSignal, untrack } from "solid-js";
 import toast from "solid-toast";
 import { updateAccountDisplayName } from "../api";
 import { Account } from "../types";
+import { useFirestore } from "~/providers/FirebaseProvider";
 
 type AccountMenuProps = {
-  firestore: Firestore;
   account: Account;
   signOut: () => void;
 };
 
 export const AccountMenu: VoidComponent<AccountMenuProps> = (props) => {
+  const firestore = useFirestore();
+
   const [menuAnchorEl, setMenuAnchorEl] = createSignal<Element | null>(null);
   const accountMenuOpen = () => Boolean(menuAnchorEl());
   const handleAccountMenuOpen = (el: { currentTarget: Element }) =>
@@ -39,7 +40,7 @@ export const AccountMenu: VoidComponent<AccountMenuProps> = (props) => {
 
   const updateDisplayName = () => {
     toast.promise(
-      updateAccountDisplayName(props.firestore, props.account, displayNameInput()).then(() =>
+      updateAccountDisplayName(firestore, props.account, displayNameInput()).then(() =>
         setDialogOpen(false)
       ),
       {

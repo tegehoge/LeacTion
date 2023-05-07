@@ -7,11 +7,10 @@ import {
   User,
   UserCredential,
 } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
 import { useAuth } from "solid-firebase";
 import { Component, createContext, createEffect, JSX, useContext } from "solid-js";
 import { createStore, produce } from "solid-js/store";
-import { useFirebaseApp } from "./FirebaseProvider";
+import { useFirebaseApp, useFirestore } from "./FirebaseProvider";
 import { createAccount, getAccount } from "~/features/account/api";
 import { Account } from "~/features/account/types";
 
@@ -44,7 +43,7 @@ const fetchAccount = (user: User): Promise<Account> => {
     return Promise.reject();
   }
   const authDisplayName = user.displayName || "";
-  const firestore = getFirestore(useFirebaseApp());
+  const firestore = useFirestore();
   console.debug("Loading account...");
   return getAccount(firestore, user.uid)
     .then((account) => {
