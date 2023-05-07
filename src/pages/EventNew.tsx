@@ -18,7 +18,7 @@ const EventNew: VoidComponent = () => {
     if (!auth.loading) {
       if (!auth.account) {
         const callbackPath = "/new";
-        navigate(`/login?callback=${encodeURIComponent(callbackPath)}`);
+        navigate(`/login?callback=${encodeURIComponent(callbackPath)}`, { replace: true });
       }
     }
   });

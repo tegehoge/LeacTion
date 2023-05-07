@@ -24,7 +24,7 @@ const LoginPage: VoidComponent = () => {
 
   createEffect(() => {
     if (!auth.loading && auth.account) {
-      navigate(callbackPath);
+      navigate(callbackPath, { replace: true });
     }
   });
 

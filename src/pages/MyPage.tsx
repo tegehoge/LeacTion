@@ -18,7 +18,7 @@ const MyPage: VoidComponent = () => {
   createEffect(() => {
     if (!auth.loading) {
       if (!auth.account) {
-        navigate("/");
+        navigate("/", { replace: true });
       }
     }
   });

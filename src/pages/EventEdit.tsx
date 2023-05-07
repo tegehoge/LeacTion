@@ -18,7 +18,7 @@ const EventEdit: VoidComponent = () => {
   createEffect(() => {
     if (!event.loading && !auth.loading) {
       if (!isEditable()) {
-        navigate("/");
+        navigate("/", { replace: true });
       }
     }
   });

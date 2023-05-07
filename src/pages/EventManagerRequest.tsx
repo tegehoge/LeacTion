@@ -37,18 +37,18 @@ const EventManagerRequest: VoidComponent = () => {
       // Googleアカウントを持っていない場合
       if (!auth.account) {
         const callbackPath = `/event/${eventId}/manager-request`;
-        return navigate(`/login?callback=${encodeURIComponent(callbackPath)}`);
+        return navigate(`/login?callback=${encodeURIComponent(callbackPath)}`, { replace: true });
       }
     }
     if (!event.loading) {
       // eventIdで指定されたイベントが存在しない場合
       if (!event()) {
-        return navigate("/");
+        return navigate("/", { replace: true });
       }
     }
     // すでに管理者である場合
     if (isManager()) {
-      return navigate(`/event/${eventId}/edit`);
+      return navigate(`/event/${eventId}/edit`, { replace: true });
     }
   });
 
