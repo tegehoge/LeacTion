@@ -1,4 +1,4 @@
+export { CreateEvent } from "./CreateEvent";
 export { EventHeader } from "./EventHeader";
-export { EventInfoInputGroup } from "./EventInfoInputGroup";
-export { EventTalksForm } from "./EventTalksForm";
+export { EventList } from "./EventList";
 export { UpdateEvent } from "./UpdateEvent";
