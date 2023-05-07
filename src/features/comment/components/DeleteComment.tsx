@@ -10,6 +10,7 @@ import {
 } from "@suid/material";
 import { Firestore } from "firebase/firestore";
 import { Show, VoidComponent, createSignal } from "solid-js";
+import toast from "solid-toast";
 import { deleteComment } from "../api";
 import { Comment } from "../types";
 
@@ -28,9 +29,15 @@ export const DeleteComment: VoidComponent<DeleteCommentProps> = (props) => {
     setOpen(false);
   };
 
+  const handleDeleteComment = () => {
+    deleteComment(props.firestore, props.comment.eventId, props.comment.id).then(() =>
+      toast.success("コメントを削除しました")
+    );
+  };
+
   return (
     <Show when={props.comment.postedBy == props.currentUid}>
-      <IconButton size="small" title="コメントを削除する" onClick={openDeleteConfirm}>
+      <IconButton size="small" color="error" title="コメントを削除する" onClick={openDeleteConfirm}>
         <Delete />
       </IconButton>
       <Dialog open={open()} onClose={closeDialog}>
@@ -40,11 +47,7 @@ export const DeleteComment: VoidComponent<DeleteCommentProps> = (props) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={closeDialog}>キャンセル</Button>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => deleteComment(props.firestore, props.comment.eventId, props.comment.id)}
-          >
+          <Button variant="contained" color="error" onClick={handleDeleteComment}>
             削除する
           </Button>
         </DialogActions>
