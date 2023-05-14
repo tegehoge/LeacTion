@@ -10,10 +10,9 @@ type Props = {
 
 export const LoginButton: Component<Props> = (props) => {
   const navigate = useNavigate();
-  const auth = useAuthContext();
+  const [auth, { signInWithPopup }] = useAuthContext();
   const signIn = () =>
-    auth
-      .signInWithPopup()
+    signInWithPopup()
       .then((_) => navigate(props.redirectPath))
       .catch((e) => {
         console.error(e);

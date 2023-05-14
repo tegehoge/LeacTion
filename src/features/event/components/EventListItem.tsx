@@ -1,5 +1,14 @@
-import { NavLink } from "@solidjs/router";
-import { ChatBubble, Edit, Forum, InsertLink } from "@suid/icons-material";
+import { NavLink, useNavigate } from "@solidjs/router";
+import {
+  ChatBubble,
+  ContentCopy,
+  Delete,
+  Edit,
+  Forum,
+  InsertLink,
+  Lock,
+  MoreVert,
+} from "@suid/icons-material";
 import {
   Box,
   Button,
@@ -7,8 +16,12 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  Chip,
+  Divider,
   IconButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
   Paper,
   Popover,
   Typography,
@@ -22,10 +35,18 @@ type EventListItemProps = {
   event: Event;
 };
 const EventListItem: VoidComponent<EventListItemProps> = (props) => {
+  const navigate = useNavigate();
+  const [menuAnchorEl, setMenuAnchorEl] = createSignal<Element | null>(null);
+  const menuOpen = () => Boolean(menuAnchorEl());
+  const openMenu = (event: { currentTarget: Element }) => {
+    setMenuAnchorEl(event.currentTarget);
+  };
+  const closeMenu = () => setMenuAnchorEl(null);
+
   const [talksPopoverAnchorEl, setTalksPopoverAnchorEl] = createSignal<Element | null>(null);
   const talksOpen = () => !!talksPopoverAnchorEl();
-  const handleTalksOpen = (event: { currentTarget: Element }) => {
-    setTalksPopoverAnchorEl(event.currentTarget);
+  const toggleTalksOpen = (event: { currentTarget: Element }) => {
+    setTalksPopoverAnchorEl(talksPopoverAnchorEl() ? null : event.currentTarget);
   };
   const handleTalksClose = () => {
     setTalksPopoverAnchorEl(null);
@@ -38,22 +59,48 @@ const EventListItem: VoidComponent<EventListItemProps> = (props) => {
           title={props.event.name}
           subheader={props.event.date.toLocaleDateString()}
           action={
-            <NavLink href={`/event/${props.event.id}/edit`}>
-              <IconButton color="primary" title="編集する">
-                <Edit />
-              </IconButton>
-            </NavLink>
+            <IconButton color="primary" onClick={openMenu}>
+              <MoreVert />
+            </IconButton>
           }
         />
+        <Menu open={menuOpen()} anchorEl={menuAnchorEl()} onBackdropClick={closeMenu}>
+          <MenuItem onClick={() => navigate(`/event/${props.event.id}/edit`)}>
+            <ListItemIcon>
+              <Edit color="primary" />
+            </ListItemIcon>
+            <ListItemText>
+              <Typography color="primary">編集する</Typography>
+            </ListItemText>
+          </MenuItem>
+          <Divider />
+          <MenuItem>
+            <ListItemIcon>
+              <ContentCopy />
+            </ListItemIcon>
+            <ListItemText>同じ管理者でイベントを作成する</ListItemText>
+          </MenuItem>
+          <MenuItem>
+            <ListItemIcon>
+              <Lock color="warning" />
+            </ListItemIcon>
+            <ListItemText>
+              <Typography color="warning">書き込み禁止にする</Typography>
+            </ListItemText>
+          </MenuItem>
+          <MenuItem>
+            <ListItemIcon>
+              <Delete color="error" />
+            </ListItemIcon>
+            <ListItemText>
+              <Typography color="error">削除する</Typography>
+            </ListItemText>
+          </MenuItem>
+        </Menu>
         <CardContent>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Box flexGrow={1}>
-              <Button
-                size="small"
-                startIcon={<ChatBubble />}
-                onMouseEnter={handleTalksOpen}
-                onMouseLeave={handleTalksClose}
-              >
+              <Button size="small" startIcon={<ChatBubble />} onClick={toggleTalksOpen}>
                 {props.event.talks.length}
               </Button>
               <Popover
@@ -61,6 +108,7 @@ const EventListItem: VoidComponent<EventListItemProps> = (props) => {
                 anchorEl={talksPopoverAnchorEl()}
                 anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
                 transformOrigin={{ vertical: "top", horizontal: "left" }}
+                onClose={handleTalksClose}
                 sx={{ pointerEvents: "none" }}
               >
                 <For each={props.event.talks}>

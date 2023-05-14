@@ -9,7 +9,7 @@ import { useFirestore } from "~/providers/FirebaseProvider";
 const EventManagerRequest: VoidComponent = () => {
   const { eventId } = useParams<{ eventId: string }>();
   const navigate = useNavigate();
-  const auth = useAuthContext();
+  const [auth] = useAuthContext();
   const firestore = useFirestore();
   const [event, { refetch }] = createResource(eventId, (id) => getEvent(firestore, id));
 

@@ -9,13 +9,12 @@ import { useAuthContext } from "~/providers/AuthProvider";
 const LoginPage: VoidComponent = () => {
   const navigate = useNavigate();
   const [{ callback }] = useSearchParams<{ callback?: string }>();
-  const callbackPath = callback || "/";
+  const callbackPath = callback || "/mypage";
 
-  const auth = useAuthContext();
+  const [auth, { signInWithPopup }] = useAuthContext();
 
   const loginAndRedirect = () => {
-    auth
-      .signInWithPopup()
+    signInWithPopup()
       .then((_) => {
         return navigate(callbackPath);
       })

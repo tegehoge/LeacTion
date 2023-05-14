@@ -10,7 +10,7 @@ import { useFirestore } from "~/providers/FirebaseProvider";
 
 const EventNew: VoidComponent = () => {
   const navigate = useNavigate();
-  const auth = useAuthContext();
+  const [auth] = useAuthContext();
 
   const firestore = useFirestore();
 

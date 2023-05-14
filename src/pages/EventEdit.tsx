@@ -10,7 +10,7 @@ const EventEdit: VoidComponent = () => {
   const navigate = useNavigate();
   const { eventId } = useParams<{ eventId: string }>();
   const firestore = useFirestore();
-  const auth = useAuthContext();
+  const [auth] = useAuthContext();
   const [event] = createResource(() => getEvent(firestore, eventId));
 
   const isEditable = () => auth.account && event() && event()?.managers.includes(auth.account?.uid);

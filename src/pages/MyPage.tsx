@@ -13,7 +13,7 @@ import { useAuthContext } from "~/providers/AuthProvider";
 
 const MyPage: VoidComponent = () => {
   const navigate = useNavigate();
-  const auth = useAuthContext();
+  const [auth, { signOut }] = useAuthContext();
 
   createEffect(() => {
     if (!auth.loading) {
@@ -36,7 +36,7 @@ const MyPage: VoidComponent = () => {
             マイページ
           </Typography>
           <Box>
-            <AccountMenu account={auth.account!} signOut={auth.signOut} />
+            <AccountMenu account={auth.account!} signOut={signOut} />
           </Box>
         </Box>
 

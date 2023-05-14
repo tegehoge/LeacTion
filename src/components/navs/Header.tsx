@@ -11,7 +11,7 @@ import { RouterLink } from "~/components/links";
 import { useAuthContext } from "~/providers/AuthProvider";
 
 export const Header: Component = () => {
-  const auth = useAuthContext();
+  const [auth] = useAuthContext();
   const navigate = useNavigate();
 
   return (

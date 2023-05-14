@@ -43,13 +43,13 @@ const LoadingEvent: VoidComponent = () => {
 const EventPage: VoidComponent = () => {
   const params = useParams<{ id: string }>();
   const firestore = useFirestore();
-  const auth = useAuthContext();
+  const [auth, { signInAnonymously }] = useAuthContext();
   const currentUid = () => auth.uid || "";
 
   createEffect(() => {
     // uid がない場合は匿名認証で uid を獲得する
     if (!auth.loading && !auth.uid) {
-      auth.signInAnonymously();
+      signInAnonymously();
     }
   });
 
