@@ -17,6 +17,7 @@ import { VoidComponent, createSignal, untrack } from "solid-js";
 import toast from "solid-toast";
 import { updateAccountDisplayName } from "../api";
 import { Account } from "../types";
+import { useAuthContext } from "~/providers/AuthProvider";
 import { useFirestore } from "~/providers/FirebaseProvider";
 
 type AccountMenuProps = {
@@ -26,6 +27,7 @@ type AccountMenuProps = {
 
 export const AccountMenu: VoidComponent<AccountMenuProps> = (props) => {
   const firestore = useFirestore();
+  const [auth, { updateDisplayName }] = useAuthContext();
 
   const [menuAnchorEl, setMenuAnchorEl] = createSignal<Element | null>(null);
   const accountMenuOpen = () => Boolean(menuAnchorEl());
@@ -38,11 +40,9 @@ export const AccountMenu: VoidComponent<AccountMenuProps> = (props) => {
     untrack(() => props.account.displayName)
   );
 
-  const updateDisplayName = () => {
+  const sendDisplayName = (newDisplayName: string) => {
     toast.promise(
-      updateAccountDisplayName(firestore, props.account, displayNameInput()).then(() =>
-        setDialogOpen(false)
-      ),
+      updateDisplayName(newDisplayName).then(() => setDialogOpen(false)),
       {
         loading: "表示名を更新中",
         success: "表示名を更新しました",
@@ -94,7 +94,10 @@ export const AccountMenu: VoidComponent<AccountMenuProps> = (props) => {
           />
         </DialogContent>
         <DialogActions>
-          <Button disabled={displayNameInput().length === 0} onClick={updateDisplayName}>
+          <Button
+            disabled={displayNameInput().length === 0}
+            onClick={() => sendDisplayName(displayNameInput())}
+          >
             変更する
           </Button>
         </DialogActions>
