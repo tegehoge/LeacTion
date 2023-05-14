@@ -35,9 +35,11 @@ export const EventHeader: VoidComponent<EventHeaderProps> = (props) => {
   const [shareDialogOpen, setShareDialogOpen] = createSignal(false);
   const navigate = useNavigate();
 
+  const eventUrl = () => new URL(`/event/${props.eventId}`, location.href).toString();
+
   const qrcodeUrl = () => {
     const u = new URL("https://api.qrserver.com/v1/create-qr-code/");
-    u.searchParams.append("data", location.href);
+    u.searchParams.append("data", eventUrl());
     u.searchParams.append("size", "300x300");
     return u.toString();
   };
@@ -45,12 +47,12 @@ export const EventHeader: VoidComponent<EventHeaderProps> = (props) => {
   const shareOnTwitter = () => {
     const u = new URL("https://twitter.com/intent/tweet");
     u.searchParams.append("text", `LeacTion!で「${props.eventName}」にリアクションしよう！`);
-    u.searchParams.append("url", location.href);
+    u.searchParams.append("url", eventUrl());
     window.open(u, "_blank");
   };
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(location.href);
+    navigator.clipboard.writeText(eventUrl());
   };
 
   return (
