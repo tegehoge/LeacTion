@@ -42,7 +42,7 @@ export const DeleteComment: VoidComponent<DeleteCommentProps> = (props) => {
       </IconButton>
       <Dialog open={open()} onClose={closeDialog}>
         <DialogTitle>コメントを削除しますか？</DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{ overflowWrap: "anywhere" }}>
           <DialogContentText>{props.comment.content}</DialogContentText>
         </DialogContent>
         <DialogActions>

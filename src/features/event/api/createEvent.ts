@@ -32,7 +32,8 @@ const regenerateId = (firestore: Firestore, id: string): Promise<string> => {
 
 export const useCreateEvent = (props: { firestore: Firestore; account: Account }) => {
   const [event, setEvent] = createStore(createEmptyEvent());
-  setEvent("administrator", props.account.uid);
+  setEvent("createdBy", props.account.uid);
+  setEvent("managers", [props.account.uid]);
 
   const sendEventCreate = () => {
     return createEvent(props.firestore, trimEvent(event));

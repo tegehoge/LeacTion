@@ -14,6 +14,7 @@ export const routes = [
         path: "/",
         component: lazy(() => import("~/pages/Top")),
       },
+      { path: "/login", component: lazy(() => import("~/pages/LoginPage")) },
       {
         path: "/mypage",
         component: lazy(() => import("~/pages/MyPage")),
@@ -25,6 +26,10 @@ export const routes = [
       {
         path: "/event/:eventId/edit",
         component: lazy(() => import("~/pages/EventEdit")),
+      },
+      {
+        path: "/event/:eventId/manager-request",
+        component: lazy(() => import("~/pages/EventManagerRequest")),
       },
     ],
   },

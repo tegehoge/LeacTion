@@ -35,8 +35,9 @@ export type Event = {
   url?: string;
   hashTag?: string;
   talks: Talk[];
-  administrator: string; // IDのみにして、画面上はAccountを別で取得して表示名を与える方針で行きたい
-  collaborators: string[];
+  createdBy: string; // IDのみにして、画面上はAccountを別で取得して表示名を与える方針で行きたい
+  managers: string[];
+  managerRequests: string[];
   createdAt?: Date;
 };
 
@@ -48,8 +49,9 @@ export const createEmptyEvent = (): Event => {
     name: "",
     date: new Date(),
     talks: [createEmptyTalk(), createEmptyTalk(), createEmptyTalk()],
-    administrator: "",
-    collaborators: [],
+    createdBy: "",
+    managers: [],
+    managerRequests: [],
   };
 };
 
@@ -65,7 +67,8 @@ export const trimEvent = (event: Event): Event => {
         return { id: talk.id, speakerName: talk.speakerName.trim(), title: talk.title.trim() };
       })
       .filter(nonEmptyTalk),
-    administrator: event.administrator,
-    collaborators: event.collaborators,
+    createdBy: event.createdBy,
+    managers: event.managers,
+    managerRequests: event.managerRequests,
   };
 };

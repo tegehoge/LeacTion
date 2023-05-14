@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@suid/material";
 import { compareAsc } from "date-fns";
-import { getFirestore, onSnapshot } from "firebase/firestore";
+import { onSnapshot } from "firebase/firestore";
 import {
   For,
   Match,
@@ -30,7 +30,7 @@ import { Comment } from "~/features/comment/types";
 import { getEvent } from "~/features/event/api";
 import { EventHeader } from "~/features/event/components";
 import { useAuthContext } from "~/providers/AuthProvider";
-import { useFirebaseApp } from "~/providers/FirebaseProvider";
+import { useFirestore } from "~/providers/FirebaseProvider";
 
 const LoadingEvent: VoidComponent = () => {
   return (
@@ -42,14 +42,14 @@ const LoadingEvent: VoidComponent = () => {
 
 const EventPage: VoidComponent = () => {
   const params = useParams<{ id: string }>();
-  const firestore = getFirestore(useFirebaseApp());
-  const auth = useAuthContext();
+  const firestore = useFirestore();
+  const [auth, { signInAnonymously }] = useAuthContext();
   const currentUid = () => auth.uid || "";
 
   createEffect(() => {
     // uid がない場合は匿名認証で uid を獲得する
     if (!auth.loading && !auth.uid) {
-      auth.signInAnonymously();
+      signInAnonymously();
     }
   });
 
@@ -78,8 +78,8 @@ const EventPage: VoidComponent = () => {
   const isEditable = () => {
     if (auth.loading || !auth.account) return false;
     return (
-      event()?.administrator == auth.account.uid ||
-      event()?.collaborators.includes(auth.account.uid || "") ||
+      event()?.createdBy == auth.account.uid ||
+      event()?.managers.includes(auth.account.uid || "") ||
       false
     );
   };

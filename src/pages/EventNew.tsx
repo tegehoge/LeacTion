@@ -1,24 +1,24 @@
 import { useNavigate } from "@solidjs/router";
 import { CheckBox } from "@suid/icons-material";
 import { Box, Container, Link, List, ListItem, ListItemIcon, ListItemText } from "@suid/material";
-import { getFirestore } from "firebase/firestore";
 import { createEffect, Show, VoidComponent } from "solid-js";
 
 import { LargeHeading } from "~/components/typographies";
 import { CreateEvent } from "~/features/event/components";
 import { useAuthContext } from "~/providers/AuthProvider";
-import { useFirebaseApp } from "~/providers/FirebaseProvider";
+import { useFirestore } from "~/providers/FirebaseProvider";
 
 const EventNew: VoidComponent = () => {
   const navigate = useNavigate();
-  const auth = useAuthContext();
+  const [auth] = useAuthContext();
 
-  const firestore = getFirestore(useFirebaseApp());
+  const firestore = useFirestore();
 
   createEffect(() => {
     if (!auth.loading) {
       if (!auth.account) {
-        navigate("/");
+        const callbackPath = "/new";
+        navigate(`/login?callback=${encodeURIComponent(callbackPath)}`, { replace: true });
       }
     }
   });

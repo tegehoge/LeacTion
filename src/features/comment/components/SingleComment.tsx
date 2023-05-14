@@ -68,7 +68,9 @@ export const SingleComment: VoidComponent<SingleCommentProps> = (props) => {
       sx={{ display: "flex", padding: ["0.3rem", "0.5rem"], alignItems: "flex-start" }}
       title={props.comment.postedAt.toLocaleString()}
     >
-      <Box flexGrow={1}>{contentToHtml(props.comment.content)}</Box>
+      <Box flexGrow={1} sx={{ overflowWrap: "anywhere" }}>
+        {contentToHtml(props.comment.content)}
+      </Box>
       <Box sx={{ marginTop: "-5px", marginBottom: "-5px" }}>
         <DeleteComment
           firestore={props.firestore}

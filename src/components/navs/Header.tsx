@@ -1,14 +1,19 @@
+import { useNavigate } from "@solidjs/router";
+import { Person } from "@suid/icons-material";
+import { Button, Skeleton } from "@suid/material";
 import AppBar from "@suid/material/AppBar";
 import Box from "@suid/material/Box";
-import IconButton from "@suid/material/IconButton";
 import Toolbar from "@suid/material/Toolbar";
 import Typography from "@suid/material/Typography";
-import { Component } from "solid-js";
+import { Component, Match, Switch } from "solid-js";
 
-import { GitHubIcon } from "~/components/icons";
-import { ExternalLink, RouterLink } from "~/components/links";
+import { RouterLink } from "~/components/links";
+import { useAuthContext } from "~/providers/AuthProvider";
 
 export const Header: Component = () => {
+  const [auth] = useAuthContext();
+  const navigate = useNavigate();
+
   return (
     <header>
       <Box>
@@ -17,11 +22,27 @@ export const Header: Component = () => {
             <Typography variant="h5" sx={{ flexGrow: 1, fontWeight: "bold" }}>
               <RouterLink href="/">LeacTion!</RouterLink>
             </Typography>
-            <ExternalLink href="https://github.com/tegehoge/LeacTion">
-              <IconButton component="span">
-                <GitHubIcon sx={{ color: "white" }} />
-              </IconButton>
-            </ExternalLink>
+            <Switch>
+              <Match when={auth.loading}>
+                <Skeleton />
+              </Match>
+              <Match when={auth.account}>
+                <Button
+                  variant="outlined"
+                  color="inherit"
+                  startIcon={<Person />}
+                  sx={{ textTransform: "none" }}
+                  onClick={() => navigate("/mypage")}
+                >
+                  {auth.account?.displayName}
+                </Button>
+              </Match>
+              <Match when={!auth.account}>
+                <Button variant="text" color="inherit" onClick={() => navigate("/login")}>
+                  ログイン
+                </Button>
+              </Match>
+            </Switch>
           </Toolbar>
         </AppBar>
       </Box>
