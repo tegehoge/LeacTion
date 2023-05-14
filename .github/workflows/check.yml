@@ -32,29 +32,10 @@ jobs:
           VITE_MEASUREMENT_ID: ${{ secrets.MEASUREMENT_ID }}
           VITE_PROJECT_ID: ${{ secrets.PROJECT_ID }}
           VITE_STORAGE_BUCKET: ${{ secrets.STORAGE_BUCKET }}
-  build_functions:
-    environment: Production Deploy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: "14"
-      - name: Install
-        working-directory: ./functions
-        run: npm install
-      - name: Lint
-        working-directory: ./functions
-        run: npm run lint
-      - name: Build
-        working-directory: ./functions
-        run: npm run build
   deploy_for_preview:
     environment: Production Deploy
     runs-on: ubuntu-latest
-    needs: [build, build_functions]
+    needs: [build]
     steps:
       - name: Checkout
         uses: actions/checkout@v2

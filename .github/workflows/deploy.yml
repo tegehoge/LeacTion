@@ -30,8 +30,5 @@ jobs:
           VITE_MEASUREMENT_ID: ${{ secrets.MEASUREMENT_ID }}
           VITE_PROJECT_ID: ${{ secrets.PROJECT_ID }}
           VITE_STORAGE_BUCKET: ${{ secrets.STORAGE_BUCKET }}
-      - name: npm install for firebase functions
-        working-directory: ./functions
-        run: npm install
       - name: Firebase Production Deploy
         run: yarn deploy --token=${{ secrets.FIREBASE_TOKEN }}
