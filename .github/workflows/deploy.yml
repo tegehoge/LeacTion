@@ -11,11 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: "14"
+          node-version: "16"
       - name: Install yarn
         run: npm install -g yarn
       - run: yarn install
@@ -30,8 +30,5 @@ jobs:
           VITE_MEASUREMENT_ID: ${{ secrets.MEASUREMENT_ID }}
           VITE_PROJECT_ID: ${{ secrets.PROJECT_ID }}
           VITE_STORAGE_BUCKET: ${{ secrets.STORAGE_BUCKET }}
-      - name: npm install for firebase functions
-        working-directory: ./functions
-        run: npm install
       - name: Firebase Production Deploy
         run: yarn deploy --token=${{ secrets.FIREBASE_TOKEN }}
