@@ -11,7 +11,7 @@ type EventListProps = {
 
 export const EventList: Component<EventListProps> = (props) => {
   const firestore = useFirestore();
-  const [events] = createResource(() =>
+  const [events, { refetch }] = createResource(() =>
     props.account ? getEventsForAccount(firestore, props.account) : Promise.resolve([])
   );
 
@@ -20,7 +20,7 @@ export const EventList: Component<EventListProps> = (props) => {
       <For each={events()}>
         {(event, _) => (
           <Grid item xs={12} sm={6} md={4}>
-            <EventListItem event={event} />
+            <EventListItem event={event} refetchEvents={refetch} />
           </Grid>
         )}
       </For>

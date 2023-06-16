@@ -29,8 +29,8 @@ export const CreateEvent: VoidComponent<CreateEventProps> = (props) => {
   const navigate = useNavigate();
   const { event, setEvent, sendEventCreate } = useCreateEvent(props);
   const location = useLocation<{ managerIds: string[] }>();
-  const [managerAccounts] = createResource(location.state?.managerIds, (ids) => {
-    if (ids && ids.length > 0) {
+  const [managerAccounts] = createResource(location.state?.managerIds || [], (ids) => {
+    if (ids.length > 0) {
       return getAccountsByUid(props.firestore, ids);
     } else {
       return Promise.resolve([props.account]);
