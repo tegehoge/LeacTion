@@ -98,14 +98,6 @@ const EventListItem: VoidComponent<EventListItemProps> = (props) => {
               </ListItemIcon>
               <ListItemText>同じ管理者でイベントを作成する</ListItemText>
             </MenuItem>
-            <MenuItem>
-              <ListItemIcon>
-                <Lock color="warning" />
-              </ListItemIcon>
-              <ListItemText>
-                <Typography color="warning">書き込み禁止にする</Typography>
-              </ListItemText>
-            </MenuItem>
             <MenuItem
               onClick={() => {
                 closeMenu();
