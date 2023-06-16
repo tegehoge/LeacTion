@@ -18,7 +18,7 @@ import { Event } from "../types";
  * @returns イベントのFirestoreドキュメント
  */
 export const eventDoc = (firestore: Firestore, id: string) =>
-  doc(firestore, `events/${id}`).withConverter(EventFirestoreConverter);
+  doc(firestore, "events_v2", id).withConverter(EventFirestoreConverter);
 
 /**
  * イベントのFirestoreコレクションを取得
@@ -26,7 +26,7 @@ export const eventDoc = (firestore: Firestore, id: string) =>
  * @returns イベントのFirestoreコレクション
  */
 export const eventCollection = (firestore: Firestore) =>
-  collection(firestore, "events").withConverter(EventFirestoreConverter);
+  collection(firestore, "events_v2").withConverter(EventFirestoreConverter);
 
 /**
  * Firestore上のデータと相互変換するためのコンバーター

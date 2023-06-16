@@ -19,7 +19,7 @@ import { Comment } from "../types";
  * @returns コメントのFirestoreドキュメント
  */
 export const commentDoc = (firestore: Firestore, eventId: string, id: string) =>
-  doc(firestore, "events", eventId, "comments", id).withConverter(CommentFirestoreConverter);
+  doc(firestore, "events_v2", eventId, "comments", id).withConverter(CommentFirestoreConverter);
 
 /**
  * イベント内のコメントのFirestoreコレクションを取得
@@ -28,7 +28,7 @@ export const commentDoc = (firestore: Firestore, eventId: string, id: string) =>
  * @returns コメントのFirestoreコレクション
  */
 export const commentCollection = (firestore: Firestore, eventId: string) =>
-  collection(firestore, "events", eventId, "comments").withConverter(CommentFirestoreConverter);
+  collection(firestore, "events_v2", eventId, "comments").withConverter(CommentFirestoreConverter);
 
 /**
  * Firestore上のデータと相互変換するためのコンバーター
