@@ -4,7 +4,7 @@ service cloud.firestore {
     match /{document=**} {
       allow read, write: if false;
     }
-    match /events/{eventId} {
+    match /events_v2/{eventId} {
       allow get: if request.auth != null;
       allow list, create: if request.auth != null && request.auth.token.firebase.sign_in_provider != "anonymous";
       allow update, delete: if request.auth != null && request.auth.uid in resource.data.managers;
@@ -17,7 +17,7 @@ service cloud.firestore {
         allow delete: if request.auth != null && request.auth.uid == resource.data.postedBy;
       }
     }
-    match /accounts/{accountId} {
+    match /accounts_v2/{accountId} {
       allow read: if request.auth != null && request.auth.token.firebase.sign_in_provider != "anonymous";
       allow write: if request.auth != null && request.auth.uid == accountId;
     }
