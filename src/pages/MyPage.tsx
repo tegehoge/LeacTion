@@ -65,7 +65,6 @@ const MyPage: VoidComponent = () => {
           <EventList account={auth.account} />
         </Box>
       </Show>
-      <Toaster position="top-center" />
     </Container>
   );
 };
