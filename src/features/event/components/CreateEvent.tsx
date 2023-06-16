@@ -1,12 +1,23 @@
-import { useNavigate } from "@solidjs/router";
-import { AddCircle, Star } from "@suid/icons-material";
-import { Box, Button, Chip, Container, Divider, Grid, TextField, Typography } from "@suid/material";
+import { useLocation, useNavigate } from "@solidjs/router";
+import { AddCircle, Person } from "@suid/icons-material";
+import {
+  Box,
+  Button,
+  Chip,
+  Container,
+  Divider,
+  Grid,
+  Stack,
+  TextField,
+  Typography,
+} from "@suid/material";
 import { formatISO, parseISO } from "date-fns";
 import { Firestore } from "firebase/firestore";
-import { VoidComponent } from "solid-js";
+import { Suspense, VoidComponent, For, Switch, Match, createResource, untrack } from "solid-js";
 import { useCreateEvent } from "../api/createEvent";
 import { createEmptyTalk } from "../types";
 import { SortableTalkList } from "./SortableTalkList";
+import { getAccountsByUid } from "~/features/account/api";
 import { Account } from "~/features/account/types";
 
 type CreateEventProps = {
@@ -17,9 +28,24 @@ type CreateEventProps = {
 export const CreateEvent: VoidComponent<CreateEventProps> = (props) => {
   const navigate = useNavigate();
   const { event, setEvent, sendEventCreate } = useCreateEvent(props);
+  const location = useLocation<{ managerIds: string[] }>();
+  const [managerAccounts] = createResource(location.state?.managerIds, (ids) => {
+    if (ids && ids.length > 0) {
+      return getAccountsByUid(props.firestore, ids);
+    } else {
+      return Promise.resolve([props.account]);
+    }
+  });
+  const protectedUids = [untrack(() => props.account.uid)];
 
   const appendTalk = () => {
     setEvent("talks", (talks) => [...talks, createEmptyTalk()]);
+  };
+
+  const deleteManager = (uid: string) => {
+    return () => {
+      setEvent("managers", (prev) => prev.filter((x) => x !== uid));
+    };
   };
 
   return (
@@ -81,8 +107,39 @@ export const CreateEvent: VoidComponent<CreateEventProps> = (props) => {
       <Divider />
 
       <Box sx={{ marginTop: "1em", marginBottom: "1em" }}>
-        イベント管理者 :
-        <Chip icon={<Star />} label={props.account.displayName} />
+        <Box sx={{ marginBottom: "1em" }}>
+          イベント作成者
+          <Suspense>
+            <Chip label={props.account.displayName} icon={<Person />} />
+          </Suspense>
+        </Box>
+        <Box sx={{ marginBottom: "1em" }}>
+          イベント管理者
+          <Suspense>
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{ border: "1px solid gray", borderRadius: "10px", padding: "5px" }}
+            >
+              <For each={managerAccounts()}>
+                {(account) => (
+                  <Switch>
+                    <Match when={protectedUids.includes(account.uid)}>
+                      <Chip label={account.displayName} icon={<Person />} />
+                    </Match>
+                    <Match when={!protectedUids.includes(account.uid)}>
+                      <Chip
+                        label={account.displayName}
+                        icon={<Person />}
+                        onDelete={deleteManager(account.uid)}
+                      />
+                    </Match>
+                  </Switch>
+                )}
+              </For>
+            </Stack>
+          </Suspense>
+        </Box>
       </Box>
       <Box textAlign="center">
         利用規約に同意して

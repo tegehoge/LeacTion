@@ -1,4 +1,4 @@
-import { Link, useParams } from "@solidjs/router";
+import { Link, useParams, useSearchParams } from "@solidjs/router";
 import {
   Box,
   CircularProgress,
@@ -42,6 +42,7 @@ const LoadingEvent: VoidComponent = () => {
 
 const EventPage: VoidComponent = () => {
   const params = useParams<{ id: string }>();
+  const [searchParams, setSearchParams] = useSearchParams<{ tid: string }>();
   const firestore = useFirestore();
   const [auth, { signInAnonymously }] = useAuthContext();
   const currentUid = () => auth.uid || "";
@@ -62,7 +63,12 @@ const EventPage: VoidComponent = () => {
   });
   onCleanup(unsubscribeComments);
 
-  const [talkId, setTalkId] = createSignal("");
+  const [talkId, setTalkId] = createSignal(searchParams.tid || "");
+  const selectTalkId = (talkId: string) => {
+    setSearchParams({ tid: talkId }, { replace: true });
+    return setTalkId(talkId);
+  };
+
   createEffect(() => {
     if (!event.loading && event() && talkId() == "") {
       setTalkId(event()?.talks[0].id || "");
@@ -110,7 +116,7 @@ const EventPage: VoidComponent = () => {
                 <Box sx={{ marginTop: "1rem", marginBottom: "1rem" }}>
                   <FormControl fullWidth size="small">
                     <InputLabel>発表</InputLabel>
-                    <Select value={talkId()} onChange={(e) => setTalkId(e.target.value)}>
+                    <Select value={talkId()} onChange={(e) => selectTalkId(e.target.value)}>
                       <For each={event()?.talks}>
                         {(talk) => (
                           <MenuItem value={talk.id}>

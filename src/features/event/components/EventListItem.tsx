@@ -74,7 +74,9 @@ const EventListItem: VoidComponent<EventListItemProps> = (props) => {
             </ListItemText>
           </MenuItem>
           <Divider />
-          <MenuItem>
+          <MenuItem
+            onClick={() => navigate("/new", { state: { managerIds: props.event.managers } })}
+          >
             <ListItemIcon>
               <ContentCopy />
             </ListItemIcon>
