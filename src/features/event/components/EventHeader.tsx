@@ -82,7 +82,7 @@ export const EventHeader: VoidComponent<EventHeaderProps> = (props) => {
               <ListItemIcon>
                 <Share fontSize="small" />
               </ListItemIcon>
-              <ListItemText>このページを共有する</ListItemText>
+              <ListItemText>共有する</ListItemText>
             </MenuItem>
             <Divider />
             <Switch>
@@ -91,7 +91,7 @@ export const EventHeader: VoidComponent<EventHeaderProps> = (props) => {
                   <ListItemIcon>
                     <Edit fontSize="small" />
                   </ListItemIcon>
-                  <ListItemText>イベント編集権限をリクエスト</ListItemText>
+                  <ListItemText>共同管理者になる</ListItemText>
                 </MenuItem>
               </Match>
               <Match when={props.isEditable}>
