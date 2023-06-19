@@ -11,7 +11,7 @@ import { useAuthContext } from "~/providers/AuthProvider";
 
 const MyPage: VoidComponent = () => {
   const navigate = useNavigate();
-  const [auth, { signOut }] = useAuthContext();
+  const [auth] = useAuthContext();
 
   createEffect(() => {
     if (!auth.loading) {
