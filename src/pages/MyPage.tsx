@@ -6,8 +6,6 @@ import Button from "@suid/material/Button";
 import CircularProgress from "@suid/material/CircularProgress";
 import Container from "@suid/material/Container";
 import { createEffect, Show, VoidComponent } from "solid-js";
-import { Toaster } from "solid-toast";
-import { AccountMenu } from "~/features/account/components";
 import { EventList } from "~/features/event/components/EventList";
 import { useAuthContext } from "~/providers/AuthProvider";
 
@@ -31,26 +29,16 @@ const MyPage: VoidComponent = () => {
   return (
     <Container maxWidth="lg">
       <Show when={!auth.loading} fallback={loadingComponent}>
-        <Box sx={{ margin: "20px", display: "flex" }}>
-          <Typography variant="h4" flexGrow={1}>
-            マイページ
-          </Typography>
-          <Box>
-            <AccountMenu account={auth.account!} signOut={signOut} />
-          </Box>
-        </Box>
-
         <Box
           sx={{
             paddingBottom: "5px",
             marginTop: "20px",
-            borderBottom: "1px solid gray",
             display: "flex",
             alignItems: "center",
           }}
         >
-          <Typography variant="h6" flexGrow={1}>
-            管理しているイベント
+          <Typography variant="h4" flexGrow={1}>
+            管理中のイベント一覧
           </Typography>
           <Box>
             <NavLink href="/new">

@@ -1,1 +1,1 @@
-export { AccountMenu } from "./AccountMenu";
+export { AccountMenuButton } from "./AccountMenuButton";
