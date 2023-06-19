@@ -28,7 +28,7 @@ export const AccountMenuButton: VoidComponent<Props> = (props) => {
   const navigate = useNavigate();
   const navigateToMypage = () => {
     handleAccountMenuClose();
-    navigate("/mypage");
+    navigate("/my-events");
   };
 
   const [menuAnchorEl, setMenuAnchorEl] = createSignal<Element | null>(null);
