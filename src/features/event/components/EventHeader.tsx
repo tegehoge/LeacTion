@@ -118,7 +118,11 @@ export const EventHeader: VoidComponent<EventHeaderProps> = (props) => {
           </Menu>
         </Show>
       </Toolbar>
-      <Dialog open={shareDialogOpen()} maxWidth="lg">
+      <Dialog
+        open={shareDialogOpen()}
+        maxWidth="lg"
+        onBackdropClick={() => setShareDialogOpen(false)}
+      >
         <DialogTitle>
           <Typography variant="h6">イベントを共有する</Typography>
           <IconButton
