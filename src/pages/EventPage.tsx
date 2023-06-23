@@ -93,7 +93,12 @@ const EventPage: VoidComponent = () => {
   return (
     <Box height={"100dvh"} sx={{ display: "flex", flexDirection: "column" }}>
       <Box>
-        <EventHeader eventId={event()?.id} eventName={event()?.name} isEditable={isEditable()} />
+        <EventHeader
+          eventId={event()?.id}
+          eventName={event()?.name}
+          eventHashTag={event()?.hashTag}
+          isEditable={isEditable()}
+        />
       </Box>
       <Suspense fallback={<LoadingEvent />}>
         <Switch>

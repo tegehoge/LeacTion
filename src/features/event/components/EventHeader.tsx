@@ -26,6 +26,7 @@ import { RouterLink } from "~/components/links";
 type EventHeaderProps = {
   eventId?: string;
   eventName?: string;
+  eventHashTag?: string;
   isEditable: boolean;
 };
 
@@ -48,6 +49,10 @@ export const EventHeader: VoidComponent<EventHeaderProps> = (props) => {
     const u = new URL("https://twitter.com/intent/tweet");
     u.searchParams.append("text", `LeacTion!で「${props.eventName}」にリアクションしよう！`);
     u.searchParams.append("url", eventUrl());
+    u.searchParams.append(
+      "hashtags",
+      props.eventHashTag ? `${props.eventHashTag},LeacTion` : "LeacTion"
+    );
     window.open(u, "_blank");
   };
 
