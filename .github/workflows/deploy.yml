@@ -15,6 +15,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - id: 'auth'
+        name: 'Authenticate to GCP'
+        uses: 'google-github-actions/auth@v1'
+        with:
+            workload_identity_provider: 'projects/leaction/locations/global/workloadIdentityPools/github-actions/providers/github'
+            service_account: 'production-deploy@leaction.iam.gserviceaccount.com'
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -33,11 +39,5 @@ jobs:
           VITE_MEASUREMENT_ID: ${{ secrets.MEASUREMENT_ID }}
           VITE_PROJECT_ID: ${{ secrets.PROJECT_ID }}
           VITE_STORAGE_BUCKET: ${{ secrets.STORAGE_BUCKET }}
-      - id: 'auth'
-        name: 'Authenticate to GCP'
-        uses: 'google-github-actions/auth@v1'
-        with:
-            workload_identity_provider: 'projects/leaction/locations/global/workloadIdentityPools/github-actions/providers/github'
-            service_account: 'production-deploy@leaction.iam.gserviceaccount.com'
       - name: Firebase Production Deploy
         run: yarn deploy
