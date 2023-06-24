@@ -37,7 +37,7 @@ export const DeleteComment: VoidComponent<DeleteCommentProps> = (props) => {
 
   return (
     <Show when={props.comment.postedBy == props.currentUid}>
-      <IconButton size="small" color="error" title="コメントを削除する" onClick={openDeleteConfirm}>
+      <IconButton size="small" title="コメントを削除する" onClick={openDeleteConfirm}>
         <Delete />
       </IconButton>
       <Dialog open={open()} onClose={closeDialog}>
