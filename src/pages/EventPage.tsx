@@ -119,7 +119,7 @@ const EventPage: VoidComponent = () => {
             <Box>
               <Container>
                 <Box sx={{ marginTop: "1rem", marginBottom: "1rem" }}>
-                  <FormControl fullWidth size="small">
+                  <FormControl fullWidth variant="filled" size="small">
                     <InputLabel>発表</InputLabel>
                     <Select value={talkId()} onChange={(e) => selectTalkId(e.target.value)}>
                       <For each={event()?.talks}>
