@@ -1,11 +1,31 @@
-node_modules
+## macOS
 .DS_Store
-dist
+
+### https://raw.github.com/github/gitignore/18aa6d83774d514da479d73a4beb864cd4220231/Global/VisualStudioCode.gitignore
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/
+
+## env
 *.local
 .env
 .env.*
+!.env.template
+
+## yarn
+node_modules
 
 ## firebase
-
 .firebase
 *-debug.log
+.emulator/
+
+## artifacts
+dist

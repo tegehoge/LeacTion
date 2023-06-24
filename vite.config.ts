@@ -1,13 +1,16 @@
+import { resolve } from "path";
 import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
+import solidPlugin from "vite-plugin-solid";
 
-export default defineConfig(({ mode }) => {
-  const isProduction = mode == "production";
-
-  return {
-    plugins: [vue()],
-    build: {
-      sourcemap: !isProduction,
+export default defineConfig({
+  plugins: [solidPlugin()],
+  build: {
+    target: "esnext",
+  },
+  resolve: {
+    alias: {
+      // eslint-disable-next-line no-undef
+      "~": resolve(__dirname, "src"),
     },
-  };
+  },
 });
