@@ -38,7 +38,7 @@ jobs:
         name: 'Authenticate to GCP'
         uses: 'google-github-actions/auth@v1'
         with:
-            workload_identity_provider: 'https://iam.googleapis.com/projects/254727144997/locations/global/workloadIdentityPools/github-actions/providers/github'
+            workload_identity_provider: 'projects/254727144997/locations/global/workloadIdentityPools/github-actions/providers/github'
             service_account: 'production-deploy@leaction.iam.gserviceaccount.com'
       - name: Firebase Production Deploy
         run: firebase deploy
