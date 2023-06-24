@@ -8,10 +8,11 @@ import Typography from "@suid/material/Typography";
 import { Component, Match, Switch } from "solid-js";
 
 import { RouterLink } from "~/components/links";
+import { AccountMenuButton } from "~/features/account/components/AccountMenuButton";
 import { useAuthContext } from "~/providers/AuthProvider";
 
 export const Header: Component = () => {
-  const [auth] = useAuthContext();
+  const [auth, { signOut, updateDisplayName }] = useAuthContext();
   const navigate = useNavigate();
 
   return (
@@ -27,19 +28,15 @@ export const Header: Component = () => {
                 <Skeleton />
               </Match>
               <Match when={auth.account}>
-                <Button
-                  variant="outlined"
-                  color="inherit"
-                  startIcon={<Person />}
-                  sx={{ textTransform: "none" }}
-                  onClick={() => navigate("/mypage")}
-                >
-                  {auth.account?.displayName}
-                </Button>
+                <AccountMenuButton
+                  account={auth.account!}
+                  signOut={signOut}
+                  updateDisplayName={updateDisplayName}
+                />
               </Match>
               <Match when={!auth.account}>
                 <Button variant="text" color="inherit" onClick={() => navigate("/login")}>
-                  ログイン
+                  ログイン / アカウント作成
                 </Button>
               </Match>
             </Switch>

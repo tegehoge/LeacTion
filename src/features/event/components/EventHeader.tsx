@@ -1,5 +1,13 @@
 import { useNavigate } from "@solidjs/router";
-import { AddCircle, Close, ContentCopy, Edit, Menu as MenuIcon, Share } from "@suid/icons-material";
+import {
+  AddCircle,
+  Close,
+  ContentCopy,
+  Edit,
+  Info,
+  Menu as MenuIcon,
+  Share,
+} from "@suid/icons-material";
 import {
   AppBar,
   Box,
@@ -20,12 +28,14 @@ import {
   Typography,
 } from "@suid/material";
 import { VoidComponent, Switch, Match, createSignal, Show } from "solid-js";
+import toast from "solid-toast";
 import { TwitterIcon } from "~/components/icons";
 import { RouterLink } from "~/components/links";
 
 type EventHeaderProps = {
   eventId?: string;
   eventName?: string;
+  eventHashTag?: string;
   isEditable: boolean;
 };
 
@@ -48,11 +58,16 @@ export const EventHeader: VoidComponent<EventHeaderProps> = (props) => {
     const u = new URL("https://twitter.com/intent/tweet");
     u.searchParams.append("text", `LeacTion!で「${props.eventName}」にリアクションしよう！`);
     u.searchParams.append("url", eventUrl());
+    u.searchParams.append(
+      "hashtags",
+      props.eventHashTag ? `${props.eventHashTag},LeacTion` : "LeacTion"
+    );
     window.open(u, "_blank");
   };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(eventUrl());
+    toast("コピーしました", { icon: <Info /> });
   };
 
   return (
@@ -82,7 +97,7 @@ export const EventHeader: VoidComponent<EventHeaderProps> = (props) => {
               <ListItemIcon>
                 <Share fontSize="small" />
               </ListItemIcon>
-              <ListItemText>このページを共有する</ListItemText>
+              <ListItemText>共有する</ListItemText>
             </MenuItem>
             <Divider />
             <Switch>
@@ -91,7 +106,7 @@ export const EventHeader: VoidComponent<EventHeaderProps> = (props) => {
                   <ListItemIcon>
                     <Edit fontSize="small" />
                   </ListItemIcon>
-                  <ListItemText>イベント編集権限をリクエスト</ListItemText>
+                  <ListItemText>共同管理者になる</ListItemText>
                 </MenuItem>
               </Match>
               <Match when={props.isEditable}>
@@ -113,7 +128,11 @@ export const EventHeader: VoidComponent<EventHeaderProps> = (props) => {
           </Menu>
         </Show>
       </Toolbar>
-      <Dialog open={shareDialogOpen()} maxWidth="lg">
+      <Dialog
+        open={shareDialogOpen()}
+        maxWidth="lg"
+        onBackdropClick={() => setShareDialogOpen(false)}
+      >
         <DialogTitle>
           <Typography variant="h6">イベントを共有する</Typography>
           <IconButton
@@ -139,7 +158,7 @@ export const EventHeader: VoidComponent<EventHeaderProps> = (props) => {
           <Stack gap={1} width="100%">
             <Box>
               <Button
-                variant="text"
+                variant="outlined"
                 fullWidth
                 startIcon={<ContentCopy />}
                 onClick={copyToClipboard}

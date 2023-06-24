@@ -9,7 +9,7 @@ import { useAuthContext } from "~/providers/AuthProvider";
 const LoginPage: VoidComponent = () => {
   const navigate = useNavigate();
   const [{ callback }] = useSearchParams<{ callback?: string }>();
-  const callbackPath = callback || "/mypage";
+  const callbackPath = callback || "/my-events";
 
   const [auth, { signInWithPopup }] = useAuthContext();
 

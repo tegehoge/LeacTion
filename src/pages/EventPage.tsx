@@ -93,7 +93,12 @@ const EventPage: VoidComponent = () => {
   return (
     <Box height={"100dvh"} sx={{ display: "flex", flexDirection: "column" }}>
       <Box>
-        <EventHeader eventId={event()?.id} eventName={event()?.name} isEditable={isEditable()} />
+        <EventHeader
+          eventId={event()?.id}
+          eventName={event()?.name}
+          eventHashTag={event()?.hashTag}
+          isEditable={isEditable()}
+        />
       </Box>
       <Suspense fallback={<LoadingEvent />}>
         <Switch>
@@ -114,7 +119,7 @@ const EventPage: VoidComponent = () => {
             <Box>
               <Container>
                 <Box sx={{ marginTop: "1rem", marginBottom: "1rem" }}>
-                  <FormControl fullWidth size="small">
+                  <FormControl fullWidth variant="filled" size="small">
                     <InputLabel>発表</InputLabel>
                     <Select value={talkId()} onChange={(e) => selectTalkId(e.target.value)}>
                       <For each={event()?.talks}>

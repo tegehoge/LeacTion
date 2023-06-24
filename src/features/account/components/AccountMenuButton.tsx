@@ -1,33 +1,35 @@
-import { ManageAccounts, Person, Logout } from "@suid/icons-material";
+import { useNavigate } from "@solidjs/router";
+import { Edit, Event, Logout, Person } from "@suid/icons-material";
 import {
   Button,
-  Menu,
-  MenuItem,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   ListItemIcon,
   ListItemText,
-  Dialog,
-  DialogTitle,
-  DialogContent,
+  Menu,
+  MenuItem,
   TextField,
-  DialogActions,
   Typography,
-  DialogContentText,
 } from "@suid/material";
 import { VoidComponent, createSignal, untrack } from "solid-js";
-import toast from "solid-toast";
-import { updateAccountDisplayName } from "../api";
+import toast, { Toaster } from "solid-toast";
 import { Account } from "../types";
-import { useAuthContext } from "~/providers/AuthProvider";
-import { useFirestore } from "~/providers/FirebaseProvider";
 
-type AccountMenuProps = {
+type Props = {
   account: Account;
+  updateDisplayName: (displayName: string) => Promise<void>;
   signOut: () => void;
 };
 
-export const AccountMenu: VoidComponent<AccountMenuProps> = (props) => {
-  const firestore = useFirestore();
-  const [auth, { updateDisplayName }] = useAuthContext();
+export const AccountMenuButton: VoidComponent<Props> = (props) => {
+  const navigate = useNavigate();
+  const navigateToMypage = () => {
+    handleAccountMenuClose();
+    navigate("/my-events");
+  };
 
   const [menuAnchorEl, setMenuAnchorEl] = createSignal<Element | null>(null);
   const accountMenuOpen = () => Boolean(menuAnchorEl());
@@ -36,13 +38,16 @@ export const AccountMenu: VoidComponent<AccountMenuProps> = (props) => {
   const handleAccountMenuClose = () => setMenuAnchorEl(null);
 
   const [dialogOpen, setDialogOpen] = createSignal(false);
+  const openDialog = () => {
+    handleAccountMenuClose();
+    setDialogOpen(true);
+  };
   const [displayNameInput, setDisplayNameInput] = createSignal<string>(
     untrack(() => props.account.displayName)
   );
-
   const sendDisplayName = (newDisplayName: string) => {
     toast.promise(
-      updateDisplayName(newDisplayName).then(() => setDialogOpen(false)),
+      props.updateDisplayName(newDisplayName).then(() => setDialogOpen(false)),
       {
         loading: "表示名を更新中",
         success: "表示名を更新しました",
@@ -50,34 +55,40 @@ export const AccountMenu: VoidComponent<AccountMenuProps> = (props) => {
       }
     );
   };
-
   return (
     <>
       <Button
         variant="outlined"
-        startIcon={<ManageAccounts />}
-        size="large"
+        color="inherit"
+        startIcon={<Person />}
+        sx={{ textTransform: "none" }}
         onClick={handleAccountMenuOpen}
       >
-        アカウント管理
+        {props.account.displayName}
       </Button>
       <Menu
         open={accountMenuOpen()}
         anchorEl={menuAnchorEl()}
         onBackdropClick={handleAccountMenuClose}
       >
-        <MenuItem onClick={() => setDialogOpen(true)}>
+        <MenuItem onClick={navigateToMypage}>
           <ListItemIcon>
-            <Person />
+            <Event />
+          </ListItemIcon>
+          <ListItemText>管理中のイベント一覧</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={openDialog}>
+          <ListItemIcon>
+            <Edit />
           </ListItemIcon>
           <ListItemText>表示名の変更</ListItemText>
         </MenuItem>
         <MenuItem onClick={() => props.signOut()}>
           <ListItemIcon>
-            <Logout color="error" />
+            <Logout />
           </ListItemIcon>
           <ListItemText>
-            <Typography color="error">ログアウト</Typography>
+            <Typography>ログアウト</Typography>
           </ListItemText>
         </MenuItem>
       </Menu>
@@ -85,7 +96,9 @@ export const AccountMenu: VoidComponent<AccountMenuProps> = (props) => {
         <DialogTitle>アカウント表示名の変更</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            LeacTion!内の表示名を変更できます。（Googleアカウントには影響しません）
+            イベントの管理権限リクエスト時にこの名前が表示されます。
+            <br />
+            ※変更してもGoogleアカウントには影響しません。
           </DialogContentText>
           <TextField
             fullWidth
@@ -94,6 +107,9 @@ export const AccountMenu: VoidComponent<AccountMenuProps> = (props) => {
           />
         </DialogContent>
         <DialogActions>
+          <Button color="inherit" onClick={() => setDialogOpen(false)}>
+            キャンセル
+          </Button>
           <Button
             disabled={displayNameInput().length === 0}
             onClick={() => sendDisplayName(displayNameInput())}
@@ -102,6 +118,7 @@ export const AccountMenu: VoidComponent<AccountMenuProps> = (props) => {
           </Button>
         </DialogActions>
       </Dialog>
+      <Toaster position="top-center" />
     </>
   );
 };
