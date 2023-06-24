@@ -1,5 +1,13 @@
 import { useNavigate } from "@solidjs/router";
-import { AddCircle, Close, ContentCopy, Edit, Menu as MenuIcon, Share } from "@suid/icons-material";
+import {
+  AddCircle,
+  Close,
+  ContentCopy,
+  Edit,
+  Info,
+  Menu as MenuIcon,
+  Share,
+} from "@suid/icons-material";
 import {
   AppBar,
   Box,
@@ -20,6 +28,7 @@ import {
   Typography,
 } from "@suid/material";
 import { VoidComponent, Switch, Match, createSignal, Show } from "solid-js";
+import toast from "solid-toast";
 import { TwitterIcon } from "~/components/icons";
 import { RouterLink } from "~/components/links";
 
@@ -58,6 +67,7 @@ export const EventHeader: VoidComponent<EventHeaderProps> = (props) => {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(eventUrl());
+    toast("コピーしました", { icon: <Info /> });
   };
 
   return (
@@ -148,7 +158,7 @@ export const EventHeader: VoidComponent<EventHeaderProps> = (props) => {
           <Stack gap={1} width="100%">
             <Box>
               <Button
-                variant="text"
+                variant="outlined"
                 fullWidth
                 startIcon={<ContentCopy />}
                 onClick={copyToClipboard}
