@@ -67,13 +67,15 @@ const EventPage: VoidComponent = () => {
     } else {
       setUnread(true);
     }
+    updateScrollPosition();
   });
   onCleanup(unsubscribeComments);
 
   const [talkId, setTalkId] = createSignal(searchParams.tid || "");
   const selectTalkId = (talkId: string) => {
     setSearchParams({ tid: talkId }, { replace: true });
-    return setTalkId(talkId);
+    setTalkId(talkId);
+    return resetScrollPosition();
   };
 
   createEffect(() => {
@@ -106,13 +108,19 @@ const EventPage: VoidComponent = () => {
     commentBox.scrollTop = commentBox.scrollHeight - commentBox.clientHeight;
   };
 
-  const detectScroll = () => {
+  const updateScrollPosition = () => {
     if (commentBox.clientHeight + commentBox.scrollTop === commentBox.scrollHeight) {
       setIsBottom(true);
       setUnread(false);
     } else {
       setIsBottom(false);
     }
+  };
+
+  const resetScrollPosition = () => {
+    setIsBottom(false);
+    setUnread(true);
+    updateScrollPosition();
   };
 
   return (
@@ -138,7 +146,7 @@ const EventPage: VoidComponent = () => {
               backgroundColor="#c1e4e9"
               flexGrow={1}
               overflow="auto"
-              onscroll={detectScroll}
+              onscroll={updateScrollPosition}
               ref={commentBox}
             >
               <CommentList
