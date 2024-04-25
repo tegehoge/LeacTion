@@ -72,9 +72,9 @@ const EventPage: VoidComponent = () => {
   onCleanup(unsubscribeComments);
 
   const [talkId, setTalkId] = createSignal(searchParams.tid || "");
-  const selectTalkId = (talkId: string) => {
-    setSearchParams({ tid: talkId }, { replace: true });
-    setTalkId(talkId);
+  const selectTalkId = (newTalkId: string) => {
+    setSearchParams({ tid: newTalkId }, { replace: true });
+    setTalkId(newTalkId);
     return resetScrollPosition();
   };
 
