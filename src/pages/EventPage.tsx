@@ -97,7 +97,7 @@ const EventPage: VoidComponent = () => {
     );
   };
 
-  let commentBox: HTMLDivElement;
+  let commentBox!: HTMLDivElement;
 
   const [isBottom, setIsBottom] = createSignal(false);
   const [unread, setUnread] = createSignal(true);
