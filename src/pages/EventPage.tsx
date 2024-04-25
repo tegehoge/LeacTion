@@ -1,8 +1,10 @@
 import { Link, useParams, useSearchParams } from "@solidjs/router";
+import { ArrowDownward } from "@suid/icons-material";
 import {
   Box,
   CircularProgress,
   Container,
+  Fab,
   FormControl,
   InputLabel,
   MenuItem,
@@ -60,6 +62,11 @@ const EventPage: VoidComponent = () => {
   // Firestore Realtime Update
   const unsubscribeComments = onSnapshot(commentCollection(firestore, params.id), (snapshot) => {
     setComments(reconcile(snapshot.docs.map((doc) => doc.data())));
+    if (isBottom()) {
+      scrollToBottom();
+    } else {
+      setUnread(true);
+    }
   });
   onCleanup(unsubscribeComments);
 
@@ -90,6 +97,24 @@ const EventPage: VoidComponent = () => {
     );
   };
 
+  let commentBox: HTMLDivElement;
+
+  const [isBottom, setIsBottom] = createSignal(false);
+  const [unread, setUnread] = createSignal(true);
+
+  const scrollToBottom = () => {
+    commentBox.scrollTop = commentBox.scrollHeight - commentBox.clientHeight;
+  };
+
+  const detectScroll = () => {
+    if (commentBox.clientHeight + commentBox.scrollTop === commentBox.scrollHeight) {
+      setIsBottom(true);
+      setUnread(false);
+    } else {
+      setIsBottom(false);
+    }
+  };
+
   return (
     <Box height={"100dvh"} sx={{ display: "flex", flexDirection: "column" }}>
       <Box>
@@ -109,12 +134,32 @@ const EventPage: VoidComponent = () => {
             </Box>
           </Match>
           <Match when={event()}>
-            <Box backgroundColor="#c1e4e9" flexGrow={1} overflow="auto">
+            <Box
+              backgroundColor="#c1e4e9"
+              flexGrow={1}
+              overflow="auto"
+              onscroll={detectScroll}
+              ref={commentBox}
+            >
               <CommentList
                 firestore={firestore}
                 comments={commentsForSelectedTalk()}
                 currentUid={currentUid()}
               />
+              <Box
+                sx={{
+                  textAlign: "center",
+                  display: unread() ? "block" : "none",
+                  position: "sticky",
+                  bottom: "15px",
+                  marginTop: "-3em",
+                }}
+              >
+                <Fab variant="extended" onClick={scrollToBottom}>
+                  <ArrowDownward />
+                  最新のコメントを見る
+                </Fab>
+              </Box>
             </Box>
             <Box>
               <Container>
